@@ -1,19 +1,17 @@
 <template>
     <svg xmlns="http://www.w3.org/2000/svg" height="52" width="52" viewBox="0 0 120 120">
-        <circle v-show="isShow[0]" ref="circle-1" id="circle-1" cx="50%" cy="50%" r="40" stroke-width="20" fill="none"
-            stroke="#2681c2" stroke-linecap="round" :transform="'rotate(30 ' + 60 + ' ' + 60 + ')'"
-            stroke-dasharray="105, 260"></circle>
-        <circle v-show="isShow[1]" ref="circle-2" id="circle-2" cx="50%" cy="50%" r="40" stroke-width="20" fill="none"
-            stroke="#3AD6E2" stroke-linecap="round" transform="rotate(180 60 60)" stroke-dasharray="62, 290"></circle>
-        <circle v-show="isShow[2]" ref="overlap" id="overlap" cx="50%" cy="50%" r="40" stroke-width="20" fill="none"
-            stroke="#0C72BA" stroke-linecap="round" transform="rotate(180 60 60)" stroke-dasharray="0, 360"></circle>
-        <circle v-show="isShow[3]" ref="circle-3" id="circle-3" cx="50%" cy="50%" r="40" stroke-width="20" fill="none"
-            stroke="#3AD6E2" stroke-linecap="round" transform="rotate(-50 60 60)" stroke-dasharray="0, 360"></circle>
+        <circle v-show="isShow[0]" id="circle-1" cx="50%" cy="50%" r="40" stroke-width="20" fill="none" stroke="#2681c2"
+            stroke-linecap="round" :transform="'rotate(30 ' + 60 + ' ' + 60 + ')'" stroke-dasharray="105, 260"></circle>
+        <circle v-show="isShow[1]" id="circle-2" cx="50%" cy="50%" r="40" stroke-width="20" fill="none" stroke="#3AD6E2"
+            stroke-linecap="round" transform="rotate(180 60 60)" stroke-dasharray="62, 290"></circle>
+        <circle v-show="isShow[2]" id="overlap" cx="50%" cy="50%" r="40" stroke-width="20" fill="none" stroke="#0C72BA"
+            stroke-linecap="round" transform="rotate(180 60 60)" stroke-dasharray="0, 360"></circle>
+        <circle v-show="isShow[3]" id="circle-3" cx="50%" cy="50%" r="40" stroke-width="20" fill="none" stroke="#3AD6E2"
+            stroke-linecap="round" transform="rotate(-50 60 60)" stroke-dasharray="0, 360"></circle>
     </svg>
 </template>
 
 <script>
-import { throttle } from 'lodash'
 export default {
     name: 'LogoSvg',
     props: ['svgConfig'],

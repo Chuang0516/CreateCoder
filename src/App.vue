@@ -1,5 +1,8 @@
 <template>
-  <Header />
+  <div>
+    <Header />
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -13,13 +16,22 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 html {
-  font-family: NSimSun;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  min-width: 1250px;
+  color: #333;
 }
 
 body {
-  background-color: #eaeaea;
+  background-color: #F5F6F9;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  .el-popover {
+    text-align: center;
+    height: 180px;
+  }
 }
 
 ul,
@@ -31,5 +43,9 @@ li {
 ul {
   margin: 0;
   padding: 0;
+}
+
+a {
+  text-decoration: none;
 }
 </style>
