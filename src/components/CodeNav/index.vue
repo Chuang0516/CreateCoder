@@ -66,7 +66,8 @@
                             </svg>
                         </i>
                         <span class="menu-text">{{ navMenu.name }}</span>
-                        <i class="el-icon-arrow-right menu-open"></i>
+                        <i
+                            :class="{ 'el-icon-arrow-right': true, 'menu-open': true, 'open': openIndex == menuIndex }"></i>
                     </div>
                     <Transition name="menu">
                         <ul class="menu-item" :style="{ '--liLength': navMenu.item.length }"
