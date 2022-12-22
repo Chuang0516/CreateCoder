@@ -10,8 +10,8 @@
         </div>
         <div class="left-nav">
             <ul class="nav-container">
-                <li class="nav-menu" v-for="(navMenu, index) in  pageNavList" :key="navMenu.id">
-                    <div class="menu" @click="openMenuItem">
+                <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
+                    <div class="menu" @click="openMenuItem(menuIndex)">
                         <i class="menu-icon">
                             <svg t="1671703690148" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" p-id="11801">
@@ -68,16 +68,19 @@
                         <span class="menu-text">{{ navMenu.name }}</span>
                         <i class="el-icon-arrow-right menu-open"></i>
                     </div>
-                    <ul class="menu-item">
-                        <li class="item" v-for="(navItem, index) in navMenu.item" :key="navItem.id">
-                            <i class="item-icon">
-                                <svg class="icon" aria-hidden="true">
-                                    <use :xlink:href="navItem.icon"></use>
-                                </svg>
-                            </i>
-                            <span class="item-text">{{ navItem.name }}</span>
-                        </li>
-                    </ul>
+                    <Transition name="menu">
+                        <ul class="menu-item" :style="{ '--liLength': navMenu.item.length }"
+                            v-show="openIndex == menuIndex">
+                            <li class="item" v-for="(navItem, itemIndex) in navMenu.item" :key="navItem.id">
+                                <i class="item-icon">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use :xlink:href="navItem.icon"></use>
+                                    </svg>
+                                </i>
+                                <span class="item-text">{{ navItem.name }}</span>
+                            </li>
+                        </ul>
+                    </Transition>
                 </li>
             </ul>
         </div>
@@ -95,6 +98,7 @@ export default {
     data() {
         return {
             updateLogoFlag: Date.now(),
+            openIndex: null,
         }
     },
     computed: {
@@ -106,8 +110,8 @@ export default {
             this.updateLogoFlag = Date.now()
         }, 1000),
         // 展开菜单
-        openMenuItem() {
-
+        openMenuItem(menuIndex) {
+            this.openIndex = menuIndex === this.openIndex ? null : menuIndex;
         }
     },
     mounted() {
