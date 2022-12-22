@@ -1,5 +1,5 @@
 <template>
-    <div class="cogs-container">
+    <div class="cogs-container" :style="{ '--angle': angle }">
         <svg t="1671158833579" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="11471" width="32" height="32">
             <path
@@ -15,10 +15,11 @@
 <script>
 export default {
     name: 'Cogs',
+    props: ['angle']
 }
 </script>
 
-<style>
+<style scoped>
 .cogs-container {
     display: flex;
     justify-content: center;
@@ -26,7 +27,7 @@ export default {
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -60%) rotate(var(--angle));
     transform-origin: center;
     width: 32px;
     height: 32px;

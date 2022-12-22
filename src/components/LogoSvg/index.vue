@@ -12,6 +12,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'LogoSvg',
     props: ['svgConfig'],

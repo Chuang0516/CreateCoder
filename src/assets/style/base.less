@@ -1,0 +1,52 @@
+html {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  color: #333;
+  box-sizing: border-box;
+
+  body {
+    background-color: #f5f6f9;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    ul,
+    ol,
+    li {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+  // 解决移动端点击高亮问题
+  -webkit-tap-highlight-color: transparent;
+}
+
+// 美化滚动条
+::-webkit-scrollbar {
+  width: 8px;
+  // height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  width: 6px;
+  background: rgba(#101f1c, 0.1);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#92fe9d 0%, #00c9ff 100%),
+    linear-gradient(45deg, #2c3e50 25%, #2980b9 75%);
+  background-clip: padding-box;
+  min-height: 28px;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+  transition: background-color 0.3s;
+  cursor: grab !important;
+}

@@ -1,51 +1,34 @@
 <template>
-  <div>
-    <Header />
-    <router-view />
+  <div class="app-container">
+    <CodeNav />
+    <div class="page-content">
+      <Header :currentIndex="$route.meta.menuIndex" />
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
-import Header from "@/components/Header";
+import CodeNav from '@/components/CodeNav'
+import Header from '@/components/Header'
 
 export default {
   name: "App",
   components: {
     Header,
+    CodeNav
   },
+
 };
 </script>
 
 <style lang="less">
-html {
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-  min-width: 1250px;
-  color: #333;
-}
+.app-container {
+  display: flex;
 
-body {
-  background-color: #F5F6F9;
-  overflow: hidden;
-  box-sizing: border-box;
-
-  .el-popover {
-    text-align: center;
-    height: 180px;
+  .page-content {
+    flex: 1;
+    margin-left: 220px;
   }
-}
-
-ul,
-ol,
-li {
-  list-style-type: none;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  text-decoration: none;
 }
 </style>

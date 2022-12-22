@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "前端开发",
+        "item":[
+            {
+                "id": 11,
+                "name": "HTML",
+                "icon": "#icon-HTML"
+            },
+            {
+                "id": 12,
+                "name": "CSS",
+                "icon": "#icon-css"
+            },
+            {
+                "id": 13,
+                "name": "JavaScript",
+                "icon": "#icon-javascript"
+            },
+            {
+                "id": 14,
+                "name": "NodeJs",
+                "icon": "#icon-nodejs"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "后端开发"
+    }
+]

@@ -16,22 +16,27 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/Home'),
+    meta: { menuIndex: 0 },
   },
   {
     path: '/books',
     component: () => import('@/views/Books'),
+    meta: { menuIndex: 1 },
   },
   {
     path: '/discuss',
     component: () => import('@/views/Discuss'),
+    meta: { menuIndex: 2 },
   },
   {
     path: '/team',
     component: () => import('@/views/Team'),
+    meta: { menuIndex: 3 },
   },
   {
     path: '/course',
     component: () => import('@/views/Course'),
+    meta: { menuIndex: 4 },
   },
 ]
 

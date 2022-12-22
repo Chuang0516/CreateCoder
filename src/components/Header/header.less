@@ -1,0 +1,473 @@
+// 屏幕大于1200像素
+@media screen and (min-width: 1200px) {
+  .header-container {
+    position: fixed;
+    width: calc(100% - 220px);
+    z-index: 99;
+
+    .header {
+      display: flex;
+      align-items: center;
+      background-color: var(--background);
+      height: 56px;
+      position: relative;
+      padding-left: 20px;
+
+      > div {
+        &.fold-btn {
+          width: 40px;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          left: -20px;
+
+          label {
+            cursor: pointer;
+
+            .nav-switch {
+              position: relative;
+              width: 38px;
+              height: 16px;
+              box-shadow: inset 0px 0px 5px 0px #666;
+              border-radius: 20px;
+              user-select: none;
+              background-color: #f5f6f9;
+
+              .circle {
+                position: absolute;
+                top: 50%;
+                left: 2px;
+                transform: translateY(-50%);
+                background-color: #2681c2;
+                width: 12px;
+                height: 12px;
+                border-radius: 6px;
+                transition: left 300ms ease-in;
+              }
+            }
+
+            input[type='checkbox'] {
+              display: none;
+
+              &:checked + .nav-switch {
+                .circle {
+                  left: calc(100% - 14px);
+                }
+              }
+            }
+
+            svg {
+              transition: all 500ms ease-in;
+            }
+          }
+        }
+
+        // 菜单的样式
+        &.menu-container {
+          flex: 5;
+          height: 100%;
+          display: flex;
+
+          .header-menu {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            height: 100%;
+
+            .navigation-bar {
+              position: absolute;
+              bottom: 6px;
+              left: var(--navigationLeft);
+              transform: translateX(-50%);
+              display: block;
+              width: 26px;
+              height: 2px;
+              background-color: var(--navigationBackground);
+              border-radius: 1px;
+            }
+
+            .menu-item {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
+              flex: 1;
+              height: 100%;
+              font-size: 15px;
+              font-weight: bold;
+              cursor: pointer;
+              user-select: none;
+
+              .icon {
+                width: 22px;
+                height: 22px;
+              }
+
+              span {
+                color: var(--color);
+              }
+
+              // 齿轮动画
+              .cogs-enter {
+                transform: translate(-50%, -60%);
+              }
+
+              .cogs-enter-to {
+                transform: translate(-50%, var(--translateY))
+                  rotate(var(--angle));
+              }
+
+              .cogs-enter-active {
+                transition: all var(--time) ease-in;
+              }
+
+              .cogs-leave {
+                transform: translate(-50%, -60%) rotate(var(--angle));
+              }
+
+              .cogs-leave-to {
+                transform: translate(-50%, -100%);
+              }
+
+              .cogs-leave-active {
+                transition: all 200ms ease-in;
+              }
+
+              &.active {
+                position: relative;
+              }
+            }
+          }
+        }
+
+        // 小飞机
+        &.mini-program-tips-container {
+          width: 36px;
+          height: 36px;
+          text-align: center;
+          line-height: 36px;
+          font-size: 22px;
+          cursor: pointer;
+          color: #eee;
+          border-radius: 6px;
+
+          &:hover {
+            background-color: #f1f1f1;
+          }
+        }
+
+        // 登录按钮的样式
+        &.login-container {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+
+          .el-button {
+            background-image: linear-gradient(
+              to right bottom,
+              #2681c2,
+              #3ad6e2
+            );
+            border: none;
+            display: flex;
+
+            > span {
+              flex: 1;
+
+              a {
+                flex: 1;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 屏幕尺寸：992px~1200px
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .header {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 1px 6px rgb(199, 199, 199);
+    height: 52px;
+
+    > div {
+      // logo 的样式
+      &.logo-container {
+        flex: 3;
+
+        .logo {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          margin: auto;
+
+          .logo-box {
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            flex: 1;
+          }
+
+          img {
+            height: 28px;
+            margin-right: 18px;
+          }
+        }
+      }
+
+      // 菜单的样式
+      &.menu-container {
+        flex: 8;
+        height: 100%;
+
+        .header-menu {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+
+          .navigation-bar {
+            position: absolute;
+            bottom: 6px;
+            left: 10%;
+            transform: translateX(-50%);
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: #2681c2;
+            border-radius: 1px;
+          }
+
+          li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            height: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+
+            .cogs-enter {
+              transform: translate(-50%, -50%);
+            }
+
+            .cogs-enter-to {
+              transform: translate(-50%, var(--translateY)) rotate(var(--angle));
+            }
+
+            .cogs-enter-active {
+              transition: all var(--time) ease-in;
+            }
+
+            .cogs-leave {
+              transform: translate(-50%, -50%) rotate(var(--angle));
+            }
+
+            .cogs-leave-to {
+              transform: translate(-50%, -100%);
+            }
+
+            .cogs-leave-active {
+              transition: all 200ms ease-in;
+            }
+
+            &.active {
+              position: relative;
+              color: #2681c2;
+            }
+          }
+        }
+      }
+
+      // 搜索框的样式
+      &.search-container {
+        flex: 8;
+        display: flex;
+        justify-content: center;
+      }
+
+      // 小飞机
+      &.mini-program-tips-container {
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        line-height: 32px;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        border-radius: 6px;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+      }
+
+      // 登录按钮的样式
+      &.login-container {
+        flex: 3;
+        display: flex;
+        justify-content: center;
+
+        .el-button {
+          background-image: linear-gradient(to right bottom, #2681c2, #3ad6e2);
+          border: none;
+          display: flex;
+          justify-content: center;
+          width: 72%;
+
+          > span {
+            display: flex;
+
+            a {
+              flex: 1;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 屏幕尺寸：768px~992px
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .header {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 1px 6px rgb(199, 199, 199);
+    height: 50px;
+
+    > div {
+      // 菜单的样式
+      &.menu-container {
+        flex: 8;
+
+        .header-menu {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+
+          .navigation-bar {
+            position: absolute;
+            bottom: 6px;
+            left: 10%;
+            transform: translateX(-50%);
+            display: block;
+            width: 26px;
+            height: 2px;
+            background-color: #2681c2;
+            border-radius: 1px;
+          }
+
+          li {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            line-height: 100%;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: font-size 50ms linear;
+
+            .cogs-enter {
+              transform: translate(-50%, -50%);
+            }
+
+            .cogs-enter-to {
+              transform: translate(-50%, var(--translateY)) rotate(var(--angle));
+            }
+
+            .cogs-enter-active {
+              transition: all var(--time) ease-in;
+            }
+
+            .cogs-leave {
+              transform: translate(-50%, -50%) rotate(var(--angle));
+            }
+
+            .cogs-leave-to {
+              transform: translate(-50%, -100%);
+            }
+
+            .cogs-leave-active {
+              transition: all 200ms ease-in;
+            }
+
+            &.active {
+              position: relative;
+              color: #2681c2;
+              font-size: 18px;
+            }
+          }
+        }
+      }
+
+      // 搜索框的样式
+      &.search-container {
+        flex: 8;
+        display: flex;
+        justify-content: center;
+      }
+
+      // 小飞机
+      &.mini-program-tips-container {
+        width: 36px;
+        height: 36px;
+        text-align: center;
+        line-height: 36px;
+        font-size: 22px;
+        cursor: pointer;
+        color: #666;
+        border-radius: 6px;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+      }
+
+      // 登录按钮的样式
+      &.login-container {
+        flex: 3;
+        display: flex;
+        justify-content: center;
+
+        .el-button {
+          background-image: linear-gradient(to right bottom, #2681c2, #3ad6e2);
+          border: none;
+          display: flex;
+          justify-content: center;
+          width: 72%;
+          font-size: 12px;
+
+          > span {
+            display: flex;
+
+            a {
+              flex: 1;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
