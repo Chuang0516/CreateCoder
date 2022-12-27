@@ -70,7 +70,7 @@
                             :class="{ 'el-icon-arrow-right': true, 'menu-open': true, 'open': openIndex == menuIndex }"></i>
                     </div>
                     <Transition name="menu">
-                        <ul class="menu-item" :style="{ '--liLength': navMenu.item.length }"
+                        <ul class="menu-item" :style="{ '--liLength': navMenu.item.length + 1 }"
                             v-show="openIndex == menuIndex">
                             <li class="item" v-for="(navItem, itemIndex) in navMenu.item" :key="navItem.id">
                                 <i class="item-icon">

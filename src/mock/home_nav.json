@@ -27,26 +27,31 @@
     },
     {
         "id": 2,
-        "name": "后端开发",
+        "name": "测试2",
         "item":[
             {
                 "id": 21,
-                "name": "测试",
+                "name": "测试21",
                 "icon": "#icon-HTML"
             },
             {
                 "id": 22,
-                "name": "测试",
+                "name": "测试22",
                 "icon": "#icon-css"
             },
             {
                 "id": 23,
-                "name": "测试",
+                "name": "测试23",
                 "icon": "#icon-javascript"
             },
             {
-                "id": 14,
-                "name": "测试",
+                "id": 24,
+                "name": "测试24",
+                "icon": "#icon-nodejs"
+            },
+            {
+                "id": 25,
+                "name": "测试25",
                 "icon": "#icon-nodejs"
             }
         ]

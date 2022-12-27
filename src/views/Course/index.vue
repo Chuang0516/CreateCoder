@@ -1,5 +1,5 @@
 <template>
-    <div>课程路由</div>
+    <div class="margin-main-top">课程路由</div>
 </template>
 
 <script>
@@ -9,5 +9,7 @@ export default {
 </script>
 
 <style>
-
+.margin-main-top {
+    margin-top: 56px;
+}
 </style>

@@ -2,7 +2,7 @@
     <div class="search-box">
         <div></div>
         <form action="">
-            <input type="text">
+            <input type="text" placeholder="站内搜索">
             <i class="el-icon-search"></i>
         </form>
         <div></div>
@@ -21,39 +21,37 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@media screen and (min-width:1200px) {
-    .search-box {
+.search-box {
+    display: flex;
+    width: 72%;
+    height: 52px;
+    background-color: rgba(28, 28, 28, 0.6);
+    border-radius: 26px;
+    padding: 0 26px;
+
+    form {
         display: flex;
-        width: 72%;
-        height: 52px;
-        background-color: rgba(28, 28, 28, 0.6);
-        border-radius: 26px;
-        padding: 0 26px;
+        align-items: center;
+        width: 100%;
+        height: 100%;
 
-        form {
-            display: flex;
-            align-items: center;
-            width: 100%;
+        input {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #eee;
             height: 100%;
+        }
 
-            input {
-                flex: 1;
-                background-color: transparent;
-                border: none;
-                outline: none;
-                color: #eee;
-                height: 100%;
-            }
-
-            i {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 36px;
-                height: 36px;
-                color: #eee;
-                font-size: 30px;
-            }
+        i {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            color: #eee;
+            font-size: 30px;
         }
     }
 }

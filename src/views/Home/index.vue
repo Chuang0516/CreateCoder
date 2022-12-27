@@ -67,7 +67,6 @@ export default {
 
 <style lang="less" scoped>
 .home {
-    height: 2000px;
     width: 100%;
 
     .start-background {
