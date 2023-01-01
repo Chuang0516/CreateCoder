@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import 'babel-polyfill'
 // 引入路由
 import router from '@/router'
 // 引入仓库

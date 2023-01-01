@@ -1,10 +1,13 @@
 <template>
-    <div class="margin-main-top">课程路由</div>
+    <div class="margin-main-top">
+        <img src="https://ghchart.rshah.org/Chuang0516" />
+    </div>
 </template>
 
 <script>
+
 export default {
-    name: 'Books'
+
 }
 </script>
 

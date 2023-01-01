@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <CodeNav />
-    <div class="page-content">
+    <div class="page-content" :style="{ '--marginLeft': isOpen ? '220px' : '60px' }">
       <Header :currentIndex="$route.meta.menuIndex" />
       <router-view />
       <Footer />
@@ -21,15 +21,26 @@ export default {
     CodeNav,
     Footer
   },
-  mounted() {
-    if (window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
-      this.$message({
-        message: '移动端尚未开发，建议使用电脑访问！',
-        type: 'warning'
-      });
-    } else {
-
+  data() {
+    return {
+      isOpen: true,
     }
+  },
+  methods: {
+    adaptation() {
+      if (window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+        this.$message({
+          message: '移动端尚未开发，建议使用电脑访问！',
+          type: 'warning'
+        });
+      }
+    }
+  },
+  mounted() {
+    this.adaptation()
+    this.$bus.$on('switchHandler', (isOpen) => {
+      this.isOpen = isOpen
+    })
   }
 };
 </script>
@@ -40,7 +51,8 @@ export default {
 
   .page-content {
     flex: 1;
-    margin-left: 220px;
+    margin-left: var(--marginLeft);
+    transition: all 500ms ease-in 300ms;
   }
 }
 </style>

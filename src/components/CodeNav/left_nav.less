@@ -1,11 +1,12 @@
 .codenav-container {
   display: flex;
   flex-direction: column;
-  width: 220px;
+  width: var(--navWidth);
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
+  transition: width 500ms ease-in 300ms;
 
   // logo 的样式
   .logo-container {
@@ -39,17 +40,20 @@
   }
 
   .left-nav {
-    flex: 1;
+    height: 68vh;
     margin-top: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
     .nav-menu {
       display: flex;
       align-items: center;
       flex-direction: column;
-      width: 100%;
+      width: 220px;
       height: 100%;
       box-sizing: border-box;
       padding: 0 10px;
+      overflow: hidden;
 
       .menu {
         display: flex;
@@ -104,7 +108,7 @@
 
         .item {
           display: flex;
-          justify-content: start;
+          justify-content: flex-start;
           align-items: center;
           width: 86%;
           height: 38px;

@@ -1,8 +1,9 @@
 // 屏幕大于1200像素
 .header-container {
   position: fixed;
-  width: calc(100% - 220px);
+  width: calc(100% - var(--leftNavWidth));
   z-index: 99;
+  transition: width 500ms ease-in 300ms;
 
   .header {
     display: flex;
