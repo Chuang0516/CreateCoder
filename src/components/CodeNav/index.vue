@@ -8,7 +8,7 @@
                 <img src="~@/assets/images/logo_text.png" alt="" v-show="isOpen">
             </RouterLink>
         </div>
-        <div class="left-nav">
+        <div class="left-nav" v-show="$route.meta.leftNav">
             <ul class="nav-container">
                 <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
                     <div class="menu" @click="openMenuItem(menuIndex)">

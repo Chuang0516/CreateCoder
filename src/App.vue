@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <CodeNav />
-    <div class="page-content" :style="{ '--marginLeft': isOpen ? '220px' : '60px' }">
+    <div class="page-content" :style="{ '--marginLeft': $route.meta.leftNav ? isOpen ? '220px' : '60px' : '0px' }">
       <Header :currentIndex="$route.meta.menuIndex" />
       <router-view />
       <Footer />

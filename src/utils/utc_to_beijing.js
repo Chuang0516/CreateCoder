@@ -10,7 +10,7 @@ export default function utctobeijing(utc_datetime) {
   let timestamp = new Date(new_datetime.replace(/-/g, '/')).getTime()
   timestamp = timestamp / 1000
   // 增加8个小时，北京时间比utc时间多八个时区
-  timestamp = timestamp + 8 * 60 * 60
+  //   timestamp = timestamp + 8 * 60 * 60
 
   // 时间戳转为时间
   let date = new Date(parseInt(timestamp) * 1000)
