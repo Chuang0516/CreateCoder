@@ -1,11 +1,13 @@
 <template>
-  <div class="header-container">
+  <div class="header-container"
+    :style="{ '--leftNavWidth': isOpen ? '220px' : '60px', '--marginLeft': $route.meta.leftNav ? '0px' : '220px' }">
     <div class="header"
       :style="{ '--background': currentIndex != 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)', '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : '#eee', '--navigationLeft': `${(currentIndex * 20) + 10}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
+      <!-- 侧边导航栏开关 -->
       <div class="fold-btn">
-        <label for="nav_btn">
-          <input checked="checked" type="checkbox" id="nav_btn" />
-          <div class="nav-switch">
+        <label>
+          <input checked type="checkbox" title="switch" />
+          <div class="nav-switch" :isOpen="isOpen" @click="switchHandler">
             <div class="circle"></div>
           </div>
         </label>
@@ -21,7 +23,7 @@
             <!-- <img :src="menuItem.icon" class="icon"> -->
             <span>{{ menuItem.name }}</span>
           </li>
-          <span ref="navigationBar" class="navigation-bar" v-show="currentIndex != null"></span>
+          <li ref="navigationBar" class="navigation-bar" v-show="currentIndex != null"></li>
         </ul>
       </div>
       <!-- 小飞机 -->
@@ -62,7 +64,7 @@ export default {
         { name: '待开发', icon: '', route: '/books' },
         { name: '待开发', icon: '', route: '/discuss' },
         { name: '待开发', icon: '', route: '/team' },
-        { name: '待开发', icon: '', route: '/course' },
+        { name: '开发日志', icon: '', route: '/course' },
       ],
       // // 当前点击的 active 
       // currentIndex: 0,
@@ -72,6 +74,8 @@ export default {
       angle: 0,
       time: 0,
       translateY: '-60%',
+      // 侧边导航栏开关
+      isOpen: true
     }
   },
   methods: {
@@ -124,6 +128,11 @@ export default {
           message: 'action: ' + action
         });
       });
+    },
+    // 开关侧边导航栏
+    switchHandler() {
+      this.isOpen = !this.isOpen
+      this.$bus.$emit('switchHandler', this.isOpen)
     }
   },
   watch: {

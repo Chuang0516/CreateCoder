@@ -5,6 +5,10 @@ export default function utctobeijing(utc_datetime) {
   // 转为正常的时间格式 年-月-日 时:分:秒
   let new_datetime =
     utc_datetime.split('T')[0] + ' ' + utc_datetime.split('T')[1].split('.')[0]
+<<<<<<< HEAD
+=======
+
+>>>>>>> 95f6d714bc082937994474ff3246c71276c4466d
   // 处理成为时间戳
   let timestamp = new Date(new_datetime.replace(/-/g, '/')).getTime()
   timestamp = timestamp / 1000

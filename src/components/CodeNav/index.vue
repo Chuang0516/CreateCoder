@@ -1,14 +1,14 @@
 <template>
-    <div class="codenav-container">
+    <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">
         <div class="logo-container">
             <RouterLink class="logo" to="/">
                 <div class="logo-box">
                     <LogoSvg :key="updateLogoFlag" />
                 </div>
-                <img src="~@/assets/images/logo_text.png" alt="">
+                <img src="~@/assets/images/logo_text.png" alt="" v-show="isOpen">
             </RouterLink>
         </div>
-        <div class="left-nav">
+        <div class="left-nav" v-show="$route.meta.leftNav">
             <ul class="nav-container">
                 <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
                     <div class="menu" @click="openMenuItem(menuIndex)">
@@ -100,6 +100,7 @@ export default {
         return {
             updateLogoFlag: Date.now(),
             openIndex: null,
+            isOpen: true
         }
     },
     computed: {
@@ -119,6 +120,13 @@ export default {
         this.$bus.$on('updateLogo', () => {
             this.updateLogo()
         })
+        this.$bus.$on('switchHandler', (isOpen) => {
+            this.isOpen = isOpen
+        })
+        window.onscroll = () => {
+            let sl = -Math.max(document.body.scrollLeft, document.documentElement.scrollLeft);
+            this.$refs.fixed.style.left = sl + 'px';
+        }
     }
 }
 </script>

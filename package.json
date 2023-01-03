@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "axios": "^1.2.1",
+    "babel-polyfill": "^6.26.0",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.12",
     "mockjs": "^1.1.0",
+    "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "vscroll": "^1.5.3-passive",
