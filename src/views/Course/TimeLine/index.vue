@@ -1,6 +1,6 @@
 <template>
     <ul class="timeline-wrapper">
-        <li class="timeline-item" v-for="t in timelineList" :key="t.id">
+        <li class="timeline-item" v-for="timeline in timelineList" :key="timeline.id">
             <div class="timeline-box">
                 <div class="out-circle">
                     <div class="in-circle"></div>
@@ -8,9 +8,9 @@
                 <div class="long-line"></div>
             </div>
             <div class="timeline-content">
-                <div class="timeline-date">{{ utctobeijing(t.commit.committer.date) }}</div>
-                <div class="timeline-title">{{ t.title }}</div>
-                <div class="timeline-desc">{{ t.commit.message }}</div>
+                <div class="timeline-date">{{ utctobeijing(timeline.date) }}</div>
+                <div class="timeline-title">{{ timeline.title }}</div>
+                <div class="timeline-desc" v-for="content in timeline.contentList">{{ content }}</div>
             </div>
         </li>
     </ul>
@@ -70,7 +70,7 @@ ul.timeline-wrapper {
 
         .long-line {
             width: 2px;
-            height: 98px;
+            height: 112px;
             background: rgba(14, 116, 218, 1);
             box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.1);
             opacity: 0.1;
@@ -81,10 +81,9 @@ ul.timeline-wrapper {
     .timeline-content {
         box-sizing: border-box;
         margin-left: 20px;
-        height: 106px;
         padding: 0 0 0 20px;
         text-align: left;
-        margin-bottom: 30px;
+        margin-bottom: 0px;
 
         .timeline-title {
             font-size: 14px;
@@ -105,6 +104,7 @@ ul.timeline-wrapper {
         .timeline-desc {
             font-size: 14px;
             color: #999999;
+            margin: 10px 0;
         }
     }
 
