@@ -31,7 +31,7 @@ request.interceptors.response.use(
   },
   (error) => {
     // 响应失败
-    return Promise.reject(new Error('faile'))
+    return Promise.reject(new Error('file'))
   }
 )
 

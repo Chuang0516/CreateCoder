@@ -47,6 +47,7 @@ ul.timeline-wrapper {
     .timeline-box {
         text-align: center;
         position: absolute;
+        height: 100%;
 
         .out-circle {
             width: 16px;
@@ -70,7 +71,7 @@ ul.timeline-wrapper {
 
         .long-line {
             width: 2px;
-            height: 112px;
+            height: 100%;
             background: rgba(14, 116, 218, 1);
             box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.1);
             opacity: 0.1;
@@ -83,7 +84,7 @@ ul.timeline-wrapper {
         margin-left: 20px;
         padding: 0 0 0 20px;
         text-align: left;
-        margin-bottom: 0px;
+        margin-bottom: 20px;
 
         .timeline-title {
             font-size: 14px;

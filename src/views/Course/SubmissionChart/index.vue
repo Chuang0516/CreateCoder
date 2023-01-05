@@ -18,13 +18,7 @@
         </div>
         <div class="operation">
             <div class="slider">
-                <div class="slider-desc">0</div>
-                <div style="width:120px;">
-                    <el-slider :value="sliderValue" :max="12" range :tip-format="sliderFormat"
-                        @on-change="sliderChange">
-                    </el-slider>
-                </div>
-                <div class="slider-desc">12+</div>
+
             </div>
             <div class="legend">
                 <div class="level-desc">少</div>
@@ -162,7 +156,6 @@ export default {
 .submission-chart {
     width: 820px;
     height: 180px;
-    background-color: #fff;
     margin: auto;
     margin-top: 20px;
     padding: 0px 0;
@@ -208,10 +201,10 @@ export default {
                 .date {
                     width: 11px;
                     height: 11px;
+                    box-sizing: border-box;
 
-                    :hover {
-                        width: 13px;
-                        height: 13px;
+                    &:hover {
+                        border: 1px solid #000;
                     }
                 }
             }
