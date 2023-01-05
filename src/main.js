@@ -19,6 +19,9 @@ import VueParticles from 'vue-particles'
 Vue.use(VueParticles)
 // 引入 mockserve
 import '@/mock/mockServe'
+// vue复制内容到剪贴板插件
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
 

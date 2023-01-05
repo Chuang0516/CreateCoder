@@ -7,7 +7,16 @@
                 :clickEffect="true" clickMode="push"></vue-particles>
             <div class="home-main">
                 <!-- 一言 -->
-                <p class="yiyan">{{ hitokoto }}</p>
+                <div class="yiyan" :style="{ '--yiyanWidth': yiyanWidth }">
+                    <p ref="yiyanText">{{ hitokoto }}</p>
+                    <el-tooltip class="item" effect="dark" content="刷新一言" placement="top">
+                        <i class="el-icon-refresh" @click="newYiyan"
+                            :style="{ '--rotate': `${yiyanIconRotate}deg` }"></i>
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="复制一言" placement="top">
+                        <i class="el-icon-copy-document" v-clipboard:copy="hitokoto" v-clipboard:success="onCopy"></i>
+                    </el-tooltip>
+                </div>
                 <!-- 天气预报 -->
                 <!-- <div class="weather">
                     <div id="he-plugin-standard"></div>
@@ -23,12 +32,18 @@
 
 <script>
 import SearchBox from '@/views/Home/SearchBox'
+import { throttle } from 'lodash'
+
 export default {
     name: 'Home',
     components: { SearchBox },
     data() {
         return {
-            hitokoto: ''
+            hitokoto: '',
+            // 一言刷新图标旋转
+            yiyanIconRotate: 0,
+            // 一言盒子宽
+            yiyanWidth: 0
         }
     },
     methods: {
@@ -56,6 +71,20 @@ export default {
                     this.hitokoto = data.hitokoto
                 })
                 .catch(console.error)
+        },
+        // 刷新一言API
+        newYiyan: throttle(function () {
+            this.yiyanIconRotate -= 360
+            this.getyiyan()
+            this.yiyanWidth = this.$refs.yiyanText.offsetWidth
+        }, 1000),
+        // 复制一言成功
+        onCopy() {
+            this.$message({
+                message: '一言已复制到剪贴板',
+                type: 'success',
+                center: true
+            })
         }
     },
     mounted() {
@@ -90,7 +119,6 @@ export default {
         .home-main {
             position: relative;
             width: 100%;
-            height: 80%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -101,9 +129,22 @@ export default {
             }
 
             .yiyan {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: var(--yiyanWidth);
                 color: #eee;
                 font-size: 16px;
                 font-family: 'Courier New', Courier, monospace;
+                z-index: 10;
+                transition: width 1s ease-in;
+
+                i {
+                    cursor: pointer;
+                    transform: rotate(var(--rotate));
+                    transition: all 1s linear;
+                    margin: 5px;
+                }
             }
 
             // 搜索框的样式
