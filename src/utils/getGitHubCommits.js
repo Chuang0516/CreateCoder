@@ -5,7 +5,9 @@ export default function getGitHubCommits() {
   let dateList = []
   let repoName = []
   return new Promise((resolve, reject) => {
-    GitHubClient.get('/users/Chuang0516/repos')
+    GitHubClient.get('/users/Chuang0516/repos', {
+      nprogress: true,
+    })
       .then((data) => {
         data.forEach((item) => {
           repoName.push(item.name)
@@ -13,7 +15,9 @@ export default function getGitHubCommits() {
       })
       .then(async () => {
         for (let i = 0; i < repoName.length; i++) {
-          await GitHubClient.get(`/repos/Chuang0516/${repoName[i]}/commits`)
+          await GitHubClient.get(`/repos/Chuang0516/${repoName[i]}/commits`, {
+            nprogress: false,
+          })
             .then((data) => {
               data.forEach((item) => {
                 let date = utctobeijing(item.commit.committer.date)

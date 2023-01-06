@@ -18,7 +18,9 @@ const GitHubClient = axios.create({
 // 请求拦截器
 GitHubClient.interceptors.request.use((config) => {
   // 进度条开始动
-  nprogress.start()
+  if (config.nprogress) {
+    nprogress.start()
+  }
   return config
 })
 

@@ -1,6 +1,5 @@
 <template>
-  <div class="header-container"
-    :style="{ '--leftNavWidth': isOpen ? '220px' : '60px', '--marginLeft': $route.meta.leftNav ? '0px' : '220px' }">
+  <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
       :style="{ '--background': currentIndex != 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)', '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : '#eee', '--navigationLeft': `${(currentIndex * 20) + 10}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
       <!-- 侧边导航栏开关 -->
@@ -81,9 +80,8 @@ export default {
   methods: {
     // 菜单切换
     menuHandler(index, route) {
-      let { currentIndex, $refs } = this
+      let { currentIndex } = this
       this.step = currentIndex - index
-      let barStyle = $refs.navigationBar.style
       // this.currentIndex = index
       // // 导航条移动
       // barStyle.left = `${(index * 20) + 10}% `

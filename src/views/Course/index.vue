@@ -15,30 +15,31 @@
 <script>
 import TimeLine from '@/views/Course/TimeLine'
 import SubmissionChart from '@/views/Course/SubmissionChart'
+import GitHubClient from '@/utils/githubClient'
 export default {
     name: 'Course',
     components: { TimeLine, SubmissionChart },
     data() {
         return {
             timelineList: [],
-            year: '2022年'
+            year: '2022年',
         }
     },
     methods: {
         getGithubCommit() {
-            let gitToken = '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'
-            fetch('https://api.github.com/repos/Chuang0516/CreateCoder/commits', {
-                headers: {
-                    "Authorization": `token${gitToken}`,
-                },
+            GitHubClient.get('/repos/Chuang0516/CreateCoder/commits', {
+                nprogress: true
             })
-                .then(res => res.json())
                 .then(data => {
                     data.forEach(item => {
                         let date = item.commit.committer.date
                         let message = item.commit.message.split('-')
                         let title = message[0]
                         let contentList = message.slice(1)
+                        // 存在强迫症异常Commit信息，跳出本次循环
+                        if (message[0].includes('Merge branch')) {
+                            return console.warn(`已过滤异常Commit信息：${message[0]}`)
+                        }
                         let timeLine = { date, title, contentList }
                         this.timelineList.push(timeLine)
                     })
@@ -60,7 +61,7 @@ export default {
 
     .githubContribute {
         display: block;
-        width: 86%;
+        width: 96%;
         margin: 20px auto;
 
         .contribute-header {

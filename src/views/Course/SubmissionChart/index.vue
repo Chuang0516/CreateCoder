@@ -1,6 +1,6 @@
 <template>
     <div class="submission-chart">
-        <div class="calendar">
+        <div class="calendar" v-loading="loading">
             <div class="weeks">
                 <div class="week">周二</div>
                 <div class="week">周四</div>
@@ -42,13 +42,13 @@ export default {
         return {
             dateData: [],
             submissionRecord: {},
-            sliderValue: [0, 12]
+            sliderValue: [0, 12],
+            loading: true
         }
     },
     mounted() {
         this.init()
         getGitHubCommits().then((data) => {
-            console.log(data);
             let dateCount = data.reduce((prev, curr) => {
                 if (curr in prev) {
                     prev[curr]++
@@ -60,6 +60,7 @@ export default {
             this.submissionRecord = dateCount
         }).then(() => {
             this.init()
+            this.loading = false
         })
     },
     methods: {
