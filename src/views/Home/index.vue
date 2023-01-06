@@ -105,7 +105,7 @@ export default {
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 80vh;
+        height: 500px;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
         background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
 

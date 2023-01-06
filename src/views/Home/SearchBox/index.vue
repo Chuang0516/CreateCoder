@@ -9,14 +9,18 @@
                 <li ref="navigationBar" class="navigation-bar"></li>
             </ul>
         </div>
-        <form action="">
-            <input type="text" :placeholder="searchTypeList[currentIndex].name">
-            <i class="el-icon-search"></i>
+        <form>
+            <input type="text" @keyup.enter="toSearch(currentIndex, currentOption)" v-model="searchInfo"
+                :placeholder="searchTypeList[currentIndex].type[currentOption] || searchTypeList[currentIndex].name">
+            <i class="el-icon-search" @click="toSearch(currentIndex, currentOption)"></i>
         </form>
         <div class="search-options">
             <ul>
                 <li v-for="(option, index) in searchTypeList[currentIndex].type" :key="index"
-                    :class="{ 'active': currentOption == index }" @click="currentOption = index">{{ option }}</li>
+                    :class="{ 'active': currentOption == index }" @click="currentOption = index">
+                    <i class="el-icon-caret-bottom currentOption-icon" v-show="currentOption == index"></i>
+                    <span>{{ option }}</span>
+                </li>
             </ul>
         </div>
     </div>
@@ -37,7 +41,7 @@ export default {
                 {
                     name: '搜索引擎',
                     icon: '',
-                    type: ['百度', 'Google', 'Edge', 'Bing']
+                    type: ['百度', '搜狗', 'Google', 'Bing']
                 },
                 {
                     name: '待开发',
@@ -56,7 +60,8 @@ export default {
                 },
             ],
             currentIndex: 0,
-            currentOption: 0
+            currentOption: 0,
+            searchInfo: ''
         }
     },
     methods: {
@@ -64,6 +69,23 @@ export default {
             this.step = this.currentIndex - index
             this.currentIndex = index
         },
+        // 搜索
+        toSearch(currentIndex, currentOption) {
+            if (this.searchInfo == '') {
+                this.$message({
+                    message: '你还没输入内容哦~',
+                    type: 'warning',
+                    center: true
+                })
+            } else {
+                if (currentIndex == 1) {
+                    if (currentOption == 0) window.open(`https://www.baidu.com/s?wd=${this.searchInfo}`)
+                    if (currentOption == 1) window.open(`https://www.sogou.com/web?query=${this.searchInfo}`)
+                    if (currentOption == 2) window.open(`https://www.google.com/search?q=${this.searchInfo}`)
+                    if (currentOption == 3) window.open(`https://cn.bing.com/search?q=${this.searchInfo}`)
+                }
+            }
+        }
     },
     watch: {
         currentIndex() {
@@ -190,20 +212,35 @@ export default {
 
     .search-options {
         width: 50%;
-        height: 36px;
-        margin-top: 20px;
+        height: 42px;
 
         ul {
             display: flex;
             justify-content: space-around;
             align-items: center;
             color: #00000090;
+            height: 100%;
+            width: 100%;
 
             li {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: center;
+                position: relative;
                 cursor: pointer;
+                height: 100%;
+                font-size: 16px;
+
+                i {
+                    position: absolute;
+                    top: -8px;
+                    font-size: 26px;
+                    color: rgba(28, 28, 28, 0.6);
+                }
 
                 &.active {
-                    color: #ffffff90;
+                    color: #fff;
                 }
             }
         }
