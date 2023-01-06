@@ -7,7 +7,7 @@
                 :clickEffect="true" clickMode="push"></vue-particles>
             <div class="home-main">
                 <!-- 一言 -->
-                <div class="yiyan" :style="{ '--yiyanWidth': yiyanWidth }">
+                <div class="yiyan">
                     <p ref="yiyanText">{{ hitokoto }}</p>
                     <el-tooltip class="item" effect="dark" content="刷新一言" placement="top">
                         <i class="el-icon-refresh" @click="newYiyan"
@@ -75,8 +75,9 @@ export default {
         // 刷新一言API
         newYiyan: throttle(function () {
             this.yiyanIconRotate -= 360
-            this.getyiyan()
-            this.yiyanWidth = this.$refs.yiyanText.offsetWidth
+            setTimeout(() => {
+                this.getyiyan()
+            }, 1000)
         }, 1000),
         // 复制一言成功
         onCopy() {
@@ -132,12 +133,15 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: var(--yiyanWidth);
                 color: #eee;
-                font-size: 16px;
+                font-size: 18px;
                 font-family: 'Courier New', Courier, monospace;
                 z-index: 10;
                 transition: width 1s ease-in;
+
+                p {
+                    margin-right: 5px;
+                }
 
                 i {
                     cursor: pointer;
