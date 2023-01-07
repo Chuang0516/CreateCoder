@@ -124,6 +124,7 @@ export default {
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            margin-bottom: 120px;
 
             .weather {
                 justify-self: start;
@@ -157,7 +158,7 @@ export default {
                 width: 100%;
                 display: flex;
                 justify-content: center;
-                margin-top: 20px;
+                margin-top: 10px;
             }
         }
     }

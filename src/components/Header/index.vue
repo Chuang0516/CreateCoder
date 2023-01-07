@@ -1,7 +1,7 @@
 <template>
   <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
-      :style="{ '--background': currentIndex != 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)', '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : '#eee', '--navigationLeft': `${(currentIndex * 20) + 10}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
+      :style="{ '--background': currentIndex != 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)', '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : '#eee', '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
       <!-- 侧边导航栏开关 -->
       <div class="fold-btn">
         <label>
@@ -136,7 +136,7 @@ export default {
   watch: {
     currentIndex() {
       let barStyle = this.$refs.navigationBar.style
-      barStyle.left = `${(this.currentIndex * 20) + 10}% `
+      barStyle.left = `${(this.currentIndex * 2 + 1) * 50 / this.headerMenuList.length}% `
       barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
     }
   }
