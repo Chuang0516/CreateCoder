@@ -48,20 +48,24 @@ export default {
     },
     mounted() {
         this.init()
-        getGitHubCommits().then((data) => {
-            let dateCount = data.reduce((prev, curr) => {
-                if (curr in prev) {
-                    prev[curr]++
-                } else {
-                    prev[curr] = 1
-                }
-                return prev
-            }, {})
-            this.submissionRecord = dateCount
-        }).then(() => {
-            this.init()
-            this.loading = false
-        })
+        try {
+            getGitHubCommits().then((data) => {
+                let dateCount = data.reduce((prev, curr) => {
+                    if (curr in prev) {
+                        prev[curr]++
+                    } else {
+                        prev[curr] = 1
+                    }
+                    return prev
+                }, {})
+                this.submissionRecord = dateCount
+            }).then(() => {
+                this.init()
+                this.loading = false
+            })
+        } catch (error) {
+            console.error(error);
+        }
     },
     methods: {
         init() {

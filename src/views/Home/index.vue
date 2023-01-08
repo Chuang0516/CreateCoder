@@ -1,10 +1,10 @@
 <template>
     <div class="home">
-        <div class="start-background">
+        <div class="home-background" :style="{ '--imgUrl': `url(${imgUrl})` }">
             <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="100"
                 shapeType="circle" :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true"
                 :lineOpacity="0.4" :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab"
-                :clickEffect="true" clickMode="push"></vue-particles>
+                :clickEffect="true" clickMode="push" />
             <div class="home-main">
                 <!-- 一言 -->
                 <div class="yiyan">
@@ -25,6 +25,16 @@
                 <div class="search-container">
                     <SearchBox />
                 </div>
+                <div class="menu-cards">
+                    <ul>
+                        <li @click="changeWallpaper">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-zhuti"></use>
+                            </svg>
+                            <span>换背景</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -33,6 +43,7 @@
 <script>
 import SearchBox from '@/views/Home/SearchBox'
 import { throttle } from 'lodash'
+
 
 export default {
     name: 'Home',
@@ -43,7 +54,9 @@ export default {
             // 一言刷新图标旋转
             yiyanIconRotate: 0,
             // 一言盒子宽
-            yiyanWidth: 0
+            yiyanWidth: 0,
+            // 背景图片url
+            imgUrl: ''
         }
     },
     methods: {
@@ -86,11 +99,19 @@ export default {
                 type: 'success',
                 center: true
             })
+        },
+        // 换壁纸
+        changeWallpaper() {
+            fetch('https://bing.img.run/rand.php')
+                .then(img => {
+                    this.imgUrl = img.url
+                })
         }
     },
     mounted() {
         this.getyiyan()
         this.$store.dispatch('getHomeNav')
+        this.changeWallpaper()
     }
 }
 </script>
@@ -99,15 +120,18 @@ export default {
 .home {
     width: 100%;
 
-    .start-background {
+    .home-background {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
         height: 500px;
+        background-image: var(--imgUrl);
+        background-position: center;
+        background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
-        background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
+        // background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
 
         #particles-js {
             width: 100%;
@@ -115,6 +139,34 @@ export default {
             position: absolute;
             z-index: 9;
             user-select: none;
+        }
+
+        .wallpaper-rope {
+            position: absolute;
+            right: 50px;
+            top: 56px;
+            width: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            cursor: pointer;
+
+            span {
+                width: 1px;
+                height: 60px;
+                background-color: #fff;
+            }
+
+            &::after {
+                display: block;
+                content: '';
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: #fff;
+            }
+
         }
 
         .home-main {
@@ -125,6 +177,8 @@ export default {
             align-items: center;
             flex-direction: column;
             margin-bottom: 120px;
+            overflow: hidden;
+
 
             .weather {
                 justify-self: start;
@@ -134,14 +188,14 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                color: #eee;
+                color: #fff;
                 font-size: 18px;
                 font-family: 'Courier New', Courier, monospace;
                 z-index: 10;
                 transition: width 1s ease-in;
 
                 p {
-                    margin-right: 5px;
+                    margin: 0 5px 0 0;
                 }
 
                 i {
@@ -158,7 +212,53 @@ export default {
                 width: 100%;
                 display: flex;
                 justify-content: center;
-                margin-top: 10px;
+                margin-top: 30px;
+            }
+
+            .menu-cards {
+                position: absolute;
+                right: 0px;
+                top: 0px;
+                width: 35px;
+
+                ul {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    width: 32px;
+
+                    li {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        width: 88px;
+                        height: 36px;
+                        background-color: rgba(28, 28, 28, 0.6);
+                        border-radius: 18px 0 0 18px;
+                        cursor: pointer;
+                        z-index: 10;
+                        padding-left: 3px;
+                        box-sizing: border-box;
+                        transition: all 300ms ease-in;
+
+
+                        svg {
+                            width: 30px;
+                            height: 30px;
+                        }
+
+                        span {
+                            color: #eee;
+                            margin-left: 2px;
+                            font-size: 14px;
+                            user-select: none;
+                        }
+
+                        &:hover {
+                            transform: translateX(-48px);
+                        }
+                    }
+                }
             }
         }
     }

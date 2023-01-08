@@ -1,5 +1,5 @@
 <template>
-    <div class="search-box" :style="{ '--height': `${keywordList.length * 32}px` }">
+    <div class="search-box" :style="{ '--height': `${keywordList.length * 28}px` }">
         <div class="search-type">
             <ul class="type-menu"
                 :style="{ '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / searchTypeList.length}%` }">
@@ -118,13 +118,12 @@ export default {
         // 搜索框关键词提示
         keywordIdeas(searchInfo) {
             if (searchInfo != '' && this.currentIndex != 0) {
-                jsonp(`/su`, {
+                jsonp(`https://suggestion.baidu.com/su`, {
                     wd: searchInfo,
                     p: 3,
                     callbackQuery: 'cb',
                 })
                     .then((res) => {
-                        console.log(res.s);
                         this.keywordList = res.s
                     })
             }
@@ -264,14 +263,14 @@ export default {
 
     .search-options {
         width: 50%;
-        height: 42px;
+        height: 36px;
         margin-bottom: 10px;
 
         ul {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            color: #00000090;
+            color: #ffffff90;
             height: 100%;
             width: 100%;
 
@@ -287,8 +286,8 @@ export default {
 
                 &>i {
                     position: absolute;
-                    top: -12px;
-                    font-size: 32px;
+                    top: -11px;
+                    font-size: 28px;
                     color: rgba(28, 28, 28, 0.6);
                 }
 
@@ -332,7 +331,7 @@ export default {
     .keywordIdeas-container {
         position: absolute;
         top: 100%;
-        width: calc(100% - 26px);
+        width: 72%;
         background-color: #fff;
         border-radius: 10px;
         overflow: hidden;
@@ -351,7 +350,7 @@ export default {
                 display: flex;
                 align-items: center;
                 width: 100%;
-                height: 32px;
+                height: 28px;
                 cursor: pointer;
                 border-radius: 10px;
                 padding-left: 10px;

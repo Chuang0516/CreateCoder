@@ -36,14 +36,7 @@
         </el-popover>
       </div>
       <div class="login-container">
-        <el-button type="primary" round @click="openLoginBox">
-          <a href="javascript:;">
-            <span>登录&nbsp;/&nbsp;</span>
-          </a>
-          <a href="javascript:;">
-            <span>注册</span>
-          </a>
-        </el-button>
+        <i class="el-icon-user-solid"></i>
       </div>
     </div>
   </div>
