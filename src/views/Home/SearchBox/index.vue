@@ -151,7 +151,7 @@ export default {
 .search-box {
     display: flex;
     flex-direction: column;
-    width: 72%;
+    width: 62%;
     align-items: center;
     position: relative;
 

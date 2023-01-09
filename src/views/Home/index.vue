@@ -1,10 +1,11 @@
 <template>
     <div class="home">
-        <div class="home-background" :style="{ '--imgUrl': `url(${imgUrl})` }">
-            <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="100"
-                shapeType="circle" :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true"
-                :lineOpacity="0.4" :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab"
-                :clickEffect="true" clickMode="push" />
+        <div class="home-background">
+            <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="60" shapeType="circle"
+                :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
+                :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
+                clickMode="push" />
+            <img :src="imgUrl" class="wallpaper" alt="">
             <div class="home-main">
                 <!-- 一言 -->
                 <div class="yiyan">
@@ -25,16 +26,27 @@
                 <div class="search-container">
                     <SearchBox />
                 </div>
-                <div class="menu-cards">
-                    <ul>
-                        <li @click="changeWallpaper">
-                            <svg class="icon" aria-hidden="true">
-                                <use xlink:href="#icon-zhuti"></use>
-                            </svg>
-                            <span>换背景</span>
-                        </li>
-                    </ul>
-                </div>
+            </div>
+            <div class="menu-cards">
+                <ul>
+                    <li @click="changeWallpaper"
+                        :class="{ 'wallpaper-card': index == 0, 'wallpaper-card2': index == 1 }"
+                        v-for="(card, index) in homeCards" :key="index">
+                        <svg class="icon" aria-hidden="true">
+                            <use :xlink:href="card.icon"></use>
+                        </svg>
+                        <span>{{ card.name }}</span>
+                        <div class="wallpaperOptions" @click.stop>
+                            <ul>
+                                <el-tooltip class="item" effect="dark" :content="cardItem.name" placement="left"
+                                    v-for="(cardItem, index) in card.cardItems" :key="index">
+                                    <li class="lock"><i :class="[cardItem.icon]"></i></li>
+                                </el-tooltip>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
             </div>
         </div>
     </div>
@@ -56,7 +68,28 @@ export default {
             // 一言盒子宽
             yiyanWidth: 0,
             // 背景图片url
-            imgUrl: ''
+            imgUrl: '',
+            // 侧边卡片
+            homeCards: [
+                {
+                    icon: '#icon-zhuti',
+                    name: '换壁纸',
+                    cardItems: [
+                        { icon: 'el-icon-unlock', name: '锁定' },
+                        { icon: 'el-icon-menu', name: '分类' },
+                        { icon: 'el-icon-more', name: '更多' }
+                    ]
+                },
+                {
+                    icon: '#icon-zhuti',
+                    name: '换壁纸',
+                    cardItems: [
+                        { icon: 'el-icon-unlock', name: '锁定' },
+                        { icon: 'el-icon-menu', name: '分类' },
+                        { icon: 'el-icon-more', name: '更多' }
+                    ]
+                },
+            ]
         }
     },
     methods: {
@@ -127,11 +160,11 @@ export default {
         align-items: center;
         width: 100%;
         height: 500px;
-        background-image: var(--imgUrl);
         background-position: center;
         background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
-        // background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
+        background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
+        overflow: hidden;
 
         #particles-js {
             width: 100%;
@@ -141,32 +174,11 @@ export default {
             user-select: none;
         }
 
-        .wallpaper-rope {
+        .wallpaper {
             position: absolute;
-            right: 50px;
-            top: 56px;
-            width: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 10;
-            cursor: pointer;
-
-            span {
-                width: 1px;
-                height: 60px;
-                background-color: #fff;
-            }
-
-            &::after {
-                display: block;
-                content: '';
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background-color: #fff;
-            }
-
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .home-main {
@@ -214,48 +226,244 @@ export default {
                 justify-content: center;
                 margin-top: 30px;
             }
+        }
 
-            .menu-cards {
-                position: absolute;
-                right: 0px;
-                top: 0px;
-                width: 35px;
+        .menu-cards {
+            position: absolute;
+            right: 0px;
+            top: 56px;
+            width: 35px;
 
-                ul {
-                    position: relative;
+            &>ul {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                width: 32px;
+
+                &>li {
                     display: flex;
-                    flex-direction: column;
-                    width: 32px;
+                    justify-content: flex-start;
+                    align-items: center;
+                    width: 88px;
+                    height: 36px;
+                    margin-top: 36px;
+                    background-color: rgba(28, 28, 28, 0.8);
+                    border-radius: 18px 0 0 18px;
+                    cursor: pointer;
+                    z-index: 10;
+                    padding-left: 3px;
+                    box-sizing: border-box;
+                    transition: all 200ms ease-in;
 
-                    li {
-                        display: flex;
-                        justify-content: flex-start;
-                        align-items: center;
-                        width: 88px;
-                        height: 36px;
-                        background-color: rgba(28, 28, 28, 0.6);
-                        border-radius: 18px 0 0 18px;
-                        cursor: pointer;
-                        z-index: 10;
-                        padding-left: 3px;
-                        box-sizing: border-box;
-                        transition: all 300ms ease-in;
+                    svg {
+                        width: 30px;
+                        height: 30px;
+                    }
+
+                    span {
+                        color: #eee;
+                        margin-left: 2px;
+                        font-size: 14px;
+                        user-select: none;
+                    }
+
+                    &:hover {
+                        transform: translateX(-48px);
+                    }
+
+                    &.wallpaper-card {
+                        position: relative;
+
+                        .wallpaperOptions {
+                            position: absolute;
+                            top: 36px;
+                            height: 0px;
+                            width: 88px;
+                            overflow: hidden;
+
+                            ul {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                width: 36px;
 
 
-                        svg {
-                            width: 30px;
-                            height: 30px;
-                        }
+                                li {
+                                    position: relative;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    width: 0px;
+                                    height: 0px;
+                                    background-color: rgba(28, 28, 28, 0.8);
+                                    margin-top: 16px;
+                                    border-radius: 50%;
+                                    color: #fff;
+                                    font-size: 12px;
 
-                        span {
-                            color: #eee;
-                            margin-left: 2px;
-                            font-size: 14px;
-                            user-select: none;
+                                    &::before {
+                                        content: '';
+                                        width: 1px;
+                                        height: 0px;
+                                        position: absolute;
+                                        top: -16px;
+                                        background-color: rgba(28, 28, 28, 0.8);
+                                    }
+
+                                    i {
+                                        font-size: 0;
+                                    }
+                                }
+                            }
                         }
 
                         &:hover {
-                            transform: translateX(-48px);
+                            .wallpaperOptions {
+                                height: 156px;
+
+                                ul {
+                                    li {
+                                        width: 36px;
+                                        height: 36px;
+
+                                        &:nth-child(1) {
+                                            transition: all 100ms ease-in-out 300ms;
+
+                                            &::before {
+                                                height: 16px;
+                                                transition: height 100ms linear 200ms;
+                                            }
+
+                                            i {
+                                                font-size: 16px;
+                                                transition: font-size 0ms linear 400ms;
+                                            }
+                                        }
+
+                                        &:nth-child(2) {
+                                            transition: all 100ms ease-in-out 500ms;
+
+                                            &::before {
+                                                height: 16px;
+                                                transition: height 100ms linear 400ms;
+                                            }
+
+                                            i {
+                                                font-size: 16px;
+                                                transition: font-size 0ms linear 600ms;
+                                            }
+                                        }
+
+                                        &:nth-child(3) {
+                                            transition: all 100ms ease-in-out 700ms;
+
+                                            &::before {
+                                                height: 16px;
+                                                transition: height 100ms linear 600ms;
+                                            }
+
+                                            i {
+                                                font-size: 16px;
+                                                transition: font-size 0ms linear 900ms;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &.wallpaper-card2 {
+                        position: relative;
+
+                        .wallpaperOptions {
+                            position: absolute;
+                            top: 0px;
+
+                            ul {
+                                position: relative;
+                                width: 36px;
+                                height: 36px;
+
+
+                                li {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    translate: -50% -50%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    width: 0px;
+                                    height: 0px;
+                                    background-color: rgba(28, 28, 28, 0.8);
+                                    border-radius: 50%;
+                                    color: #fff;
+                                    font-size: 12px;
+                                    z-index: 9;
+
+                                    i {
+                                        font-size: 0px;
+                                    }
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            .wallpaperOptions {
+                                ul {
+
+                                    &::after {
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        content: '';
+                                        width: 152px;
+                                        height: 152px;
+                                        border-radius: 50%;
+                                    }
+
+                                    li {
+                                        transition: all 300ms linear 200ms;
+
+                                        i {
+                                            position: relative;
+                                            font-size: 16px;
+                                            transition-delay: 500ms;
+                                        }
+
+
+                                        &:nth-child(1) {
+                                            width: 36px;
+                                            height: 36px;
+                                            transform: translate(-58px);
+                                        }
+
+                                        &:nth-child(2) {
+                                            width: 36px;
+                                            height: 36px;
+                                            transform: translate(-58px) rotate(60deg);
+                                            transform-origin: 76px;
+
+                                            i {
+                                                rotate: -60deg;
+                                            }
+                                        }
+
+                                        &:nth-child(3) {
+                                            width: 36px;
+                                            height: 36px;
+                                            transform: translate(-58px) rotate(-60deg);
+                                            transform-origin: 76px;
+
+                                            i {
+                                                rotate: 60deg;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
