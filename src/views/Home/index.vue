@@ -5,7 +5,7 @@
                 :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
                 :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
                 clickMode="push" />
-            <img :src="imgUrl" class="wallpaper" alt="">
+            <img :src="imgUrl" class="wallpaper" v-show="imgUrl" alt="">
             <div class="home-main">
                 <!-- 一言 -->
                 <div class="yiyan">
@@ -30,22 +30,23 @@
             <div class="menu-cards">
                 <ul>
                     <li @click="changeWallpaper"
-                        :class="{ 'wallpaper-card': index == 0, 'wallpaper-card2': index == 1 }"
-                        v-for="(card, index) in homeCards" :key="index">
+                        :class="{ 'wallpaper-card': cardsIndex == 0, 'wallpaper-card2': cardsIndex == 1 }"
+                        v-for="(card, cardsIndex) in homeCards" :key="cardsIndex">
                         <svg class="icon" aria-hidden="true">
                             <use :xlink:href="card.icon"></use>
                         </svg>
                         <span>{{ card.name }}</span>
-                        <div class="wallpaperOptions" @click.stop>
+                        <div class="wallpaperOptions">
                             <ul>
                                 <el-tooltip class="item" effect="dark" :content="cardItem.name" placement="left"
-                                    v-for="(cardItem, index) in card.cardItems" :key="index">
-                                    <li class="lock"><i :class="[cardItem.icon]"></i></li>
+                                    v-for="(cardItem, cardIndex) in card.cardItems" :key="cardIndex">
+                                    <li class="lock" @click.stop="cardItemHandler(cardsIndex, cardIndex)">
+                                        <i :class="[cardItem.icon]"></i>
+                                    </li>
                                 </el-tooltip>
                             </ul>
                         </div>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -55,7 +56,6 @@
 <script>
 import SearchBox from '@/views/Home/SearchBox'
 import { throttle } from 'lodash'
-
 
 export default {
     name: 'Home',
@@ -69,6 +69,8 @@ export default {
             yiyanWidth: 0,
             // 背景图片url
             imgUrl: '',
+            // 壁纸是否锁定
+            imgLock: false,
             // 侧边卡片
             homeCards: [
                 {
@@ -135,16 +137,78 @@ export default {
         },
         // 换壁纸
         changeWallpaper() {
-            fetch('https://bing.img.run/rand.php')
-                .then(img => {
-                    this.imgUrl = img.url
+            if (this.imgLock) {
+                this.$message({
+                    message: '壁纸已锁定，请先解锁',
+                    type: 'warning',
+                    center: true
                 })
+            } else {
+                fetch('https://bing.img.run/rand.php')
+                    .then(img => {
+                        this.imgUrl = img.url
+                    })
+            }
+        },
+        // 点击首页右侧卡片
+        cardItemHandler(cardsIndex, cardIndex) {
+            if (cardsIndex == 1) {
+                if (cardIndex == 0) {
+                    this.lockWallpaper()
+                }
+            }
+        },
+        // 处理锁定壁纸
+        lockWallpaper() {
+            if (this.imgUrl == '') {
+                this.$message({
+                    message: '你还没有换壁纸哦',
+                    type: 'warning',
+                    center: true
+                })
+            } else {
+                this.imgLock = !this.imgLock
+                let lockIcon = ''
+                let lockTip = ''
+                if (this.imgLock) {
+                    lockIcon = 'el-icon-lock'
+                    lockTip = '解锁'
+                    this.$message({
+                        message: '壁纸已锁定',
+                        type: 'success',
+                        center: true
+                    })
+                    localStorage.setItem('imgUrl', this.imgUrl)
+                } else {
+                    lockIcon = 'el-icon-unlock'
+                    lockTip = '锁定'
+                    this.$message({
+                        message: '壁纸已解锁',
+                        type: 'success',
+                        center: true
+                    })
+                    localStorage.removeItem('imgUrl')
+                }
+                this.homeCards[1].cardItems[0].icon = lockIcon
+                this.homeCards[1].cardItems[0].name = lockTip
+            }
+        },
+        // 初始化
+        init() {
+            const imgUrl = localStorage.getItem('imgUrl')
+            // 本地有存储壁纸
+            if (imgUrl != null) {
+                this.imgUrl = imgUrl
+                this.imgLock = true
+                this.homeCards[1].cardItems[0].icon = 'el-icon-lock'
+                this.homeCards[1].cardItems[0].name = '解锁'
+            }
         }
     },
     mounted() {
+        this.init()
         this.getyiyan()
         this.$store.dispatch('getHomeNav')
-        this.changeWallpaper()
     }
 }
 </script>
@@ -388,9 +452,7 @@ export default {
 
                                 li {
                                     position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    translate: -50% -50%;
+                                    transform: translate(-50%, -50%);
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
@@ -447,7 +509,7 @@ export default {
                                             transform-origin: 76px;
 
                                             i {
-                                                rotate: -60deg;
+                                                transform: rotate(-60deg);
                                             }
                                         }
 
@@ -458,7 +520,7 @@ export default {
                                             transform-origin: 76px;
 
                                             i {
-                                                rotate: 60deg;
+                                                transform: rotate(60deg);
                                             }
                                         }
                                     }
