@@ -5,7 +5,7 @@
                 :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
                 :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
                 clickMode="push" />
-            <img :src="imgUrl" class="wallpaper" v-show="imgUrl" alt="">
+            <img :src="imgUrl" v-show="imgUrl" class="wallpaper">
             <div class="home-main">
                 <!-- 一言 -->
                 <div class="yiyan">
@@ -26,72 +26,32 @@
                 <div class="search-container">
                     <SearchBox />
                 </div>
+                <!-- 时钟 -->
+                <div class="clock-container">
+                    <Clock />
+                </div>
             </div>
-            <div class="menu-cards">
-                <ul>
-                    <li @click="changeWallpaper"
-                        :class="{ 'wallpaper-card': cardsIndex == 0, 'wallpaper-card2': cardsIndex == 1 }"
-                        v-for="(card, cardsIndex) in homeCards" :key="cardsIndex">
-                        <svg class="icon" aria-hidden="true">
-                            <use :xlink:href="card.icon"></use>
-                        </svg>
-                        <span>{{ card.name }}</span>
-                        <div class="wallpaperOptions">
-                            <ul>
-                                <el-tooltip class="item" effect="dark" :content="cardItem.name" placement="left"
-                                    v-for="(cardItem, cardIndex) in card.cardItems" :key="cardIndex">
-                                    <li class="lock" @click.stop="cardItemHandler(cardsIndex, cardIndex)">
-                                        <i :class="[cardItem.icon]"></i>
-                                    </li>
-                                </el-tooltip>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <MenuCards :imgUrl="imgUrl" @updateImgUrl="updateImgUrl" />
         </div>
     </div>
 </template>
 
 <script>
 import SearchBox from '@/views/Home/SearchBox'
+import MenuCards from '@/views/Home/MenuCards'
+import Clock from '@/views/Home/Clock'
 import { throttle } from 'lodash'
 
 export default {
     name: 'Home',
-    components: { SearchBox },
+    components: { SearchBox, MenuCards, Clock },
     data() {
         return {
             hitokoto: '',
             // 一言刷新图标旋转
             yiyanIconRotate: 0,
-            // 一言盒子宽
-            yiyanWidth: 0,
             // 背景图片url
             imgUrl: '',
-            // 壁纸是否锁定
-            imgLock: false,
-            // 侧边卡片
-            homeCards: [
-                {
-                    icon: '#icon-zhuti',
-                    name: '换壁纸',
-                    cardItems: [
-                        { icon: 'el-icon-unlock', name: '锁定' },
-                        { icon: 'el-icon-menu', name: '分类' },
-                        { icon: 'el-icon-more', name: '更多' }
-                    ]
-                },
-                {
-                    icon: '#icon-zhuti',
-                    name: '换壁纸',
-                    cardItems: [
-                        { icon: 'el-icon-unlock', name: '锁定' },
-                        { icon: 'el-icon-menu', name: '分类' },
-                        { icon: 'el-icon-more', name: '更多' }
-                    ]
-                },
-            ]
         }
     },
     methods: {
@@ -135,63 +95,9 @@ export default {
                 center: true
             })
         },
-        // 换壁纸
-        changeWallpaper() {
-            if (this.imgLock) {
-                this.$message({
-                    message: '壁纸已锁定，请先解锁',
-                    type: 'warning',
-                    center: true
-                })
-            } else {
-                fetch('https://bing.img.run/rand.php')
-                    .then(img => {
-                        this.imgUrl = img.url
-                    })
-            }
-        },
-        // 点击首页右侧卡片
-        cardItemHandler(cardsIndex, cardIndex) {
-            if (cardsIndex == 1) {
-                if (cardIndex == 0) {
-                    this.lockWallpaper()
-                }
-            }
-        },
-        // 处理锁定壁纸
-        lockWallpaper() {
-            if (this.imgUrl == '') {
-                this.$message({
-                    message: '你还没有换壁纸哦',
-                    type: 'warning',
-                    center: true
-                })
-            } else {
-                this.imgLock = !this.imgLock
-                let lockIcon = ''
-                let lockTip = ''
-                if (this.imgLock) {
-                    lockIcon = 'el-icon-lock'
-                    lockTip = '解锁'
-                    this.$message({
-                        message: '壁纸已锁定',
-                        type: 'success',
-                        center: true
-                    })
-                    localStorage.setItem('imgUrl', this.imgUrl)
-                } else {
-                    lockIcon = 'el-icon-unlock'
-                    lockTip = '锁定'
-                    this.$message({
-                        message: '壁纸已解锁',
-                        type: 'success',
-                        center: true
-                    })
-                    localStorage.removeItem('imgUrl')
-                }
-                this.homeCards[1].cardItems[0].icon = lockIcon
-                this.homeCards[1].cardItems[0].name = lockTip
-            }
+        // 更新壁纸
+        updateImgUrl(imgUrl) {
+            this.imgUrl = imgUrl
         },
         // 初始化
         init() {
@@ -199,9 +105,6 @@ export default {
             // 本地有存储壁纸
             if (imgUrl != null) {
                 this.imgUrl = imgUrl
-                this.imgLock = true
-                this.homeCards[1].cardItems[0].icon = 'el-icon-lock'
-                this.homeCards[1].cardItems[0].name = '解锁'
             }
         }
     },
@@ -216,19 +119,21 @@ export default {
 <style lang="less" scoped>
 .home {
     width: 100%;
+    height: 1200px;
+    overflow: hidden;
 
     .home-background {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         width: 100%;
-        height: 500px;
+        height: 520px;
         background-position: center;
         background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
         background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
-        overflow: hidden;
 
         #particles-js {
             width: 100%;
@@ -243,17 +148,16 @@ export default {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: 1;
         }
 
         .home-main {
             position: relative;
             width: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
             flex-direction: column;
-            margin-bottom: 120px;
-            overflow: hidden;
 
 
             .weather {
@@ -290,245 +194,11 @@ export default {
                 justify-content: center;
                 margin-top: 30px;
             }
-        }
 
-        .menu-cards {
-            position: absolute;
-            right: 0px;
-            top: 56px;
-            width: 35px;
-
-            &>ul {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                width: 32px;
-
-                &>li {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    width: 88px;
-                    height: 36px;
-                    margin-top: 36px;
-                    background-color: rgba(28, 28, 28, 0.8);
-                    border-radius: 18px 0 0 18px;
-                    cursor: pointer;
-                    z-index: 10;
-                    padding-left: 3px;
-                    box-sizing: border-box;
-                    transition: all 200ms ease-in;
-
-                    svg {
-                        width: 30px;
-                        height: 30px;
-                    }
-
-                    span {
-                        color: #eee;
-                        margin-left: 2px;
-                        font-size: 14px;
-                        user-select: none;
-                    }
-
-                    &:hover {
-                        transform: translateX(-48px);
-                    }
-
-                    &.wallpaper-card {
-                        position: relative;
-
-                        .wallpaperOptions {
-                            position: absolute;
-                            top: 36px;
-                            height: 0px;
-                            width: 88px;
-                            overflow: hidden;
-
-                            ul {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                width: 36px;
-
-
-                                li {
-                                    position: relative;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    width: 0px;
-                                    height: 0px;
-                                    background-color: rgba(28, 28, 28, 0.8);
-                                    margin-top: 16px;
-                                    border-radius: 50%;
-                                    color: #fff;
-                                    font-size: 12px;
-
-                                    &::before {
-                                        content: '';
-                                        width: 1px;
-                                        height: 0px;
-                                        position: absolute;
-                                        top: -16px;
-                                        background-color: rgba(28, 28, 28, 0.8);
-                                    }
-
-                                    i {
-                                        font-size: 0;
-                                    }
-                                }
-                            }
-                        }
-
-                        &:hover {
-                            .wallpaperOptions {
-                                height: 156px;
-
-                                ul {
-                                    li {
-                                        width: 36px;
-                                        height: 36px;
-
-                                        &:nth-child(1) {
-                                            transition: all 100ms ease-in-out 300ms;
-
-                                            &::before {
-                                                height: 16px;
-                                                transition: height 100ms linear 200ms;
-                                            }
-
-                                            i {
-                                                font-size: 16px;
-                                                transition: font-size 0ms linear 400ms;
-                                            }
-                                        }
-
-                                        &:nth-child(2) {
-                                            transition: all 100ms ease-in-out 500ms;
-
-                                            &::before {
-                                                height: 16px;
-                                                transition: height 100ms linear 400ms;
-                                            }
-
-                                            i {
-                                                font-size: 16px;
-                                                transition: font-size 0ms linear 600ms;
-                                            }
-                                        }
-
-                                        &:nth-child(3) {
-                                            transition: all 100ms ease-in-out 700ms;
-
-                                            &::before {
-                                                height: 16px;
-                                                transition: height 100ms linear 600ms;
-                                            }
-
-                                            i {
-                                                font-size: 16px;
-                                                transition: font-size 0ms linear 900ms;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    &.wallpaper-card2 {
-                        position: relative;
-
-                        .wallpaperOptions {
-                            position: absolute;
-                            top: 0px;
-
-                            ul {
-                                position: relative;
-                                width: 36px;
-                                height: 36px;
-
-
-                                li {
-                                    position: absolute;
-                                    transform: translate(-50%, -50%);
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    width: 0px;
-                                    height: 0px;
-                                    background-color: rgba(28, 28, 28, 0.8);
-                                    border-radius: 50%;
-                                    color: #fff;
-                                    font-size: 12px;
-                                    z-index: 9;
-
-                                    i {
-                                        font-size: 0px;
-                                    }
-                                }
-                            }
-                        }
-
-                        &:hover {
-                            .wallpaperOptions {
-                                ul {
-
-                                    &::after {
-                                        position: absolute;
-                                        top: 50%;
-                                        left: 50%;
-                                        transform: translate(-50%, -50%);
-                                        content: '';
-                                        width: 152px;
-                                        height: 152px;
-                                        border-radius: 50%;
-                                    }
-
-                                    li {
-                                        transition: all 300ms linear 200ms;
-
-                                        i {
-                                            position: relative;
-                                            font-size: 16px;
-                                            transition-delay: 500ms;
-                                        }
-
-
-                                        &:nth-child(1) {
-                                            width: 36px;
-                                            height: 36px;
-                                            transform: translate(-58px);
-                                        }
-
-                                        &:nth-child(2) {
-                                            width: 36px;
-                                            height: 36px;
-                                            transform: translate(-58px) rotate(60deg);
-                                            transform-origin: 76px;
-
-                                            i {
-                                                transform: rotate(-60deg);
-                                            }
-                                        }
-
-                                        &:nth-child(3) {
-                                            width: 36px;
-                                            height: 36px;
-                                            transform: translate(-58px) rotate(-60deg);
-                                            transform-origin: 76px;
-
-                                            i {
-                                                transform: rotate(60deg);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            // 时钟
+            .clock-container {
+                z-index: 9;
+                margin-top: 20px;
             }
         }
     }

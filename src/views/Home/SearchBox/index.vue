@@ -1,5 +1,5 @@
 <template>
-    <div class="search-box" :style="{ '--height': `${keywordList.length * 28}px` }">
+    <div class="search-box" :style="{ '--height': `${keywordList.length * 26}px` }">
         <div class="search-type">
             <ul class="type-menu"
                 :style="{ '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / searchTypeList.length}%` }">
@@ -49,7 +49,6 @@ export default {
     name: 'SearchBox',
     data() {
         return {
-            isdown: true,
             searchTypeList: [
                 {
                     name: '站内',
@@ -117,6 +116,7 @@ export default {
         },
         // 搜索框关键词提示
         keywordIdeas(searchInfo) {
+            console.log(searchInfo);
             if (searchInfo != '' && this.currentIndex != 0) {
                 jsonp(`https://suggestion.baidu.com/su`, {
                     wd: searchInfo,
@@ -125,6 +125,9 @@ export default {
                 })
                     .then((res) => {
                         this.keywordList = res.s
+                    })
+                    .catch((error) => {
+                        console.error(error);
                     })
             }
         },
@@ -335,7 +338,7 @@ export default {
         background-color: #fff;
         border-radius: 10px;
         overflow: hidden;
-
+        box-shadow: 0 2px 8px #999;
 
         ul {
             width: 100%;
@@ -345,18 +348,16 @@ export default {
             padding: 10px;
             box-sizing: border-box;
 
-
             li {
                 display: flex;
                 align-items: center;
                 width: 100%;
-                height: 28px;
+                height: 26px;
                 cursor: pointer;
                 border-radius: 10px;
                 padding-left: 10px;
                 box-sizing: border-box;
                 font-size: 14px;
-
 
                 &:hover {
                     background-color: #eee;
