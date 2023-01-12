@@ -65,12 +65,14 @@ export default {
         letter-spacing: 0.05em;
         font-size: 36px;
         margin: 0;
+        user-select: none;
     }
 
     .date {
         letter-spacing: 0.1em;
         font-size: 15px;
         margin: 0;
+        user-select: none;
     }
 }
 </style>

@@ -4,12 +4,10 @@ module.exports = defineConfig({
   lintOnSave: false,
   devServer: {
     proxy: {
-      '/api': {
-        target: 'http://192.168.2.90:3000', //后端接口地址
+      '/index.php': {
+        target: 'http://wallpaper.apc.360.cn', //后端接口地址
         changeOrigin: true, //是否允许跨越
-        pathRewrite: {
-          '^/api': '/api', //重写,
-        },
+        ws: true,
       },
     },
   },

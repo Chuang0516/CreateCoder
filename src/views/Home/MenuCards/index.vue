@@ -18,11 +18,18 @@
                                 <i class="el-icon-more"></i>
                             </li>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="分类" placement="left">
-                            <li class="classify" @click.stop="classifyHandler" v-popover:popover>
+                        <el-tooltip class="item" :disabled="classifyTip" effect="dark" :content="wallpaperType"
+                            placement="left">
+                            <li class="classify" @click.stop="classifyHandler"
+                                @mouseleave="classifyShow = false; classifyTip = false" v-popover:popover>
                                 <i class="el-icon-menu"></i>
-                                <ul class="classifyList" v-show="classifyShow">
-                                    <li v-for="(classify, index) in classifyList">{{ classify.name }}</li>
+                                <ul class="classifyList" v-show="classifyShow" v-loading="classifyLoading"
+                                    element-loading-spinner="el-icon-loading"
+                                    element-loading-background="rgba(28, 28, 28, 0.8)">
+                                    <li v-for="(classify, index) in classifyList" :key="index"
+                                        @click="imgTypeHandler(classify.name, classify.id)">
+                                        {{ classify.name }}
+                                    </li>
                                 </ul>
                             </li>
                         </el-tooltip>
@@ -34,6 +41,8 @@
 </template>
 
 <script>
+import { random } from 'lodash'
+import axios from 'axios'
 export default {
     name: 'MenuCards',
     props: ['imgUrl'],
@@ -47,7 +56,11 @@ export default {
             lockTip: '锁定',
             // 壁纸分类列表
             classifyShow: false,
-            classifyList: []
+            classifyList: [],
+            classifyTip: false,
+            wallpaperType: '风景大片',
+            wallpaperId: 9,
+            classifyLoading: true
         }
     },
     methods: {
@@ -60,9 +73,12 @@ export default {
                     center: true
                 })
             } else {
-                fetch('https://bing.img.run/rand.php')
-                    .then(img => {
-                        this.$emit('updateImgUrl', img.url)
+                const request = this.imgRequest()
+                request({ url: `/index.php?c=WallPaperAndroid&a=getAppsByCategory&cid=${this.wallpaperId}&start=0&count=99`, method: 'get' })
+                    .then(res => {
+                        let index = random(1, 99)
+                        this.classifyLoading = false
+                        this.$emit('updateImgUrl', res.data[index].url)
                     })
             }
         },
@@ -104,21 +120,57 @@ export default {
         // 初始化
         init() {
             const imgUrl = localStorage.getItem('imgUrl')
+            const wallpaperType = localStorage.getItem('wallpaperType')
+            const wallpaperId = localStorage.getItem('wallpaperId')
             // 本地有存储壁纸，说明已经锁定
             if (imgUrl != null) {
                 this.lockIcon = 'el-icon-lock'
                 this.lockTip = '解锁'
                 this.imgLock = true
             }
+            // 如果本地存储有壁纸id
+            if (wallpaperId != null) {
+                this.wallpaperId = wallpaperId
+                this.wallpaperType = wallpaperType
+            }
         },
         // 壁纸分类
         classifyHandler() {
             this.classifyShow = !this.classifyShow
-            fetch('http://wallpaper.apc.360.cn/index.php?c=WallPaperAndroid&a=getAllCategories')
-                .then(res => res.json())
+            this.classifyTip = !this.classifyTip
+            const request = this.imgRequest()
+            request({ url: '/index.php?c=WallPaperAndroid&a=getAllCategories', method: 'get' })
                 .then(res => {
                     this.classifyList = res.data
                 })
+        },
+        // 点击分类
+        imgTypeHandler(name, id) {
+            this.wallpaperId = id
+            this.wallpaperType = name
+            localStorage.setItem('wallpaperType', name)
+            localStorage.setItem('wallpaperId', id)
+            this.$message({
+                message: `随机壁纸已设为${name}`,
+                type: 'success',
+                center: true
+            })
+        },
+        // 壁纸axios、
+        imgRequest() {
+            const request = axios.create()
+            request.interceptors.request.use(config => {
+                return config
+            })
+            request.interceptors.response.use(
+                res => {
+                    return res.data
+                },
+                error => {
+                    return Promise.reject(new Error('壁纸数据响应失败'))
+                }
+            )
+            return request
         }
     },
     mounted() {
@@ -362,17 +414,34 @@ export default {
                                     }
 
                                     .classifyList {
+                                        display: flex;
+                                        align-items: center;
+                                        flex-direction: column;
                                         position: absolute;
                                         top: 36px;
                                         left: 50%;
-                                        width: 86px;
+                                        width: 120px;
                                         background-color: rgba(28, 28, 28, 0.8);
                                         transform: translate(-50%) rotate(60deg);
-                                        transform-origin: 43px -18px;
+                                        transform-origin: 60px -18px;
+                                        height: 210px;
+                                        overflow-y: scroll;
+                                        overflow-x: hidden;
+                                        padding: 5px 5px;
+                                        box-sizing: border-box;
 
                                         li {
-                                            width: 86px;
-                                            height: 20px;
+                                            width: 100%;
+                                            height: 28px;
+                                            font-size: 14px;
+                                            text-align: center;
+                                            line-height: 28px;
+                                            border-radius: 14px;
+
+                                            &:hover {
+                                                background-color: rgba(252, 252, 252, 0.8);
+                                                color: #333;
+                                            }
                                         }
                                     }
                                 }

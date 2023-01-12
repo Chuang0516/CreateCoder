@@ -1,7 +1,7 @@
 <template>
   <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
-      :style="{ '--background': currentIndex != 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)', '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : '#eee', '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
+      :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
       <!-- 侧边导航栏开关 -->
       <div class="fold-btn">
         <label>
@@ -67,7 +67,11 @@ export default {
       time: 0,
       translateY: '-60%',
       // 侧边导航栏开关
-      isOpen: true
+      isOpen: true,
+      // 背景颜色
+      background: 'rgba(255, 255, 255, 0.1)',
+      // 字体颜色
+      fontColor: '#eee'
     }
   },
   methods: {
@@ -124,6 +128,17 @@ export default {
     switchHandler() {
       this.isOpen = !this.isOpen
       this.$bus.$emit('switchHandler', this.isOpen)
+    },
+    // 页面滚动
+    scrollHandler() {
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      if (scrollTop > 36) {
+        this.background = '#fff'
+        this.fontColor = '#666'
+      } else {
+        this.background = 'rgba(255, 255, 255, 0.1)'
+        this.fontColor = '#eee'
+      }
     }
   },
   watch: {
@@ -132,6 +147,9 @@ export default {
       barStyle.left = `${(this.currentIndex * 2 + 1) * 50 / this.headerMenuList.length}% `
       barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
     }
+  },
+  mounted() {
+    window.addEventListener("scroll", this.scrollHandler);
   }
 };
 </script>

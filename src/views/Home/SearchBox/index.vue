@@ -286,6 +286,7 @@ export default {
                 cursor: pointer;
                 height: 100%;
                 font-size: 16px;
+                user-select: none;
 
                 &>i {
                     position: absolute;
