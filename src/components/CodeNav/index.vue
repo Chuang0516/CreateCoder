@@ -1,13 +1,6 @@
 <template>
     <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">
-        <div class="logo-container">
-            <RouterLink class="logo" to="/">
-                <div class="logo-box">
-                    <LogoSvg :key="updateLogoFlag" />
-                </div>
-                <img src="~@/assets/images/logo_text.png" alt="" v-show="isOpen">
-            </RouterLink>
-        </div>
+
         <div class="left-nav" v-show="$route.meta.leftNav">
             <ul class="nav-container">
                 <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
@@ -42,7 +35,6 @@
 
 <script>
 import LogoSvg from '@/components/LogoSvg'
-import { throttle } from 'lodash'
 import { mapState } from 'vuex'
 
 export default {
@@ -50,7 +42,6 @@ export default {
     components: { LogoSvg },
     data() {
         return {
-            updateLogoFlag: Date.now(),
             openIndex: null,
             isOpen: true
         }
@@ -59,19 +50,13 @@ export default {
         ...mapState({ pageNavList: (state) => state.homeNavList })
     },
     methods: {
-        // 更新 Logo 动效
-        updateLogo: throttle(function () {
-            this.updateLogoFlag = Date.now()
-        }, 1000),
         // 展开菜单
         openMenuItem(menuIndex) {
             this.openIndex = menuIndex === this.openIndex ? null : menuIndex;
         }
     },
     mounted() {
-        this.$bus.$on('updateLogo', () => {
-            this.updateLogo()
-        })
+
         this.$bus.$on('switchHandler', (isOpen) => {
             this.isOpen = isOpen
         })

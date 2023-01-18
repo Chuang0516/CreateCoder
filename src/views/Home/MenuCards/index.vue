@@ -43,6 +43,7 @@
 <script>
 import { random } from 'lodash'
 import axios from 'axios'
+
 export default {
     name: 'MenuCards',
     props: ['imgUrl'],
@@ -156,7 +157,7 @@ export default {
                 center: true
             })
         },
-        // 壁纸axios、
+        // 壁纸axios
         imgRequest() {
             const request = axios.create()
             request.interceptors.request.use(config => {

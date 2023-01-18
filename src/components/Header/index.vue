@@ -2,17 +2,25 @@
   <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
       :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
-      <!-- 侧边导航栏开关 -->
-      <div class="fold-btn">
-        <label>
-          <input checked type="checkbox" title="switch" />
-          <div class="nav-switch" :isOpen="isOpen" @click="switchHandler">
-            <div class="circle"></div>
+      <div class="logo-container">
+        <RouterLink class="logo" to="/">
+          <div class="logo-box">
+            <LogoSvg :key="updateLogoFlag" />
           </div>
-        </label>
+          <img src="~@/assets/images/logo_text.png" alt="" v-show="isOpen">
+        </RouterLink>
       </div>
       <!-- 页面菜单 -->
       <div class="menu-container">
+        <!-- 侧边导航栏开关 -->
+        <div class="fold-btn">
+          <label>
+            <input checked type="checkbox" title="switch" />
+            <div class="nav-switch" :isOpen="isOpen" @click="switchHandler">
+              <div class="circle"></div>
+            </div>
+          </label>
+        </div>
         <ul class="header-menu">
           <li class="menu-item" :class="{ active: currentIndex == index }" v-for="(menuItem, index) in headerMenuList"
             :key="index" @click="menuHandler(index, menuItem.route)">
@@ -44,9 +52,11 @@
 
 <script>
 import Cogs from '@/components/Header/Cogs'
+import LogoSvg from '@/components/LogoSvg'
+import { throttle } from 'lodash'
 export default {
   name: 'Header',
-  components: { Cogs },
+  components: { Cogs, LogoSvg },
   props: ['currentIndex'],
   data() {
     return {
@@ -71,7 +81,8 @@ export default {
       // 背景颜色
       background: 'rgba(255, 255, 255, 0.1)',
       // 字体颜色
-      fontColor: '#eee'
+      fontColor: '#eee',
+      updateLogoFlag: Date.now(),
     }
   },
   methods: {
@@ -139,7 +150,11 @@ export default {
         this.background = 'rgba(255, 255, 255, 0.1)'
         this.fontColor = '#eee'
       }
-    }
+    },
+    // 更新 Logo 动效
+    updateLogo: throttle(function () {
+      this.updateLogoFlag = Date.now()
+    }, 1000),
   },
   watch: {
     currentIndex() {
@@ -150,6 +165,9 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.scrollHandler);
+    this.$bus.$on('updateLogo', () => {
+      this.updateLogo()
+    })
   }
 };
 </script>

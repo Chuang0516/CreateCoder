@@ -3,40 +3,10 @@
   flex-direction: column;
   width: var(--navWidth);
   position: fixed;
-  top: 0;
+  top: 56px;
   left: 0;
   transition: width 500ms ease-in 300ms;
-
-  // logo 的样式
-  .logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 56px;
-    background-color: #fff;
-    position: relative;
-
-    .logo {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 80%;
-      height: 100%;
-      margin: auto;
-
-      .logo-box {
-        display: flex;
-        justify-content: right;
-        align-items: center;
-        flex: 1;
-      }
-
-      img {
-        height: 42px;
-        margin-right: 20px;
-      }
-    }
-  }
+  z-index: 999;
 
   .left-nav {
     height: 454px;

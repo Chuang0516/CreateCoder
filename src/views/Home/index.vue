@@ -1,6 +1,7 @@
 <template>
     <div class="home">
-        <div class="home-background">
+        <CodeNav />
+        <div class="home-top" :style="{ '--marginLeft': isOpen ? '220px' : '60px' }">
             <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="60" shapeType="circle"
                 :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
                 :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
@@ -40,11 +41,12 @@
 import SearchBox from '@/views/Home/SearchBox'
 import MenuCards from '@/views/Home/MenuCards'
 import Clock from '@/views/Home/Clock'
+import CodeNav from '@/components/CodeNav'
 import { throttle } from 'lodash'
 
 export default {
     name: 'Home',
-    components: { SearchBox, MenuCards, Clock },
+    components: { SearchBox, MenuCards, Clock, CodeNav },
     data() {
         return {
             hitokoto: '',
@@ -52,6 +54,7 @@ export default {
             yiyanIconRotate: 0,
             // 背景图片url
             imgUrl: '',
+            isOpen: true
         }
     },
     methods: {
@@ -127,6 +130,9 @@ export default {
         this.init()
         this.getyiyan()
         this.$store.dispatch('getHomeNav')
+        this.$bus.$on('switchHandler', (isOpen) => {
+            this.isOpen = isOpen
+        })
     }
 }
 </script>
@@ -137,14 +143,15 @@ export default {
     height: 1200px;
     overflow: hidden;
 
-    .home-background {
+    .home-top {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        width: 100%;
         height: 520px;
+        margin-left: var(--marginLeft);
+        transition: all 500ms ease-in 300ms;
         background-position: center;
         background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);

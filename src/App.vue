@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
-    <CodeNav />
-    <div class="page-content" :style="{ '--marginLeft': isOpen ? '220px' : '60px' }">
+    <div class="page-content">
       <Header :currentIndex="$route.meta.menuIndex" />
       <router-view />
       <Footer />
@@ -10,7 +9,6 @@
 </template>
 
 <script>
-import CodeNav from '@/components/CodeNav'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
@@ -18,7 +16,6 @@ export default {
   name: "App",
   components: {
     Header,
-    CodeNav,
     Footer
   },
   data() {
@@ -38,9 +35,6 @@ export default {
   },
   mounted() {
     this.adaptation()
-    this.$bus.$on('switchHandler', (isOpen) => {
-      this.isOpen = isOpen
-    })
   }
 };
 </script>
@@ -51,8 +45,6 @@ export default {
 
   .page-content {
     flex: 1;
-    margin-left: var(--marginLeft);
-    transition: all 500ms ease-in 300ms;
   }
 }
 </style>
