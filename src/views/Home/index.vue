@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <CodeNav />
-        <div class="home-top" :style="{ '--marginLeft': isOpen ? '220px' : '60px' }">
+        <CodeNav :isOpen="isOpen" />
+        <div class="home-top" :style="{ '--marginLeft': isOpen ? '220px' : '60px', '--transition': transition }">
             <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="60" shapeType="circle"
                 :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
                 :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
@@ -12,8 +12,7 @@
                 <div class="yiyan" :style="{ '--width': `${(hitokoto.length + 4) * 18}px` }" v-show="hitokoto">
                     <span>{{ hitokoto }}</span>
                     <el-tooltip class="item" effect="dark" content="刷新一言" placement="top">
-                        <i class="el-icon-refresh" @click="newYiyan"
-                            :style="{ '--rotate': `${yiyanIconRotate}deg` }"></i>
+                        <i class="el-icon-refresh" @click="newYiyan" :style="{ '--rotate': `${yiyanIconRotate}deg` }"></i>
                     </el-tooltip>
                     <el-tooltip class="item" effect="dark" content="复制一言" placement="top">
                         <i class="el-icon-copy-document" v-clipboard:copy="hitokoto" v-clipboard:success="onCopy"></i>
@@ -54,7 +53,8 @@ export default {
             yiyanIconRotate: 0,
             // 背景图片url
             imgUrl: '',
-            isOpen: true
+            isOpen: true,
+            transition: ''
         }
     },
     methods: {
@@ -127,12 +127,18 @@ export default {
     },
     mounted() {
         // this.createWether()
+        console.log('home加载' + this.isOpen);
         this.init()
-        this.getyiyan()
-        this.$store.dispatch('getHomeNav')
         this.$bus.$on('switchHandler', (isOpen) => {
             this.isOpen = isOpen
+            if (!isOpen) {
+                this.transition = `null`
+            } else {
+                this.transition = `all 500ms ease-in 300ms`
+            }
         })
+        this.getyiyan()
+        this.$store.dispatch('getHomeNav')
     }
 }
 </script>
@@ -151,7 +157,7 @@ export default {
         flex-direction: column;
         height: 520px;
         margin-left: var(--marginLeft);
-        transition: all 500ms ease-in 300ms;
+        transition: var(--transition);
         background-position: center;
         background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
@@ -180,7 +186,6 @@ export default {
             justify-content: space-around;
             align-items: center;
             flex-direction: column;
-
 
             .weather {
                 z-index: 9;

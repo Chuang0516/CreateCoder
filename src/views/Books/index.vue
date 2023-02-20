@@ -1,5 +1,5 @@
 <template>
-    <div class="margin-main-top">题库路由</div>
+    <div class="books-container">题库路由</div>
 </template>
 
 <script>
@@ -8,8 +8,8 @@ export default {
 }
 </script>
 
-<style>
-.margin-main-top {
+<style scoped lang="less">
+.books-container {
     margin-top: 56px;
 }
 </style>

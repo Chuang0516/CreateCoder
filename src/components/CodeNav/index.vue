@@ -40,10 +40,10 @@ import { mapState } from 'vuex'
 export default {
     name: 'CodeNav',
     components: { LogoSvg },
+    props: ['isOpen'],
     data() {
         return {
             openIndex: null,
-            isOpen: true
         }
     },
     computed: {
@@ -56,10 +56,6 @@ export default {
         }
     },
     mounted() {
-
-        this.$bus.$on('switchHandler', (isOpen) => {
-            this.isOpen = isOpen
-        })
         window.onscroll = () => {
             let sl = -Math.max(document.body.scrollLeft, document.documentElement.scrollLeft);
             this.$refs.fixed.style.left = sl + 'px';

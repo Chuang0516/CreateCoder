@@ -9,7 +9,5 @@ export default {
 </script>
 
 <style>
-.margin-main-top {
-    margin-top: 56px;
-}
+
 </style>

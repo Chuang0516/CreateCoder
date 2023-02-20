@@ -186,6 +186,7 @@ export default {
     right: 0px;
     top: 72px;
     width: 35px;
+    z-index: 9;
 
     &>ul {
         position: relative;

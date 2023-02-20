@@ -1,10 +1,8 @@
 <template>
   <div class="app-container">
-    <div class="page-content">
-      <Header :currentIndex="$route.meta.menuIndex" />
-      <router-view />
-      <Footer />
-    </div>
+    <Header :currentIndex="$route.meta.menuIndex" />
+    <router-view />
+    <Footer />
   </div>
 </template>
 
@@ -17,11 +15,6 @@ export default {
   components: {
     Header,
     Footer
-  },
-  data() {
-    return {
-      isOpen: true,
-    }
   },
   methods: {
     adaptation() {
@@ -41,10 +34,6 @@ export default {
 
 <style lang="less" scoped>
 .app-container {
-  display: flex;
-
-  .page-content {
-    flex: 1;
-  }
+  min-width: 1200px;
 }
 </style>

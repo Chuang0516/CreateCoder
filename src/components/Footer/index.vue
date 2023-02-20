@@ -15,7 +15,7 @@ export default {
 <style lang="less" scoped>
 .footer {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 50px;

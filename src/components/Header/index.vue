@@ -168,6 +168,9 @@ export default {
     this.$bus.$on('updateLogo', () => {
       this.updateLogo()
     })
+  },
+  updated() {
+    this.$bus.$emit('switchHandler', this.isOpen)
   }
 };
 </script>

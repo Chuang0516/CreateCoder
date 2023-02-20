@@ -54,7 +54,6 @@ export default {
 
 <style lang="less" scoped>
 .development-logs {
-    margin-top: 56px;
     display: flex;
     flex-direction: column;
     align-items: center;
