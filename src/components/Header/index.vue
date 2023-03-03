@@ -13,13 +13,12 @@
       <!-- 页面菜单 -->
       <div class="menu-container">
         <!-- 侧边导航栏开关 -->
-        <div class="fold-btn">
-          <label>
-            <input checked type="checkbox" title="switch" />
-            <div class="nav-switch" :isOpen="isOpen" @click="switchHandler">
-              <div class="circle"></div>
-            </div>
-          </label>
+        <div class="fold-btn" @click="navSwitch(isOpen)">
+          <svg class="icon" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+            <path d="M 10 15 h 40 C 55 15 55 25 50 25 h -40 C 5 25 5 15 10 15" ref="path1" />
+            <path d="M 10 45 h 80 C 95 45 95 55 90 55 h -80 C 5 55 5 45 10 45" />
+            <path d="M 10 75 h 40 C 55 75 55 85 50 85 h -40 C 5 85 5 75 10 75" ref="path2" />
+          </svg>
         </div>
         <ul class="header-menu">
           <li class="menu-item" :class="{ active: currentIndex == index }" v-for="(menuItem, index) in headerMenuList"
@@ -135,11 +134,6 @@ export default {
         });
       });
     },
-    // 开关侧边导航栏
-    switchHandler() {
-      this.isOpen = !this.isOpen
-      this.$bus.$emit('switchHandler', this.isOpen)
-    },
     // 页面滚动
     scrollHandler() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -155,6 +149,19 @@ export default {
     updateLogo: throttle(function () {
       this.updateLogoFlag = Date.now()
     }, 1000),
+    // 点击页面导航开关展开折叠
+    navSwitch(isOpen) {
+      if (isOpen) {
+        this.$refs.path1.setAttribute('d', 'M 10 15 h 80 C 95 15 95 25 90 25 h -80 C 5 25 5 15 10 15')
+        this.$refs.path2.setAttribute('d', 'M 10 75 h 80 C 95 75 95 85 90 85 h -80 C 5 85 5 75 10 75')
+
+      } else {
+        this.$refs.path1.setAttribute('d', 'M 10 15 h 40 C 55 15 55 25 50 25 h -40 C 5 25 5 15 10 15')
+        this.$refs.path2.setAttribute('d', 'M 10 75 h 40 C 55 75 55 85 50 85 h -40 C 5 85 5 75 10 75')
+      }
+      this.isOpen = !this.isOpen
+      this.$emit('switchHandler', this.isOpen)
+    }
   },
   watch: {
     currentIndex() {
@@ -168,9 +175,6 @@ export default {
     this.$bus.$on('updateLogo', () => {
       this.updateLogo()
     })
-  },
-  updated() {
-    this.$bus.$emit('switchHandler', this.isOpen)
   }
 };
 </script>

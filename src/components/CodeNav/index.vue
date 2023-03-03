@@ -1,6 +1,5 @@
 <template>
-    <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">
-
+    <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">2
         <div class="left-nav" v-show="$route.meta.leftNav">
             <ul class="nav-container">
                 <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
@@ -11,8 +10,7 @@
                             </svg>
                         </i>
                         <span class="menu-text">{{ navMenu.name }}</span>
-                        <i
-                            :class="{ 'el-icon-arrow-right': true, 'menu-open': true, 'open': openIndex == menuIndex }"></i>
+                        <i :class="{ 'el-icon-arrow-right': true, 'menu-open': true, 'open': openIndex == menuIndex }"></i>
                     </div>
                     <Transition name="menu">
                         <ul class="menu-item" :style="{ '--liLength': navMenu.item.length + 1 }"

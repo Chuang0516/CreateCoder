@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <Header :currentIndex="$route.meta.menuIndex" />
-    <router-view />
+    <Header @switchHandler="switchHandler" :currentIndex="$route.meta.menuIndex" />
+    <router-view :isOpen="isOpen" />
     <Footer />
   </div>
 </template>
@@ -14,7 +14,12 @@ export default {
   name: "App",
   components: {
     Header,
-    Footer
+    Footer,
+  },
+  data() {
+    return {
+      isOpen: true
+    }
   },
   methods: {
     adaptation() {
@@ -24,6 +29,10 @@ export default {
           type: 'warning'
         });
       }
+    },
+    // 侧边导航栏开关操作
+    switchHandler(isOpen) {
+      this.isOpen = isOpen
     }
   },
   mounted() {

@@ -45,6 +45,7 @@ import { throttle } from 'lodash'
 
 export default {
     name: 'Home',
+    props: ['isOpen'],
     components: { SearchBox, MenuCards, Clock, CodeNav },
     data() {
         return {
@@ -53,7 +54,6 @@ export default {
             yiyanIconRotate: 0,
             // 背景图片url
             imgUrl: '',
-            isOpen: true,
             transition: ''
         }
     },
@@ -127,16 +127,16 @@ export default {
     },
     mounted() {
         // this.createWether()
-        console.log('home加载' + this.isOpen);
         this.init()
-        this.$bus.$on('switchHandler', (isOpen) => {
-            this.isOpen = isOpen
-            if (!isOpen) {
-                this.transition = `null`
-            } else {
-                this.transition = `all 500ms ease-in 300ms`
-            }
-        })
+        // this.$bus.$on('switchHandler', (config) => {
+        //     let { isOpen, type } = config
+        //     this.isOpen = isOpen
+        //     if (type == 'switch') {
+        //         this.transition = `null`
+        //     } else {
+        //         this.transition = `all 500ms ease-in 300ms`
+        //     }
+        // })
         this.getyiyan()
         this.$store.dispatch('getHomeNav')
     }
@@ -157,7 +157,7 @@ export default {
         flex-direction: column;
         height: 520px;
         margin-left: var(--marginLeft);
-        transition: var(--transition);
+        transition: all 500ms ease-in;
         background-position: center;
         background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
