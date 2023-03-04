@@ -1,5 +1,5 @@
 <template>
-    <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">2
+    <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">
         <div class="left-nav" v-show="$route.meta.leftNav">
             <ul class="nav-container">
                 <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">

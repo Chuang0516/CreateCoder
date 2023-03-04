@@ -1,7 +1,7 @@
 <template>
   <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
-      :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': time, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
+      :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': `${time}ms`, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
       <div class="logo-container">
         <RouterLink class="logo" to="/">
           <div class="logo-box">
@@ -24,9 +24,11 @@
           <li class="menu-item" :class="{ active: currentIndex == index }" v-for="(menuItem, index) in headerMenuList"
             :key="index" @click="menuHandler(index, menuItem.route)">
             <Transition name="cogs">
-              <Cogs v-show="currentIndex == index" :angle="angle" />
+              <Cogs v-show="currentIndex == index && !isLeave" :angle="angle" />
             </Transition>
-            <!-- <img :src="menuItem.icon" class="icon"> -->
+            <svg class="icon" aria-hidden="true">
+              <use :xlink:href="menuItem.icon"></use>
+            </svg>
             <span>{{ menuItem.name }}</span>
           </li>
           <li ref="navigationBar" class="navigation-bar" v-show="currentIndex != null"></li>
@@ -61,9 +63,9 @@ export default {
     return {
       // 导航菜单数据
       headerMenuList: [
-        { name: '首页', icon: require('@/assets/icons/home_icon.png'), route: '/' },
-        { name: '待开发', icon: '', route: '/books' },
-        { name: '待开发', icon: '', route: '/discuss' },
+        { name: '首页', icon: '#icon-shouye', route: '/' },
+        { name: '码上API', icon: '#icon-api', route: '/books' },
+        { name: '码上编程', icon: '#icon-code', route: '/discuss' },
         { name: '待开发', icon: '', route: '/team' },
         { name: '开发日志', icon: '', route: '/course' },
       ],
@@ -75,6 +77,7 @@ export default {
       angle: 0,
       time: 0,
       translateY: '-60%',
+      isLeave: false,
       // 侧边导航栏开关
       isOpen: true,
       // 背景颜色
@@ -88,6 +91,7 @@ export default {
     // 菜单切换
     menuHandler(index, route) {
       let { currentIndex } = this
+      this.isLeave = false
       this.step = currentIndex - index
       // this.currentIndex = index
       // // 导航条移动
@@ -95,7 +99,10 @@ export default {
       // barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
       // 齿轮旋转
       this.angle = `${(this.step) * 80}deg`
-      this.time = `${(Math.abs(this.step) + 1) * 200}ms`
+      this.time = (Math.abs(this.step) + 1) * 200
+      setTimeout(() => {
+        this.isLeave = true
+      }, this.time + 360)
       // Logo 动效
       this.$bus.$emit('updateLogo')
       // 路由切换
@@ -166,7 +173,7 @@ export default {
   watch: {
     currentIndex() {
       let barStyle = this.$refs.navigationBar.style
-      barStyle.left = `${(this.currentIndex * 2 + 1) * 50 / this.headerMenuList.length}% `
+      // barStyle.left = `${(this.currentIndex * 2 + 1) * 50 / this.headerMenuList.length}%`
       barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
     }
   },

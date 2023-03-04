@@ -157,7 +157,7 @@ export default {
         flex-direction: column;
         height: 520px;
         margin-left: var(--marginLeft);
-        transition: all 500ms ease-in;
+        transition: all 500ms ease;
         background-position: center;
         background-size: cover;
         // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
@@ -244,7 +244,7 @@ export default {
             // 时钟
             .clock-container {
                 z-index: 9;
-                margin-top: 20px;
+                margin-top: 10px;
             }
         }
     }

@@ -3,8 +3,8 @@
         <div class="search-type">
             <ul class="type-menu"
                 :style="{ '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / searchTypeList.length}%` }">
-                <li class="type-item" :class="{ active: currentIndex == index }"
-                    v-for="(menuItem, index) in searchTypeList" :key="index" @click="typeHandler(index)">
+                <li class="type-item" :class="{ active: currentIndex == index }" v-for="(menuItem, index) in searchTypeList"
+                    :key="index" @click="typeHandler(index)">
                     <span>{{ menuItem.name }}</span>
                 </li>
                 <li ref="navigationBar" class="navigation-bar"></li>

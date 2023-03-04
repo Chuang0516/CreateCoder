@@ -26,8 +26,8 @@ export default {
     align-items: center;
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translate(-50%, -60%) rotate(var(--angle));
+    left: calc(50% + 17px);
+    transform: translate(-50%, -55%) rotate(var(--angle));
     transform-origin: center;
     width: 32px;
     height: 32px;

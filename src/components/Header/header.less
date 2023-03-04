@@ -23,7 +23,7 @@
         width: var(--leftNavWidth);
         background-color: #fff;
         position: relative;
-        transition: width 500ms ease-in;
+        transition: width 500ms ease;
         overflow: hidden;
 
         .logo {
@@ -67,7 +67,8 @@
           svg {
             path {
               fill: #fff;
-              transition: all 0.5s ease-in;
+              transition: d 0.5s ease;
+              fill: var(--color);
             }
           }
           // label {
@@ -117,12 +118,11 @@
           align-items: center;
           flex: 1;
           height: 100%;
-          margin-left: 20px;
 
           .navigation-bar {
             position: absolute;
             bottom: 6px;
-            left: var(--navigationLeft);
+            left: calc(var(--navigationLeft) + 17px);
             transform: translateX(-50%);
             display: block;
             width: 26px;
@@ -144,8 +144,9 @@
             user-select: none;
 
             .icon {
-              width: 22px;
-              height: 22px;
+              width: 24px;
+              height: 24px;
+              margin-right: 10px;
             }
 
             span {
@@ -154,11 +155,11 @@
 
             // 齿轮动画
             .cogs-enter {
-              transform: translate(-50%, -60%);
+              transform: translate(-50%, -55%);
             }
 
             .cogs-enter-to {
-              transform: translate(-50%, var(--translateY)) rotate(var(--angle));
+              transform: translate(-50%, -55%) rotate(var(--angle));
             }
 
             .cogs-enter-active {
@@ -166,11 +167,11 @@
             }
 
             .cogs-leave {
-              transform: translate(-50%, -60%) rotate(var(--angle));
+              transform: translate(-50%, -55%) rotate(var(--angle));
             }
 
             .cogs-leave-to {
-              transform: translate(-50%, -100%);
+              transform: translate(-50%, -100%) rotate(var(--angle));
             }
 
             .cogs-leave-active {
