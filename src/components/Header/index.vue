@@ -1,7 +1,7 @@
 <template>
   <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
-      :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': `${time}ms`, '--translateY': translateY, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
+      :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': `${time}ms`, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
       <div class="logo-container">
         <RouterLink class="logo" to="/">
           <div class="logo-box">
@@ -24,7 +24,7 @@
           <li class="menu-item" :class="{ active: currentIndex == index }" v-for="(menuItem, index) in headerMenuList"
             :key="index" @click="menuHandler(index, menuItem.route)">
             <Transition name="cogs">
-              <Cogs v-show="currentIndex == index && !isLeave" :angle="angle" />
+              <Cogs v-show="lastIndex == index && !isLeave" :angle="angle" />
             </Transition>
             <svg class="icon" aria-hidden="true">
               <use :xlink:href="menuItem.icon"></use>
@@ -64,20 +64,19 @@ export default {
       // 导航菜单数据
       headerMenuList: [
         { name: '首页', icon: '#icon-shouye', route: '/' },
-        { name: '码上API', icon: '#icon-api', route: '/books' },
-        { name: '码上编程', icon: '#icon-code', route: '/discuss' },
+        { name: '码上API', icon: '#icon-API1', route: '/books' },
+        { name: '码上编程', icon: '#icon-biancheng', route: '/discuss' },
         { name: '待开发', icon: '', route: '/team' },
-        { name: '开发日志', icon: '', route: '/course' },
+        { name: '开发日志', icon: '#icon-fuwurizhi', route: '/course' },
       ],
-      // // 当前点击的 active 
-      // currentIndex: 0,
       // 导航条相关数据
       step: 0,
       // 齿轮相关数据
       angle: 0,
       time: 0,
-      translateY: '-60%',
-      isLeave: false,
+      lastIndex: this.currentIndex,
+      // 齿轮默认离开
+      isLeave: true,
       // 侧边导航栏开关
       isOpen: true,
       // 背景颜色
@@ -91,22 +90,24 @@ export default {
     // 菜单切换
     menuHandler(index, route) {
       let { currentIndex } = this
-      this.isLeave = false
-      this.step = currentIndex - index
-      // this.currentIndex = index
-      // // 导航条移动
-      // barStyle.left = `${(index * 20) + 10}% `
-      // barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
-      // 齿轮旋转
-      this.angle = `${(this.step) * 80}deg`
-      this.time = (Math.abs(this.step) + 1) * 200
-      setTimeout(() => {
-        this.isLeave = true
-      }, this.time + 360)
-      // Logo 动效
-      this.$bus.$emit('updateLogo')
+      this.lastIndex = index
       // 路由切换
       this.$router.push(`${route}`)
+      // 点击的不是当前的菜单项
+      if (currentIndex != index) {
+        // 步长值等于当前的 index - 上一个 index
+        this.step = currentIndex - index
+        // 齿轮旋转动效相关数据变化
+        this.angle = `${(this.step) * 120}deg`
+        this.time = (Math.abs(this.step) + 1) * 200
+        // 齿轮到达目标菜单后，停留 360ms 后离开
+        this.isLeave = false
+        setTimeout(() => {
+          this.isLeave = true
+        }, this.time + 260)
+        // Logo 动效
+        this.$bus.$emit('updateLogo')
+      }
     },
     // 登录弹框
     openLoginBox() {

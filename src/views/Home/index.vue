@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <CodeNav :isOpen="isOpen" />
+        <LeftNav :isOpen="isOpen" />
         <div class="home-top" :style="{ '--marginLeft': isOpen ? '220px' : '60px', '--transition': transition }">
             <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="60" shapeType="circle"
                 :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
@@ -40,13 +40,13 @@
 import SearchBox from '@/views/Home/SearchBox'
 import MenuCards from '@/views/Home/MenuCards'
 import Clock from '@/views/Home/Clock'
-import CodeNav from '@/components/CodeNav'
+import LeftNav from '@/components/LeftNav'
 import { throttle } from 'lodash'
 
 export default {
     name: 'Home',
     props: ['isOpen'],
-    components: { SearchBox, MenuCards, Clock, CodeNav },
+    components: { SearchBox, MenuCards, Clock, LeftNav },
     data() {
         return {
             hitokoto: '',

@@ -36,7 +36,7 @@ import LogoSvg from '@/components/LogoSvg'
 import { mapState } from 'vuex'
 
 export default {
-    name: 'CodeNav',
+    name: 'LeftNav',
     components: { LogoSvg },
     props: ['isOpen'],
     data() {

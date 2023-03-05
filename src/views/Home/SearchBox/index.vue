@@ -16,7 +16,7 @@
                 :placeholder="searchTypeList[currentIndex].type.length ? searchTypeList[currentIndex].type[currentOption].name : searchTypeList[currentIndex].name">
             <i class="el-icon-search" @click="toSearch(currentIndex, currentOption)"></i>
         </form>
-        <div class="search-options">
+        <div class="search-options" :style="{ '--optionsWidth': `${searchTypeList[currentIndex].type.length * 18}%` }">
             <ul>
                 <li v-for="(option, index) in searchTypeList[currentIndex].type" :key="index"
                     :class="{ 'active': currentOption == index }" @click="currentOption = index">
@@ -52,7 +52,13 @@ export default {
             searchTypeList: [
                 {
                     name: '站内',
-                    type: []
+                    type: [
+                        { name: '首页', icon: '#icon-shouye' },
+                        { name: '码上API', icon: '#icon-API1' },
+                        { name: '码上编程', icon: '#icon-biancheng' },
+                        { name: '待开发', icon: '' },
+                        { name: '开发日志', icon: '#icon-fuwurizhi' }
+                    ]
                 },
                 {
                     name: '搜索引擎',
@@ -265,7 +271,7 @@ export default {
     }
 
     .search-options {
-        width: 50%;
+        width: var(--optionsWidth);
         height: 36px;
         margin-bottom: 10px;
 
@@ -290,7 +296,7 @@ export default {
 
                 &>i {
                     position: absolute;
-                    top: -11px;
+                    top: -10.5px;
                     font-size: 28px;
                     color: rgba(28, 28, 28, 0.6);
                 }
@@ -305,7 +311,10 @@ export default {
                     align-items: center;
 
                     .option-icon {
-                        margin-right: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-right: 5px;
 
                         svg {
                             width: 20px;
