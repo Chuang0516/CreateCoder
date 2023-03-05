@@ -22,6 +22,9 @@ import '@/mock/mockServe'
 // vue复制内容到剪贴板插件
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+// 引入 animate.css
+import animate from 'animate.css'
+Vue.use(animate)
 
 Vue.config.productionTip = false
 

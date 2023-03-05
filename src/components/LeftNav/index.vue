@@ -1,30 +1,47 @@
 <template>
     <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">
         <div class="left-nav" v-show="$route.meta.leftNav">
-            <ul class="nav-container">
+            <!-- 展开时的导航菜单 -->
+            <Transition enter-active-class="animate__animated animate__slideInRight animate__fast"
+                leave-active-class="animate__animated animate__slideOutRight animate__fast">
+                <ul class="nav-container" v-show="isOpen">
+                    <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
+                        <div class="menu" @click="openMenuItem(menuIndex)">
+                            <i class="menu-icon">
+                                <svg class="icon" aria-hidden="true">
+                                    <use :xlink:href="navMenu.icon"></use>
+                                </svg>
+                            </i>
+                            <span class="menu-text">{{ navMenu.name }}</span>
+                            <i
+                                :class="{ 'el-icon-arrow-right': true, 'menu-open': true, 'open': openIndex == menuIndex }"></i>
+                        </div>
+                        <Transition name="menu">
+                            <ul class="menu-item" :style="{ '--liLength': navMenu.item.length + 1 }"
+                                v-show="openIndex == menuIndex">
+                                <li class="item" v-for="(navItem, itemIndex) in navMenu.item" :key="navItem.id">
+                                    <i class="item-icon">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use :xlink:href="navItem.icon"></use>
+                                        </svg>
+                                    </i>
+                                    <span class="item-text">{{ navItem.name }}</span>
+                                </li>
+                            </ul>
+                        </Transition>
+                    </li>
+                </ul>
+            </Transition>
+            <!-- 收缩后的菜单 -->
+            <ul class="nav-container-shrink" :style="{ '--navTop': `${navTop}px` }">
                 <li class="nav-menu" v-for="(navMenu, menuIndex) in  pageNavList" :key="navMenu.id">
-                    <div class="menu" @click="openMenuItem(menuIndex)">
+                    <div class="menu">
                         <i class="menu-icon">
                             <svg class="icon" aria-hidden="true">
                                 <use :xlink:href="navMenu.icon"></use>
                             </svg>
                         </i>
-                        <span class="menu-text">{{ navMenu.name }}</span>
-                        <i :class="{ 'el-icon-arrow-right': true, 'menu-open': true, 'open': openIndex == menuIndex }"></i>
                     </div>
-                    <Transition name="menu">
-                        <ul class="menu-item" :style="{ '--liLength': navMenu.item.length + 1 }"
-                            v-show="openIndex == menuIndex">
-                            <li class="item" v-for="(navItem, itemIndex) in navMenu.item" :key="navItem.id">
-                                <i class="item-icon">
-                                    <svg class="icon" aria-hidden="true">
-                                        <use :xlink:href="navItem.icon"></use>
-                                    </svg>
-                                </i>
-                                <span class="item-text">{{ navItem.name }}</span>
-                            </li>
-                        </ul>
-                    </Transition>
                 </li>
             </ul>
         </div>
@@ -42,6 +59,8 @@ export default {
     data() {
         return {
             openIndex: null,
+            // 收缩后菜单定位
+            navTop: 0
         }
     },
     computed: {
@@ -51,6 +70,14 @@ export default {
         // 展开菜单
         openMenuItem(menuIndex) {
             this.openIndex = menuIndex === this.openIndex ? null : menuIndex;
+        }
+    },
+    watch: {
+        isOpen: {
+            handler(newVal, oldVal) {
+                this.navTop = newVal ? -454 : 0
+            },
+            immediate: true
         }
     },
     mounted() {
