@@ -7,6 +7,10 @@
                 :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
                 clickMode="push" />
             <img :src="imgUrl" v-show="imgUrl" class="wallpaper">
+            <!-- 天气预报 -->
+            <div class="weather">
+                <div id="he-plugin-simple"></div>
+            </div>
             <div class="home-main">
                 <!-- 一言 -->
                 <div class="yiyan" :style="{ '--width': `${(hitokoto.length + 4) * 18}px` }" v-show="hitokoto">
@@ -22,16 +26,15 @@
                 <div class="search-container">
                     <SearchBox />
                 </div>
-                <!-- 天气预报 -->
-                <!-- <div class="weather">
-                    <div id="he-plugin-simple"></div>
-                </div> -->
                 <!-- 时钟 -->
                 <div class="clock-container">
                     <Clock />
                 </div>
             </div>
             <MenuCards :imgUrl="imgUrl" @updateImgUrl="updateImgUrl" />
+        </div>
+        <div class="">
+
         </div>
     </div>
 </template>
@@ -62,23 +65,23 @@ export default {
             window.WIDGET = {
                 "CONFIG": {
                     "modules": "012",
-                    "background": "1",
+                    "background": "5",
                     "tmpColor": "FFFFFF",
-                    "tmpSize": "16",
+                    "tmpSize": "14",
                     "cityColor": "FFFFFF",
-                    "citySize": "16",
+                    "citySize": "14",
                     "aqiColor": "FFFFFF",
-                    "aqiSize": "16",
-                    "weatherIconSize": "24",
-                    "alertIconSize": "18",
-                    "padding": "5px 10px 5px 10px",
+                    "aqiSize": "14",
+                    "weatherIconSize": "16",
+                    "alertIconSize": "20",
+                    "padding": "10px 10px 10px 10px",
                     "shadow": "0",
                     "language": "auto",
-                    "borderRadius": "20",
-                    "fixed": "false",
+                    "borderRadius": "5",
+                    "fixed": "true",
                     "vertical": "center",
                     "horizontal": "center",
-                    "key": "a5d8d473da3d4efa880afc6c070886db"
+                    "key": "18372296867d4592a43c6b85f39f252d"
                 }
             }
             let script = document.createElement('script')
@@ -126,7 +129,7 @@ export default {
         }
     },
     mounted() {
-        // this.createWether()
+        this.createWether()
         this.init()
         // this.$bus.$on('switchHandler', (config) => {
         //     let { isOpen, type } = config
@@ -167,7 +170,7 @@ export default {
             width: 100%;
             height: 100%;
             position: absolute;
-            z-index: 9;
+            z-index: 1;
             user-select: none;
         }
 
@@ -176,7 +179,14 @@ export default {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 1;
+            z-index: -1;
+        }
+
+        .weather {
+            z-index: 9;
+            position: absolute;
+            left: 16px;
+            top: 72px;
         }
 
         .home-main {
@@ -187,22 +197,14 @@ export default {
             align-items: center;
             flex-direction: column;
 
-            .weather {
-                z-index: 9;
-
-                & div {
-                    z-index: 9999;
-                }
-            }
-
             .yiyan {
+                z-index: 2;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 color: #fff;
                 font-size: 18px;
                 font-family: 'Courier New', Courier, monospace;
-                z-index: 10;
                 transition: width 200ms linear;
                 backdrop-filter: blur(60px);
                 background-color: #ffffff20;
@@ -234,7 +236,7 @@ export default {
 
             // 搜索框的样式
             .search-container {
-                z-index: 10;
+                z-index: 2;
                 width: 100%;
                 display: flex;
                 justify-content: center;
@@ -243,7 +245,7 @@ export default {
 
             // 时钟
             .clock-container {
-                z-index: 9;
+                z-index: 1;
                 margin-top: 10px;
             }
         }

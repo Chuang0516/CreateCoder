@@ -7,7 +7,9 @@
           <div class="logo-box">
             <LogoSvg :key="updateLogoFlag" />
           </div>
+          <!-- <Transition name="logoText"> -->
           <img src="~@/assets/images/logo_text.png" alt="" v-show="isOpen">
+          <!-- </Transition> -->
         </RouterLink>
       </div>
       <!-- 页面菜单 -->
