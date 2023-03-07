@@ -1,7 +1,7 @@
 <template>
-    <div class="home">
+    <div class="home" :style="{ '--marginLeft': isOpen ? '220px' : '60px' }">
         <LeftNav :isOpen="isOpen" />
-        <div class="home-top" :style="{ '--marginLeft': isOpen ? '220px' : '60px', '--transition': transition }">
+        <div class="home-top" :style="{ '--transition': transition }">
             <vue-particles class="login-bg" color="#fff" :particleOpacity="0.7" :particlesNumber="60" shapeType="circle"
                 :particleSize="4" linesColor="#8DD1FE" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
                 :linesDistance="150" :moveSpeed="2" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
@@ -33,8 +33,22 @@
             </div>
             <MenuCards :imgUrl="imgUrl" @updateImgUrl="updateImgUrl" />
         </div>
-        <div class="">
-
+        <div class="home-billboard" :style="{ height: isOpen ? '216px' : '260px' }">
+            <div class="recommend">
+                <div></div>
+                <div></div>
+            </div>
+            <div class="banner">
+                <el-carousel :interval="12000" type="card" :height="isOpen ? '189px' : '233px'">
+                    <el-carousel-item v-for="banner in bannerList" :key="banner.id">
+                        <div class="banner-box">
+                            <img :src="banner.url" :title="banner.title">
+                            <span>{{ banner.title }}</span>
+                        </div>
+                    </el-carousel-item>
+                </el-carousel>
+            </div>
+            <div class="ranking"></div>
         </div>
     </div>
 </template>
@@ -45,6 +59,7 @@ import MenuCards from '@/views/Home/MenuCards'
 import Clock from '@/views/Home/Clock'
 import LeftNav from '@/components/LeftNav'
 import { throttle } from 'lodash'
+import { mapState } from 'vuex'
 
 export default {
     name: 'Home',
@@ -128,29 +143,26 @@ export default {
             }
         }
     },
+    computed: {
+        // 获取仓库中轮播图数据
+        ...mapState({ bannerList: state => state.homeBanner })
+    },
     mounted() {
         this.createWether()
         this.init()
-        // this.$bus.$on('switchHandler', (config) => {
-        //     let { isOpen, type } = config
-        //     this.isOpen = isOpen
-        //     if (type == 'switch') {
-        //         this.transition = `null`
-        //     } else {
-        //         this.transition = `all 500ms ease-in 300ms`
-        //     }
-        // })
         this.getyiyan()
         this.$store.dispatch('getHomeNav')
+        this.$store.dispatch('getHomeBanner')
     }
 }
 </script>
 
 <style lang="less" scoped>
 .home {
-    width: 100%;
     height: 1200px;
     overflow: hidden;
+    margin-left: var(--marginLeft);
+    transition: all 500ms ease;
 
     .home-top {
         position: relative;
@@ -159,11 +171,9 @@ export default {
         align-items: center;
         flex-direction: column;
         height: 520px;
-        margin-left: var(--marginLeft);
-        transition: all 500ms ease;
+        width: 100%;
         background-position: center;
         background-size: cover;
-        // background: linear-gradient(0deg, #3ad6e2 0%, #2681c2 60%, #0C72BA 100%);
         background: radial-gradient(180% 100% at top center, #48466d 20%, #3d84a8 60%, #46cdcf 85%, #f5f6f9);
 
         #particles-js {
@@ -248,6 +258,79 @@ export default {
                 z-index: 1;
                 margin-top: 10px;
             }
+        }
+    }
+
+    .home-billboard {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 216px;
+        margin-top: -32px;
+        transition: all 300ms ease;
+
+        .recommend {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 25%;
+            height: 100%;
+            z-index: 3;
+
+            div {
+                width: 90%;
+                height: 48%;
+                border-radius: 18px;
+
+                &:first-child {
+                    background-color: #3d84a8;
+                }
+
+                &:last-child {
+                    background-color: #e1cd11;
+                }
+            }
+        }
+
+        .banner {
+            width: 50%;
+            height: 100%;
+            align-self: flex-end;
+
+            .banner-box {
+                position: relative;
+                width: 100%;
+                height: 100%;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                span {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 32px;
+                    line-height: 32px;
+                    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+                    color: #fff;
+                    text-align: center;
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .ranking {
+            z-index: 9;
+            width: 25%;
+            height: 100%;
+            margin: 0 10px;
+            background-color: #46cdcf;
+            border-radius: 18px;
         }
     }
 }

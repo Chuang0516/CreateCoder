@@ -51,6 +51,7 @@
 <script>
 import LogoSvg from '@/components/LogoSvg'
 import { mapState } from 'vuex'
+import 'animate.css'
 
 export default {
     name: 'LeftNav',
