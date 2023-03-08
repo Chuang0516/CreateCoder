@@ -44,6 +44,7 @@ export default {
                         this.timelineList.push(timeLine)
                     })
                 })
+
         }
     },
     mounted() {

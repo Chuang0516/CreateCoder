@@ -23,6 +23,12 @@ import '@/mock/mockServe'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
+import VueLazyload from 'vue-lazyload'
+import LazyloadImg from '@/assets/images/loading.gif'
+Vue.use(VueLazyload, {
+  loading: LazyloadImg,
+})
+
 Vue.config.productionTip = false
 
 new Vue({

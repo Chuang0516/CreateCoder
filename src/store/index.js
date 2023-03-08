@@ -7,14 +7,14 @@ import { reqHomeInfo, reqHomeBanner } from '@/api'
 
 const state = {
   homeNavList: [],
-  homeBanner: [],
+  homeBillboard: [],
 }
 const mutations = {
   GETHOMENAV(state, homeNavList) {
     state.homeNavList = homeNavList
   },
-  GETHOMEBANNER(state, homeBanner) {
-    state.homeBanner = homeBanner
+  GETHOMEBANNER(state, homeBillboard) {
+    state.homeBillboard = homeBillboard
   },
 }
 const actions = {
