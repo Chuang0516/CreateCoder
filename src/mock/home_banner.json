@@ -15,23 +15,23 @@
     "bannerList": [
             {
                 "id": 1,
-                "url": "https://636c-cloudbase-baas-4g1a5g4h6dc9d130-1314033851.tcb.qcloud.la/Banner/%E6%A4%8D%E6%A0%91%E8%8A%82.png?sign=ac2706ab8f4bd36274fe10452f7391f9&t=1678182588",
-                "title": "植树节"
+                "url": "https://dummyimage.com/300x200/9ecff0/000000.png&text=%E5%B9%BF%E5%91%8A%E5%8D%A0%E4%BD%8D300%C3%97200",
+                "title": "广告标题测试"
             },
             {
                 "id": 2,
-                "url": "https://636c-cloudbase-baas-4g1a5g4h6dc9d130-1314033851.tcb.qcloud.la/Banner/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-03-07%20173841.png?sign=6405ec1ec62e66fa423074369b75f5e2&t=1678182006",
-                "title": "3.8女神节买一赠一"
+                "url": "https://dummyimage.com/300x200/9ef0b4/000000.png&text=%E5%B9%BF%E5%91%8A%E5%8D%A0%E4%BD%8D300%C3%97200",
+                "title": "广告标题测试"
             },
             {
                 "id": 3,
-                "url": "https://636c-cloudbase-baas-4g1a5g4h6dc9d130-1314033851.tcb.qcloud.la/Banner/3.8%E5%A6%87%E5%A5%B3%E8%8A%82.png?sign=8a04b40bd1020f1c7aa834de48b61a61&t=1678182955",
-                "title": "国际劳动妇女节快乐"
+                "url": "https://dummyimage.com/300x200/f0a69e/000000.png&text=%E5%B9%BF%E5%91%8A%E5%8D%A0%E4%BD%8D300%C3%97200",
+                "title": "广告标题测试"
             },
             {
                 "id": 4,
-                "url": "https://636c-cloudbase-baas-4g1a5g4h6dc9d130-1314033851.tcb.qcloud.la/Banner/%E7%A7%91%E6%8A%80.png?sign=21852f0ad5f734ffdc79acbb1a69d638&t=1678182942",
-                "title": "现代城市科技网络与自动化交通"
+                "url": "https://dummyimage.com/300x200/f0da9e/000000.png&text=%E5%B9%BF%E5%91%8A%E5%8D%A0%E4%BD%8D300%C3%97200",
+                "title": "广告标题测试"
             }
     ]
 }

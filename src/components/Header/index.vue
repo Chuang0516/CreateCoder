@@ -36,18 +36,9 @@
           <li ref="navigationBar" class="navigation-bar" v-show="currentIndex != null"></li>
         </ul>
       </div>
-      <!-- 小飞机 -->
-      <div class="mini-program-tips-container">
-        <el-popover placement="bottom" title="扫码联系作者" width="50" trigger="hover">
-          <el-image style="width: 130px; height: 150px" :src="require('@/assets/images/mine_wechat.png')"
-            fit="cover"></el-image>
-          <div slot="reference" class="mini-program-tips-container">
-            <i class="el-icon-s-promotion mini-program-tips"></i>
-          </div>
-        </el-popover>
-      </div>
       <div class="login-container">
-        <i class="el-icon-user-solid"></i>
+        <i class="el-icon-user-solid" @click="$LoginModal()"></i>
+        <div class="loginModal"></div>
       </div>
     </div>
   </div>
@@ -57,6 +48,8 @@
 import Cogs from '@/components/Header/Cogs'
 import LogoSvg from '@/components/LogoSvg'
 import { throttle } from 'lodash'
+import cloudbase from "@cloudbase/js-sdk"
+
 export default {
   name: 'Header',
   components: { Cogs, LogoSvg },
@@ -86,6 +79,11 @@ export default {
       // 字体颜色
       fontColor: '#eee',
       updateLogoFlag: Date.now(),
+      // 登录数据
+      userLogin: {
+        email: '',
+        password: ''
+      }
     }
   },
   methods: {
@@ -171,7 +169,35 @@ export default {
       }
       this.isOpen = !this.isOpen
       this.$emit('switchHandler', this.isOpen)
-    }
+    },
+    // 登录处理
+    // loginHandler(email, password) {
+    //   const app = cloudbase.init({
+    //     env: "cloudbase-baas-4g1a5g4h6dc9d130"
+    //   })
+    //   app
+    //     .auth()
+    //     .signInWithEmailAndPassword(email, password)
+    //     .then((loginState) => {
+    //       // 登录成功
+    //       console.log(loginState);
+    //     });
+    // },
+    // registered(email, password) {
+    //   const app = cloudbase.init({
+    //     env: "cloudbase-baas-4g1a5g4h6dc9d130"
+    //   })
+    //   app
+    //     .auth()
+    //     .signUpWithEmailAndPassword(email, password)
+    //     .then(() => {
+    //       this.$message({
+    //         message: '请登录您的邮箱确认',
+    //         type: 'success',
+    //         center: true
+    //       })
+    //     })
+    // }
   },
   watch: {
     currentIndex() {

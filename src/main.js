@@ -22,12 +22,15 @@ import '@/mock/mockServe'
 // vue复制内容到剪贴板插件
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
-
+// 图片懒加载
 import VueLazyload from 'vue-lazyload'
 import LazyloadImg from '@/assets/images/loading.gif'
 Vue.use(VueLazyload, {
   loading: LazyloadImg,
 })
+// 引入自定义插件
+import LoginModal from '@/Plugins/Login'
+Vue.use(LoginModal)
 
 Vue.config.productionTip = false
 

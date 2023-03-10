@@ -11,6 +11,14 @@
             <div class="weather">
                 <div id="he-plugin-simple"></div>
             </div>
+            <div class="translate">
+                <span>快捷翻译</span>
+                <i class="translate-icon">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-yuyanfanyi"></use>
+                    </svg>
+                </i>
+            </div>
             <div class="home-main">
                 <!-- 一言 -->
                 <div class="yiyan" :style="{ '--width': `${(hitokoto.length + 4) * 18}px` }" v-show="hitokoto">
@@ -31,7 +39,17 @@
                     <Clock />
                 </div>
             </div>
+            <!-- 右侧卡片菜单 -->
             <MenuCards :imgUrl="imgUrl" @updateImgUrl="updateImgUrl" />
+            <!-- 快捷应用栏 -->
+            <div class="quickAppBar">
+                <div class="app" v-for="app in quickAppBar" :key="app.id">
+                    <svg class="icon" aria-hidden="true">
+                        <use :xlink:href="app.icon"></use>
+                    </svg>
+                    <div class="active"></div>
+                </div>
+            </div>
         </div>
         <div class="home-billboard" :style="{ height: isOpen ? '216px' : '260px' }">
             <div class="recommend">
@@ -67,8 +85,8 @@
                 </div>
                 <div class="timeline">
                     <el-timeline :reverse="reverse">
-                        <el-timeline-item v-for="(commit, index) in timelineList" :key="index" color="rgb(11, 189, 135)"
-                            size="normal" :timestamp="utctobeijing(commit.date)">
+                        <el-timeline-item v-for="(commit, index) in timelineList" :key="index" color="#2681C2" size="normal"
+                            :timestamp="utctobeijing(commit.date)">
                             <span class="title">{{ commit.title }}</span>
                             <br>
                             <span class="content" v-for="(content, index) in commit.contentList" :key="index">{{ content
@@ -109,7 +127,11 @@ export default {
             imgUrl: '',
             transition: '',
             timelineList: [],
-            reverse: false
+            reverse: false,
+            // 快捷应用相关数据
+            quickAppBar: [
+                { id: 1, name: '翻译', icon: '#icon-yuyanfanyi' }
+            ]
         }
     },
     methods: {
@@ -260,6 +282,37 @@ export default {
             top: 72px;
         }
 
+        .translate {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 132px;
+            left: 16px;
+            width: 118px;
+            height: 32px;
+            z-index: 3;
+
+            .translate-icon {
+                display: inline-block;
+                height: 22px;
+
+                .icon {
+                    width: 22px;
+                    height: 22px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            span {
+                color: #fff;
+                font-size: 14px;
+                margin-right: 6px;
+            }
+        }
+
         .home-main {
             position: relative;
             width: 100%;
@@ -320,6 +373,37 @@ export default {
                 margin-top: 10px;
             }
         }
+
+        .quickAppBar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 20px;
+            width: 92%;
+            height: 50px;
+            // border-bottom: 1px solid #666;
+            z-index: 3;
+            cursor: pointer;
+
+            .app {
+                width: 36px;
+                height: 36px;
+                background-color: #F5F5FB;
+                border-radius: 6px;
+                margin: 0 12px;
+                transition: all 160ms linear;
+
+                &:hover {
+                    transform: scale(1.2) translateY(-8px);
+                }
+
+                .icon {
+                    width: 36px;
+                    height: 36px;
+                }
+            }
+        }
     }
 
     .home-billboard {
@@ -327,7 +411,7 @@ export default {
         justify-content: space-around;
         align-items: center;
         height: 216px;
-        margin: -36px 10px 0 10px;
+        margin: 0px 10px 0 10px;
         transition: all 300ms ease;
 
         .recommend {
@@ -346,10 +430,10 @@ export default {
                 border-radius: 18px;
                 overflow: hidden;
                 cursor: pointer;
+                transition: all 260ms ease;
 
                 &:hover {
                     transform: scale(1.05);
-                    transition: all 100ms linear;
                 }
 
                 img {
@@ -432,6 +516,8 @@ export default {
                 width: 100%;
                 height: 30px;
                 background-color: #efefef;
+                box-shadow: 0 1px 6px 1px #666;
+                z-index: 9;
 
                 .title {
                     display: flex;
@@ -452,8 +538,8 @@ export default {
 
                     span {
                         line-height: 30px;
-                        font-size: 15px;
-                        color: #333;
+                        font-size: 16px;
+                        color: #000;
                     }
                 }
 
@@ -461,8 +547,9 @@ export default {
                     display: flex;
                     justify-content: space-around;
                     align-items: center;
-                    width: 60px;
+                    width: 52px;
                     height: 30px;
+                    margin-right: 5px;
 
                     i {
                         width: 24px;
@@ -483,11 +570,16 @@ export default {
                 overflow-y: scroll;
                 padding: 10px;
                 user-select: none;
-                line-height: 20px;
+                line-height: 18px;
                 cursor: pointer;
+
+                .el-timeline-item {
+                    padding-bottom: 10px;
+                }
 
                 span.title {
                     margin-bottom: 5px;
+                    font-size: 13px;
                 }
 
                 span.content {
