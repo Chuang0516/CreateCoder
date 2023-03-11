@@ -170,34 +170,6 @@ export default {
       this.isOpen = !this.isOpen
       this.$emit('switchHandler', this.isOpen)
     },
-    // 登录处理
-    // loginHandler(email, password) {
-    //   const app = cloudbase.init({
-    //     env: "cloudbase-baas-4g1a5g4h6dc9d130"
-    //   })
-    //   app
-    //     .auth()
-    //     .signInWithEmailAndPassword(email, password)
-    //     .then((loginState) => {
-    //       // 登录成功
-    //       console.log(loginState);
-    //     });
-    // },
-    // registered(email, password) {
-    //   const app = cloudbase.init({
-    //     env: "cloudbase-baas-4g1a5g4h6dc9d130"
-    //   })
-    //   app
-    //     .auth()
-    //     .signUpWithEmailAndPassword(email, password)
-    //     .then(() => {
-    //       this.$message({
-    //         message: '请登录您的邮箱确认',
-    //         type: 'success',
-    //         center: true
-    //       })
-    //     })
-    // }
   },
   watch: {
     currentIndex() {

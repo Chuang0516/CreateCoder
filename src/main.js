@@ -28,7 +28,7 @@ import LazyloadImg from '@/assets/images/loading.gif'
 Vue.use(VueLazyload, {
   loading: LazyloadImg,
 })
-// 引入自定义插件
+// 引入自定义登录模态框插件
 import LoginModal from '@/Plugins/Login'
 Vue.use(LoginModal)
 
