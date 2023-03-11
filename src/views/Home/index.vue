@@ -242,8 +242,7 @@ export default {
 
 <style lang="less" scoped>
 .home {
-    height: 1200px;
-    overflow: hidden;
+    height: 100%;
     margin-left: var(--marginLeft);
     transition: all 500ms ease;
 
