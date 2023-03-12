@@ -159,7 +159,7 @@
 // 引入图形验证码组件
 import Identify from '@/components/Identify'
 import cloudbase from "@cloudbase/js-sdk"
-import env from '../config/login'
+import env from '@/config/login'
 
 export default {
     name: 'LoginModal',
@@ -493,12 +493,14 @@ export default {
                     .signInWithEmailAndPassword(email, password)
                     .then((loginState) => {
                         console.log(loginState);
-                        // // 登录成功
+                        // 登录成功
                         this.$notify({
                             title: '登录成功',
                             message: '恭喜你，欢迎使用码上创新！',
                             type: 'success',
                         })
+                        // 向 header 组件发送登录成功的信息
+                        this.$bus.$emit('loginState', true)
                         this.close()
                     })
                     .catch(error => {
@@ -535,7 +537,7 @@ export default {
                     .then(() => {
                         this.$notify({
                             title: '验证邮箱',
-                            message: `我们向你的邮箱发送了一封邮件，请登录你的邮箱${this.email}，点击邮件中的链接，以得到我们的确认。`,
+                            message: `我们向你的邮箱发送了一封邮件，请登录你的邮箱${this.email}，以得到我们的确认。`,
                             type: 'success'
                         });
                     })

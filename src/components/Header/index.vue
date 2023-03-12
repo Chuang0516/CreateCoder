@@ -37,8 +37,8 @@
         </ul>
       </div>
       <div class="login-container">
-        <i class="el-icon-user-solid" @click="$LoginModal()"></i>
-        <div class="loginModal"></div>
+        <i class="el-icon-user-solid" @click="$LoginModal()" v-show="!isLogin"></i>
+        <UserAvatar v-show="isLogin" />
       </div>
     </div>
   </div>
@@ -47,11 +47,14 @@
 <script>
 import Cogs from '@/components/Header/Cogs'
 import LogoSvg from '@/components/LogoSvg'
+import UserAvatar from '@/components/Header/UserAvatar'
 import { throttle } from 'lodash'
+import cloudbase from '@cloudbase/js-sdk'
+import env from '@/config/login'
 
 export default {
   name: 'Header',
-  components: { Cogs, LogoSvg },
+  components: { Cogs, LogoSvg, UserAvatar },
   props: ['currentIndex'],
   data() {
     return {
@@ -82,7 +85,9 @@ export default {
       userLogin: {
         email: '',
         password: ''
-      }
+      },
+      // 登录状态
+      isLogin: false
     }
   },
   methods: {
@@ -182,6 +187,17 @@ export default {
     this.$bus.$on('updateLogo', () => {
       this.updateLogo()
     })
+    this.$bus.$on('loginState', (isLogin) => {
+      console.log(isLogin);
+      this.isLogin = isLogin
+    })
+    const app = cloudbase.init(env)
+    const loginState = app.auth().hasLoginState()
+    if (loginState) {
+      this.isLogin = true
+    } else {
+      this.isLogin = false
+    }
   }
 };
 </script>
