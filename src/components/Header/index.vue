@@ -48,7 +48,6 @@
 import Cogs from '@/components/Header/Cogs'
 import LogoSvg from '@/components/LogoSvg'
 import { throttle } from 'lodash'
-import cloudbase from "@cloudbase/js-sdk"
 
 export default {
   name: 'Header',

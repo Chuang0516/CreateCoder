@@ -1,6 +1,6 @@
 <template>
-    <div v-if="show" ref="modal" class="loginModal" @click="modalQuit" @mousewheel.prevent>
-        <div class="login-container" @click.stop>
+    <div v-if="show" ref="modal" class="loginModal" @mousedown="modalQuit" @mousewheel.prevent>
+        <div class="login-container" @mousedown.stop>
             <span class="close" @click="close">
                 <i class="el-icon-close"></i>
             </span>
@@ -11,36 +11,44 @@
             <p>已有超过{{ userNum }}名用户加入码上创新</p>
             <div class="loginBox" v-if="isSignin">
                 <div class="loginInput">
-                    <form>
+                    <form @submit.prevent>
                         <div class="email input">
-                            <input type="email" placeholder="邮箱" v-model="email" @blur="emailBlur">
-                            <span v-show="testResult.email" class="tips">
-                                <i :class="{ 'el-icon-success': testing.email, 'el-icon-error': !testing.email }"></i>
-                                {{ testing.email ? '邮箱格式正确' : '邮箱格式有误' }}
+                            <input type="email" placeholder="邮箱地址" v-model="email" @blur="emailBlur"
+                                @focus="testResult.email.state = false">
+                            <span v-show="showEmailTip" class="tips">
+                                <i :class="emailTip.icon"></i>
+                                {{ emailTip.content }}
                             </span>
                         </div>
-                        <div class="password input">
-                            <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur" @input="eyesShow = true"
+                        <div class="password input"
+                            :style="{ marginTop: showEmailTip ? '38px' : '28px', transition: showEmailTip ? 'all 160ms ease-in' : 'none' }">
+                            <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur" @input="passwordInput"
                                 @focus="passwordFocus" placeholder="密码" v-model="password" autocomplete>
-                            <span class="eyes" @click="eyesHandler" v-show="eyesShow" ref="eyes">
+                            <span class="eyes" v-show="eyesShow" @mousedown="eyesHandler">
                                 <svg class="icon" aria-hidden="true">
                                     <use :xlink:href="passwordEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
                                 </svg>
                             </span>
-                            <span v-show="testResult.password" class="tips">
-                                <i :class="{ 'el-icon-success': testing.password, 'el-icon-error': !testing.password }"></i>
-                                {{ testing.password ? '密码格式正确' : '密码格式有误' }}
+                            <span v-show="showPasswordTip" class="tips">
+                                <i :class="passwordTip.icon"></i>
+                                {{ passwordTip.content }}
                             </span>
                         </div>
-                        <div class="captcha input">
-                            <input type="text" v-model="code" placeholder="图形验证码">
+                        <div class="captcha input"
+                            :style="{ marginTop: showPasswordTip ? '38px' : '28px', transition: showPasswordTip ? 'all 160ms ease-in' : 'none' }">
+                            <input type="text" v-model="code" placeholder="图形验证码" @input="codeFinish" maxlength="4">
+                            <span v-show="showCodeTip" class="tips">
+                                <i :class="codeTip.icon"></i>
+                                {{ codeTip.content }}
+                            </span>
                             <el-tooltip class="item" effect="dark" content="点击刷新" placement="top">
                                 <div class="codeBox" @click="refreshCode">
                                     <Identify :identifyCode="identifyCode" />
                                 </div>
                             </el-tooltip>
                         </div>
-                        <div class="remember">
+                        <div class="remember"
+                            :style="{ marginTop: showCodeTip ? '32px' : '18px', transition: showCodeTip ? 'all 160ms ease-in' : 'none' }">
                             <label for="rememberCheck">
                                 <input id="rememberCheck" type="checkbox">
                                 <span>30天内免登录</span>
@@ -58,29 +66,65 @@
                     </span>
                 </div>
             </div>
-
             <div class="signupBox" v-if="!isSignin">
                 <div class="signupInput">
-                    <form>
+                    <form @submit.prevent>
                         <div class="email input">
-                            <input type="email" placeholder="邮箱" v-model="email">
+                            <input type="email" placeholder="邮箱地址" v-model="email" @blur="emailBlur"
+                                @focus="testResult.email.state = false">
+                            <span v-show="showEmailTip" class="tips">
+                                <i :class="emailTip.icon"></i>
+                                {{ emailTip.content }}
+                            </span>
                         </div>
-                        <div class="password input">
-                            <input type="password" placeholder="密码" v-model="password" autocomplete>
+                        <div class="password input"
+                            :style="{ marginTop: showEmailTip ? '32px' : '22px', transition: showEmailTip ? 'all 160ms ease-in' : 'none' }">
+                            <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur" @input="passwordInput"
+                                @focus="passwordFocus" placeholder="密码" v-model="password" autocomplete>
+                            <span class="eyes" v-show="eyesShow" @mousedown="eyesHandler">
+                                <svg class="icon" aria-hidden="true">
+                                    <use :xlink:href="passwordEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
+                                </svg>
+                            </span>
+                            <span v-show="showPasswordTip" class="tips">
+                                <i :class="passwordTip.icon"></i>
+                                {{ passwordTip.content }}
+                            </span>
                         </div>
-                        <div class="password input">
-                            <input type="password" placeholder="确认密码" v-model="password" autocomplete>
+                        <!-- 确认密码 -->
+                        <div class="password input"
+                            :style="{ marginTop: showPasswordTip ? '32px' : '22px', transition: showPasswordTip ? 'all 160ms ease-in' : 'none' }">
+                            <input :type="passwordSureEyes ? 'password' : 'text'" @input="passwordSureInput"
+                                @blur="passwordSureBlur" placeholder="确认密码" v-model="passwordSure" autocomplete>
+                            <!-- 确认密码的小眼睛 -->
+                            <span class="eyes" v-show="sureEyesShow" @mousedown="sureEyesHandler">
+                                <svg class="icon" aria-hidden="true">
+                                    <use :xlink:href="passwordSureEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
+                                </svg>
+                            </span>
+                            <!-- 确认密码提示信息 -->
+                            <span v-show="showPasswordSureTip" class="tips">
+                                <i :class="passwordSureTip.icon"></i>
+                                {{ passwordSureTip.content }}
+                            </span>
                         </div>
-                        <div class="captcha input">
-                            <input type="text" v-model="code" placeholder="图形验证码">
+                        <!-- 图形验证码 -->
+                        <div class="captcha input"
+                            :style="{ marginTop: showPasswordSureTip ? '32px' : '22px', transition: showPasswordSureTip ? 'all 160ms ease-in' : 'none' }">
+                            <input type="text" v-model="code" placeholder="图形验证码" @input="codeFinish" maxlength="4">
+                            <span v-show="showCodeTip" class="tips">
+                                <i :class="codeTip.icon"></i>
+                                {{ codeTip.content }}
+                            </span>
                             <el-tooltip class="item" effect="dark" content="点击刷新" placement="top">
                                 <div class="codeBox" @click="refreshCode">
                                     <Identify :identifyCode="identifyCode" />
                                 </div>
                             </el-tooltip>
                         </div>
-                        <div class="signupButton">
-                            <button>注册</button>
+                        <div class="signupButton"
+                            :style="{ marginTop: showCodeTip ? '36px' : '19px', transition: showCodeTip ? 'all 160ms ease-in' : 'none' }">
+                            <button @click="signup">注册</button>
                             <button @click="close">取消</button>
                         </div>
                     </form>
@@ -94,15 +138,17 @@
 
             <div class="othersLogin">
                 <span class="title">第三方账号登录</span>
-                <div class="qqLogin">
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-social-qq"></use>
-                    </svg>
-                </div>
-                <div class="giteeLogin">
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-gitee"></use>
-                    </svg>
+                <div class="othersApp">
+                    <div class="qqLogin">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-social-qq"></use>
+                        </svg>
+                    </div>
+                    <div class="giteeLogin">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-gitee"></use>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,6 +158,9 @@
 <script>
 // 引入图形验证码组件
 import Identify from '@/components/Identify'
+import cloudbase from "@cloudbase/js-sdk"
+import env from '../config/login'
+
 export default {
     name: 'LoginModal',
     components: { Identify },
@@ -126,22 +175,129 @@ export default {
             // 账号信息
             email: '',
             password: '',
+            passwordSure: '',
             code: '',
-            // 模态框状态
+            // 模态框状态：登录 / 注册
             isSignin: true,
-            // 输入信息校验
-            testing: {
-                email: false,
-                password: false
-            },
             // 校验结果
             testResult: {
-                email: false,
-                password: false
+                email: {
+                    state: false,
+                    type: 0,
+                },
+                password: {
+                    state: false,
+                    type: 0,
+                },
+                code: {
+                    state: false,
+                    type: 0,
+                },
+                passwordSure: {
+                    state: false,
+                    type: 0,
+                }
             },
-            // 密码可见
-            passwordEyes: false,
+            // 控制密码框的显示方式：text/password
+            passwordEyes: true,
+            passwordSureEyes: true,
+            // 控制小眼睛的显示和隐藏
             eyesShow: false,
+            sureEyesShow: false,
+            // 标记眼睛是否被点击
+            eyeClick: false,
+        }
+    },
+    computed: {
+        // 显示邮箱规范提示
+        showEmailTip() {
+            return this.testResult.email.state
+        },
+
+        // 邮箱规范提示内容
+        emailTip() {
+            if (this.testResult.email.type) {
+                return {
+                    content: '邮箱格式检验通过',
+                    type: 'sucess',
+                    icon: 'el-icon-success'
+                }
+            } else {
+                return {
+                    content: '邮箱格式检验未通过',
+                    type: 'warning',
+                    icon: 'el-icon-warning'
+                }
+            }
+        },
+
+        // 显示密码规范提示
+        showPasswordTip() {
+            return this.testResult.password.state
+        },
+        // 密码规范提示内容
+        passwordTip() {
+            let content, type, icon;
+            switch (this.testResult.password.type) {
+                case 0: content = '密码至少为8个字符'; break
+                case 1: content = '密码最多为16个字符'; break
+                case 2: content = '密码安全系数较低，缺少大写字母'; break;
+                case 3: content = '密码安全系数较低，缺少小写字母'; break;
+                case 4: content = '密码安全系数较低，缺少数字'; break;
+                case 5: content = '密码安全系数较低，不能全为大写字母'; break;
+                case 6: content = '密码安全系数较低，不能全为小写字母'; break;
+                case 7: content = '密码安全系数较低，不能全为数字'; break;
+                case 8: content = '密码为8-16个字符，包括大、小写字母和数字'; break;
+                case 9: content = '密码格式检验通过'; break;
+            }
+            switch (this.testResult.password.type) {
+                case 8: type = 'info'; icon = 'el-icon-info'; break;
+                case 9: type = 'success'; icon = 'el-icon-success'; break;
+                default: type = 'warning'; icon = 'el-icon-warning';
+            }
+            return { content, type, icon }
+        },
+
+        // 显示确认密码提示
+        showPasswordSureTip() {
+            return this.testResult.passwordSure.state
+        },
+        // 确认密码提示内容
+        passwordSureTip() {
+            if (this.testResult.passwordSure.type) {
+                return {
+                    content: '密码已确认一致',
+                    type: 'success',
+                    icon: 'el-icon-success'
+                }
+            } else {
+                return {
+                    content: '两次密码不一致',
+                    type: 'warning',
+                    icon: 'el-icon-warning'
+                }
+            }
+        },
+
+        // 显示验证码提示
+        showCodeTip() {
+            return this.testResult.code.state
+        },
+        // 验证码提示内容
+        codeTip() {
+            if (this.testResult.code.type) {
+                return {
+                    content: '验证码正确',
+                    type: 'success',
+                    icon: 'el-icon-success'
+                }
+            } else {
+                return {
+                    content: '验证码错误',
+                    type: 'warning',
+                    icon: 'el-icon-warning'
+                }
+            }
         }
     },
     methods: {
@@ -173,54 +329,227 @@ export default {
         },
         // 邮箱输入框失去焦点
         emailBlur() {
+            const { email } = this
+            // 邮箱规范正则
             const reg = /^([a-zA-Z\d][\w-]{2,})@(\w{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/
-            if (this.email) {
-                this.testResult.email = true
+
+            // 如果 email 不为空
+            if (email) {
+                this.testResult.email.state = true
+                let type;
                 if (reg.test(this.email)) {
-                    this.testing.email = true
+                    type = 1
                 } else {
-                    this.testing.email = false
+                    type = 0
                 }
+                this.testResult.email.type = type
             } else {
-                this.testResult.email = false
+                this.testResult.email.state = false
             }
         },
         // 密码框失去焦点
         passwordBlur() {
-            const reg = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/
+            const { password } = this
+            // 密码正则：6-10位之间，包含大、小写字母和数字，可以使用特殊字符。
+            const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/
+            // 全为大写匹配
+            const regX = /^[A-Z]+$/
+            // 全为小写匹配
+            const regx = /^[a-z]+$/
+            // 全为数字匹配
+            const reg9 = /^[0-9]*$/
+            // 大写匹配
+            const regAX = /[A-Z]+/g
+            // 小写匹配
+            const regAx = /[a-z]+/g
+            // 数字匹配
+            const regA9 = /[0-9]+/g
+            // 失去焦点时，如果密码框有内容
             if (this.password) {
-                this.testResult.password = true
-                if (reg.test(this.password)) {
-                    this.testing.password = true
-                } else {
-                    this.testing.password = false
+                let type
+                // 校验结果
+                this.testResult.password.state = !this.eyeClick
+                if (reg.test(password)) {
+                    type = 9
+                } else if (password.length > 0 && password.length < 8) {
+                    type = 0
+                } else if (password.length > 16) {
+                    type = 1
+                } else if (regX.test(password)) {
+                    type = 5
+                } else if (regx.test(password)) {
+                    type = 6
+                } else if (reg9.test(password)) {
+                    type = 7
+                } else if (!regAX.test(password)) {
+                    type = 2
+                } else if (!regAx.test(password)) {
+                    type = 3
+                } else if (!regA9.test(password)) {
+                    type = 4
                 }
+                this.testResult.password.type = type
             } else {
-                this.testResult.password = false
+                this.testResult.password.state = false
+                this.eyesShow = false
+            }
+            this.eyeClick = false
+        },
+        // 密码框输入
+        passwordInput() {
+            const { passwordSure, password } = this
+            this.eyesShow = true
+            if (passwordSure.length) {
+                if (password == passwordSure) {
+                    this.testResult.passwordSure.type = 1
+                } else {
+                    this.testResult.passwordSure.type = 0
+                }
+            }
+            if (!password.length) {
+                this.testResult.passwordSure.state = false
+                this.eyesShow = false
+            } else {
+                this.testResult.passwordSure.state = true
             }
         },
         // 点击小眼睛
         eyesHandler() {
+            // 眼睛睁开、闭上
             this.passwordEyes = !this.passwordEyes
+            // 点击眼睛的标记
+            this.eyeClick = true
+            // 关闭提示
+            this.testResult.password.state = false
+        },
+        sureEyesHandler() {
+            this.passwordSureEyes = !this.passwordSureEyes
+            // 点击眼睛的标记
+            this.eyeClick = true
+            // 关闭提示
+            this.testResult.passwordSure.state = false
         },
         // 密码框获得焦点
         passwordFocus() {
-            this.testResult.password = false
+            // 密码校验结果隐藏
+            this.testResult.password.state = true
+            this.eyeClick = false
+            // 密码规范提示显示
+            this.testResult.password.type = 8
+            // 显示小眼睛
+            if (this.password) {
+                this.eyesShow = true
+            }
+        },
+        // 验证码输入完毕
+        codeFinish() {
+            const { code, identifyCode } = this
+            if (code.length == 4) {
+                this.testResult.code.state = true
+                if (code == identifyCode) {
+                    this.testResult.code.type = 1
+                } else {
+                    this.testResult.code.type = 0
+                }
+            } else {
+                this.testResult.code.state = false
+            }
+        },
+
+        // 确认密码输入
+        passwordSureInput() {
+            const { passwordSure, password } = this
+            if (passwordSure.length == password.length && password.length) {
+                this.testResult.passwordSure.state = true
+                if (passwordSure == password) {
+                    this.testResult.passwordSure.type = 1
+                } else {
+                    this.testResult.passwordSure.type = 0
+                }
+            } else {
+                this.testResult.passwordSure.state = false
+            }
+            if (!passwordSure) {
+                this.sureEyesShow = false
+            } else {
+                this.sureEyesShow = true
+            }
+        },
+        // 确认密码失去焦点
+        passwordSureBlur() {
+            const { passwordSure, password } = this
+            if (passwordSure.length != password.length && password.length && passwordSure.length) {
+                this.testResult.passwordSure.state = true
+                this.testResult.passwordSure.type = 0
+            }
         },
         // 登录
         login() {
-            let { email, password, code } = this
-            const app = cloudbase.init({
-                env: "cloudbase-baas-4g1a5g4h6dc9d130"
-            })
-            app
-                .auth()
-                .signInWithEmailAndPassword(email, password)
-                .then((loginState) => {
-                    // 登录成功
-                    console.log(loginState);
-                });
+            const { email, password, testResult } = this
+            const app = cloudbase.init(env)
+            if (testResult.email.type && testResult.password.type == 9 && testResult.code.type) {
+                app
+                    .auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then((loginState) => {
+                        console.log(loginState);
+                        // // 登录成功
+                        this.$notify({
+                            title: '登录成功',
+                            message: '恭喜你，欢迎使用码上创新！',
+                            type: 'success',
+                        })
+                        this.close()
+                    })
+                    .catch(error => {
+                        if (error.message.indexOf('102001')) {
+                            this.$notify({
+                                title: '密码有误',
+                                message: '你输入的密码有误，请重新输入',
+                                type: 'warning'
+                            })
+                        } else if (error.message.indexOf('102003')) {
+                            this.$message({
+                                title: '未注册',
+                                message: '你的邮箱尚未注册，请先注册',
+                                type: 'warning'
+                            })
+                        }
+                    })
+            } else {
+                this.$message({
+                    message: '请检查您输入的信息',
+                    type: 'warning',
+                    center: true
+                })
+            }
         },
+        // 注册
+        signup() {
+            const { email, password, testResult } = this
+            const app = cloudbase.init(env)
+            if (testResult.email.type && testResult.password.type == 9 && testResult.passwordSure.type && testResult.code.type) {
+                app
+                    .auth()
+                    .signUpWithEmailAndPassword(email, password)
+                    .then(() => {
+                        this.$notify({
+                            title: '验证邮箱',
+                            message: `我们向你的邮箱发送了一封邮件，请登录你的邮箱${this.email}，点击邮件中的链接，以得到我们的确认。`,
+                            type: 'success'
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error.message);
+                    })
+            } else {
+                this.$message({
+                    message: '请检查您输入的信息',
+                    type: 'warning',
+                    center: true
+                })
+            }
+        }
     },
     mounted() {
         this.identifyCode = ""
@@ -230,536 +559,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.loginModal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    min-width: 1200px;
-    z-index: 99;
-    transition: all 500ms;
-    background-color: rgba(0, 0, 0, 0.6);
-    animation: loginModalAnimate 600ms;
-
-    @keyframes loginModalAnimate {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
-
-    .login-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        width: 430px;
-        height: 550px;
-        background-color: #fff;
-        border-radius: 16px;
-        z-index: 199;
-        animation: loginAnimate 400ms;
-
-        @keyframes loginAnimate {
-            0% {
-                transform: scale(.7);
-            }
-
-            45% {
-                transform: scale(1.05);
-            }
-
-            80% {
-                transform: scale(.95);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            transition: all 300ms;
-            cursor: pointer;
-
-            i {
-                font-size: 26px;
-                color: #999;
-            }
-
-            &:hover {
-                transform: rotate(180deg);
-            }
-        }
-
-        .logoBox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 56px;
-            margin-top: 16px;
-
-            img {
-
-                &:first-child {
-                    width: 42px;
-                    height: 42px;
-                }
-
-                &:last-child {
-                    height: 38px;
-                }
-            }
-        }
-
-        p {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-            color: #666;
-            letter-spacing: 1px;
-
-            &::before {
-                content: '';
-                width: 32px;
-                height: 2px;
-                background-color: #d8d8d8;
-                margin-right: 10px;
-            }
-
-
-            &::after {
-                content: '';
-                width: 32px;
-                height: 2px;
-                background-color: #d8d8d8;
-                margin-left: 10px;
-            }
-        }
-
-        .loginBox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            width: 100%;
-
-            .loginInput {
-                width: 320px;
-
-                form {
-                    width: 100%;
-                    height: 100%;
-
-                    .input {
-                        position: relative;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 100%;
-                        height: 36px;
-                        border-bottom: 1px solid #333;
-                        margin: 22px 0 0 0;
-                        transition: all 100ms;
-
-                        span.tips {
-                            position: absolute;
-                            bottom: -16px;
-                            left: 0px;
-                            height: 12px;
-                            font-size: 12px;
-                            user-select: none;
-
-                            &:has(i.el-icon-success),
-                            i.el-icon-success {
-                                color: #67C23A;
-                            }
-
-                            &:has(i.el-icon-error),
-                            i.el-icon-error {
-                                color: #F56C6C;
-                            }
-                        }
-
-                        &:first-child {
-                            margin: 12px 0 0 0;
-                        }
-
-                        &.password {
-                            .eyes {
-                                position: absolute;
-                                top: 5px;
-                                right: 12px;
-                                width: 26px;
-                                height: 26px;
-
-                                .icon {
-                                    width: 26px;
-                                    height: 26px;
-                                }
-                            }
-                        }
-
-                        input {
-                            width: 100%;
-                            height: 36px;
-                            line-height: 36px;
-                            border: none;
-                            outline: none;
-                            font-size: 18px;
-                            box-sizing: border-box;
-                            font-weight: bold;
-                            letter-spacing: 1px;
-
-                            &[type='password']::-ms-reveal {
-                                display: none
-                            }
-
-                            &::-webkit-input-placeholder {
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-
-                            &::-moz-placeholder {
-                                /* Mozilla Firefox 19+ */
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-
-                            &:-moz-placeholder {
-                                /* Mozilla Firefox 4 to 18 */
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-
-                            &:-ms-input-placeholder {
-                                /* Internet Explorer 10-11 */
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-                        }
-
-                        &:has(input:focus) {
-                            border-bottom: 1px solid #2681C2;
-                        }
-                    }
-
-                    .captcha {
-                        display: flex;
-                        cursor: pointer;
-
-                        input {
-                            flex: 1;
-                        }
-
-                        .codeBox {
-                            width: 96px;
-                            height: 32px;
-                        }
-                    }
-
-                    .loginButton {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        border: none;
-                        height: 36px;
-                        margin-top: 32px;
-
-                        button {
-                            width: 42%;
-                            height: 100%;
-                            border: 1px solid #2681C2;
-                            color: #fff;
-                            font-size: 18px;
-                            letter-spacing: 6px;
-                            cursor: pointer;
-                            border-radius: 5px;
-                            transition: all 120ms ease;
-
-                            &:first-child {
-                                background-color: #2681C2;
-                            }
-
-                            &:last-child {
-                                background-color: transparent;
-                                color: #2681C2;
-                            }
-
-                            &:hover {
-                                transform: scale(1.1);
-                                box-shadow: 0 0 5px 1px #666;
-                            }
-                        }
-                    }
-
-                    .remember {
-                        height: 36px;
-                        margin-top: 16px;
-                        line-height: 36px;
-
-                        label {
-                            display: flex;
-                            align-items: center;
-
-                            input {
-                                width: 14px;
-                                height: 14px;
-                                cursor: pointer;
-                            }
-
-                            span {
-                                margin-left: 10px;
-                                font-size: 14px;
-                                cursor: pointer;
-                                user-select: none;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .choices {
-                display: flex;
-                justify-content: start;
-                align-items: center;
-                width: 320px;
-                height: 32px;
-                margin-top: 12px;
-
-                span {
-                    font-size: 12px;
-                    color: #666;
-                    user-select: none;
-
-                    a {
-                        cursor: pointer;
-
-                        &:hover {
-                            color: #2681C2;
-                        }
-                    }
-                }
-            }
-        }
-
-        .signupBox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            width: 100%;
-
-            .signupInput {
-                width: 320px;
-
-                form {
-                    width: 100%;
-                    height: 100%;
-
-                    .input {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 100%;
-                        height: 36px;
-                        border-bottom: 1px solid #333;
-                        margin: 22px 0 0 0;
-                        transition: all 100ms;
-
-                        &:first-child {
-                            margin: 12px 0 0 0;
-                        }
-
-                        input {
-                            width: 100%;
-                            height: 36px;
-                            line-height: 36px;
-                            border: none;
-                            outline: none;
-                            font-size: 18px;
-                            box-sizing: border-box;
-                            font-weight: bold;
-                            letter-spacing: 1px;
-
-                            &::-webkit-input-placeholder {
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-
-                            &::-moz-placeholder {
-                                /* Mozilla Firefox 19+ */
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-
-                            &:-moz-placeholder {
-                                /* Mozilla Firefox 4 to 18 */
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-
-                            &:-ms-input-placeholder {
-                                /* Internet Explorer 10-11 */
-                                color: #bbb;
-                                font-size: 14px;
-                                font-weight: normal;
-                            }
-                        }
-
-                        &:has(input:focus) {
-                            border-bottom: 1px solid #2681C2;
-                        }
-                    }
-
-                    .captcha {
-                        display: flex;
-                        cursor: pointer;
-
-                        input {
-                            flex: 1;
-                        }
-
-                        .codeBox {
-                            width: 96px;
-                            height: 32px;
-                        }
-                    }
-
-                    .signupButton {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        border: none;
-                        height: 36px;
-                        margin-top: 26px;
-
-                        button {
-                            width: 42%;
-                            height: 100%;
-                            border: 1px solid #2681C2;
-                            color: #fff;
-                            font-size: 18px;
-                            letter-spacing: 6px;
-                            cursor: pointer;
-                            border-radius: 5px;
-                            transition: all 120ms ease;
-
-                            &:first-child {
-                                background-color: #2681C2;
-                            }
-
-                            &:last-child {
-                                background-color: transparent;
-                                color: #2681C2;
-                            }
-
-                            &:hover {
-                                transform: scale(1.1);
-                                box-shadow: 0 0 5px 1px #666;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .choices {
-                display: flex;
-                justify-content: start;
-                align-items: center;
-                width: 320px;
-                height: 32px;
-                margin-top: 12px;
-
-                span {
-                    font-size: 12px;
-                    color: #666;
-                    user-select: none;
-
-                    a {
-                        cursor: pointer;
-
-                        &:hover {
-                            color: #2681C2;
-                        }
-                    }
-                }
-            }
-        }
-
-        .othersLogin {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 90%;
-            height: 36px;
-            margin-bottom: 16px;
-
-            div {
-                width: 28px;
-                height: 28px;
-                margin: 0 10px;
-                cursor: pointer;
-                transition: all 200ms;
-
-                .icon {
-                    width: 28px;
-                    height: 28px;
-                }
-
-                &:hover {
-                    transform: scale(1.1);
-                }
-            }
-
-            .title {
-                position: absolute;
-                top: -28px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 14px;
-                color: #666;
-                letter-spacing: 1px;
-                user-select: none;
-
-                &::before {
-                    content: '';
-                    width: 20px;
-                    height: 1px;
-                    background-color: #d8d8d8;
-                    margin-right: 5px;
-                }
-
-                &::after {
-                    content: '';
-                    width: 20px;
-                    height: 1px;
-                    background-color: #d8d8d8;
-                    margin-left: 5px;
-                }
-            }
-        }
-    }
-}
+@import url(./index.less);
 </style>
