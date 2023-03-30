@@ -1,0 +1,18 @@
+@url=http://localhost:3000
+
+###
+POST {{url}}/api/getcaptcha
+Content-Type: application/json
+
+{
+    "code": "0e31SdGa1KVG2F0iFfIa1lJX3a21SdGJ",
+    "userInfo":{}
+}
+
+###
+POST {{url}}/api/onlogin
+Content-Type: application/json
+
+{
+    "captcha": "086242"
+}
