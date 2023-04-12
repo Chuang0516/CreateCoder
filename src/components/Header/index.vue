@@ -37,8 +37,8 @@
         </ul>
       </div>
       <div class="login-container">
-        <i class="el-icon-user-solid" @click="$LoginModal()" v-show="!isLogin"></i>
-        <UserAvatar v-show="isLogin" />
+        <i class="el-icon-user-solid" @click="$LoginModal()" v-if="!isLogin"></i>
+        <UserAvatar v-if="isLogin" />
       </div>
     </div>
   </div>
@@ -49,8 +49,6 @@ import Cogs from '@/components/Header/Cogs'
 import LogoSvg from '@/components/LogoSvg'
 import UserAvatar from '@/components/Header/UserAvatar'
 import { throttle } from 'lodash'
-import cloudbase from '@cloudbase/js-sdk'
-import env from '@/config/login'
 
 export default {
   name: 'Header',
@@ -188,16 +186,8 @@ export default {
       this.updateLogo()
     })
     this.$bus.$on('loginState', (isLogin) => {
-      console.log(isLogin);
       this.isLogin = isLogin
     })
-    const app = cloudbase.init(env)
-    const loginState = app.auth().hasLoginState()
-    if (loginState) {
-      this.isLogin = true
-    } else {
-      this.isLogin = false
-    }
   }
 };
 </script>

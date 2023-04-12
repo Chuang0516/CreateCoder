@@ -1,7 +1,17 @@
-import MockRequests from '@/utils/mockRequest'
+import request from '@/utils/request'
+import axios from 'axios'
 
-export const reqHomeInfo = () =>
-  MockRequests({ url: '/homenav', method: 'get' })
+export const reqHomeInfo = () => request({ url: '/home/nav', method: 'post' })
 
 export const reqHomeBanner = () =>
-  MockRequests({ url: '/homebanner', method: 'get' })
+  request({ url: '/home/banner', method: 'post' })
+
+export const reqLogin = (captcha, _id) =>
+  request({ url: `/onlogin`, data: { captcha, _id }, method: 'post' })
+
+export const reqCurrentUser = () =>
+  request({ url: `/user/current`, method: 'post' })
+
+export const reqLogout = () => request({ url: '/logout', method: 'post' })
+
+export const reqUserId = () => request({ url: '/user/id', method: 'post' })

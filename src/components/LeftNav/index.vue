@@ -65,7 +65,7 @@ export default {
         }
     },
     computed: {
-        ...mapState({ pageNavList: (state) => state.homeNavList })
+        ...mapState({ pageNavList: (state) => state.home.homeNavList })
     },
     methods: {
         // 展开菜单

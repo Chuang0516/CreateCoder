@@ -9,6 +9,7 @@
 <script>
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { onlineWS } from '@/service/wsInstance'
 
 export default {
   name: "App",
@@ -18,7 +19,9 @@ export default {
   },
   data() {
     return {
-      isOpen: true
+      isOpen: true,
+      wsTimer: null,
+      isLogin: false
     }
   },
   methods: {
@@ -33,10 +36,54 @@ export default {
     // 侧边导航栏开关操作
     switchHandler(isOpen) {
       this.isOpen = isOpen
+    },
+    // 获取当前登录状态
+    async getCurrentUser() {
+      const isLogin = await this.$store.dispatch('getCurrentUser')
+      if (isLogin) {
+        this.$bus.$emit('loginState', true)
+        this.isLogin = isLogin
+      } else {
+        this.$LoginModal()
+      }
+    },
+    // 心跳连接，防止连接中断
+    heartbeat() {
+      this.wsTimer = setInterval(() => {
+        onlineWS.send(JSON.stringify({
+          code: 'HEARTBEAT',
+          message: '链接状态：链接中...'
+        }))
+      }, 30 * 1000)
     }
   },
-  mounted() {
+  watch: {
+    isLogin(newVal) {
+      if (newVal) {
+        onlineWS.socket.onmessage = (msg) => {
+          const data = msg.data
+          if (JSON.parse(data).code == 'OFFSITE_LOGIN') {
+            this.$notify({
+              title: '异地登录',
+              message: '你的登录验证码可能泄露',
+              type: 'warning',
+              duration: 0
+            })
+            this.$store.dispatch('logout')
+            this.$bus.$emit('loginState', false)
+            this.$LoginModal()
+          }
+        }
+      }
+    }
+  },
+  async mounted() {
     this.adaptation()
+    await this.getCurrentUser()
+    this.heartbeat()
+  },
+  beforeDestroy() {
+    clearInterval(this.wsTimer)
   }
 };
 </script>

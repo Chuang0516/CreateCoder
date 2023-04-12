@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import loginModal from '@/Plugins/Login/src/LoginModal'
+import loginModal from '@/plugins/Login/src/LoginModal'
 
 const showloginModal = (options) => {
   // extend 是构造一个组件的语法器.传入参数，返回一个组件

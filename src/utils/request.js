@@ -11,6 +11,8 @@ const request = axios.create({
   // 配置对象
   // 基础路径，发送请求，路径中会出现api
   baseURL: '/api',
+  // 允许跨域携带cookie
+  withCredentials: true,
   // 代表请求超时的时间为5s
   timeout: 5000,
 })

@@ -4,14 +4,14 @@ module.exports = defineConfig({
   lintOnSave: false,
   devServer: {
     proxy: {
-      ['/index.php']: {
-        target: 'http://wallpaper.apc.360.cn', //后端接口地址
+      ['/api']: {
+        target: 'http://127.0.0.1:7592', //后端接口地址
         changeOrigin: true, //是否允许跨越
         ws: true,
-        pathRewrite: {
-          '^/index.php': '/index.php',
-        },
       },
+    },
+    client: {
+      webSocketURL: 'ws://localhost:7592/ws',
     },
   },
 })

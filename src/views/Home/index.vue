@@ -227,7 +227,7 @@ export default {
     },
     computed: {
         // 获取仓库中轮播图数据
-        ...mapState({ homeBillboard: state => state.homeBillboard })
+        ...mapState({ homeBillboard: (state) => state.home.homeBillboard })
     },
     mounted() {
         this.createWether()

@@ -17,8 +17,6 @@ import '@/assets/style/base.less'
 // 引入粒子背景
 import VueParticles from 'vue-particles'
 Vue.use(VueParticles)
-// 引入 mockserve
-import '@/mock/mockServe'
 // vue复制内容到剪贴板插件
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
@@ -29,12 +27,12 @@ Vue.use(VueLazyload, {
   loading: LazyloadImg,
 })
 // 引入自定义登录模态框插件
-import LoginModal from '@/Plugins/Login'
+import LoginModal from '@/plugins/Login'
 Vue.use(LoginModal)
 
 Vue.config.productionTip = false
 
-new Vue({
+let vueThis = new Vue({
   // 注册路由
   router,
   // 注册仓库
@@ -45,3 +43,5 @@ new Vue({
   },
   render: (h) => h(App),
 }).$mount('#app')
+
+export default vueThis

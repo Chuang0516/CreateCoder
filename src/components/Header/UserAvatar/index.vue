@@ -1,19 +1,17 @@
 <template>
     <div class="userAvatar-container" @mouseenter="showInfoHandler" @mouseleave="showInfo = false">
-        <div class="userAvatar"
-            :style="{ backgroundImage: 'url(https://636c-cloudbase-baas-4g1a5g4h6dc9d130-1314033851.tcb.qcloud.la/user/defaultAvatar/defaultAvatar.png?sign=803922815134cb08b66901a44f13ff12&t=1678632521)' }">
+        <div class="userAvatar" :style="{ backgroundImage: `url(${user.avatar})` }">
             <div class="userInfoBox" v-show="showInfo">
                 <div class="userInfo">
                     <i class="el-icon-caret-top arrow"></i>
                     <div class="top">
-                        <div class="avatar">
-                            <img :src="user.avatarUrl" alt="" />
-                        </div>
-                        <div class="nickNameAndId">
+                        <div class="avatarAndNickName">
+                            <div class="avatar">
+                                <img :src="user.avatar" alt="" />
+                            </div>
                             <span class="nickName">{{ user.nickName }}</span>
-                            <span>ID:&nbsp;{{ user.id }}</span>
                         </div>
-                        <div class=""></div>
+                        <div class="logout" @click="logout">退出登录</div>
                     </div>
                 </div>
             </div>
@@ -22,27 +20,37 @@
 </template>
 
 <script>
-import env from '@/config/login'
-import cloudbase from '@cloudbase/js-sdk';
+import { mapState } from 'vuex'
+
 export default {
     name: 'UserAvatar',
     data() {
         return {
             showInfo: false,
-            user: {}
         }
+    },
+    computed: {
+        // 用户信息
+        ...mapState({ user: state => state.user.currentUser }),
     },
     methods: {
         showInfoHandler() {
             this.showInfo = true
-            const app = cloudbase.init(env)
-            app
-                .auth()
-                .getCurrenUser()
-                .then((user) => {
-                    this.user = user
-                });
+        },
+        async logout() {
+            const isLogin = await this.$store.dispatch('logout')
+            if (isLogin) {
+                this.$bus.$emit('loginState', false)
+                this.$notify({
+                    title: '退出成功',
+                    message: '欢迎再次登录码上创新',
+                    type: 'success',
+                })
+            }
         }
+    },
+    mounted() {
+
     }
 }
 </script>
@@ -88,6 +96,43 @@ export default {
                     font-size: 26px;
                     color: #fff;
                     text-shadow: 0px -5px 2px #333;
+                }
+
+                .top {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    height: 50px;
+                    padding: 10px;
+                    box-sizing: border-box;
+
+                    .avatarAndNickName {
+                        display: flex;
+                        align-items: center;
+
+                        .avatar {
+                            width: 36px;
+                            height: 36px;
+
+                            img {
+                                width: 36px;
+                                height: 36px;
+                            }
+                        }
+
+                        .nickName {
+                            font-size: 16px;
+                            margin-left: 6px;
+                        }
+                    }
+
+                    .logout {
+
+                        &:hover {
+                            color: #666;
+                        }
+                    }
                 }
             }
         }

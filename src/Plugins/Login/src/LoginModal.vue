@@ -9,133 +9,145 @@
                 <img src="~@/assets/images/logo_text.png" alt="">
             </div>
             <p>已有超过{{ userNum }}名用户加入码上创新</p>
-            <div class="loginBox" v-if="isSignin">
-                <div class="loginInput">
-                    <form @submit.prevent>
-                        <div class="email input">
-                            <input type="email" placeholder="邮箱地址" v-model="email" @blur="emailBlur"
-                                @focus="testResult.email.state = false">
-                            <span v-show="showEmailTip" class="tips">
-                                <i :class="emailTip.icon"></i>
-                                {{ emailTip.content }}
-                            </span>
-                        </div>
-                        <div class="password input"
-                            :style="{ marginTop: showEmailTip ? '38px' : '28px', transition: showEmailTip ? 'all 160ms ease-in' : 'none' }">
-                            <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur" @input="passwordInput"
-                                @focus="passwordFocus" placeholder="密码" v-model="password" autocomplete>
-                            <span class="eyes" v-show="eyesShow" @mousedown="eyesHandler">
-                                <svg class="icon" aria-hidden="true">
-                                    <use :xlink:href="passwordEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
-                                </svg>
-                            </span>
-                            <span v-show="showPasswordTip" class="tips">
-                                <i :class="passwordTip.icon"></i>
-                                {{ passwordTip.content }}
-                            </span>
-                        </div>
-                        <div class="captcha input"
-                            :style="{ marginTop: showPasswordTip ? '38px' : '28px', transition: showPasswordTip ? 'all 160ms ease-in' : 'none' }">
-                            <input type="text" v-model="code" placeholder="图形验证码" @input="codeFinish" maxlength="4">
-                            <span v-show="showCodeTip" class="tips">
-                                <i :class="codeTip.icon"></i>
-                                {{ codeTip.content }}
-                            </span>
-                            <el-tooltip class="item" effect="dark" content="点击刷新" placement="top">
-                                <div class="codeBox" @click="refreshCode">
-                                    <Identify :identifyCode="identifyCode" />
-                                </div>
-                            </el-tooltip>
-                        </div>
-                        <div class="remember"
-                            :style="{ marginTop: showCodeTip ? '32px' : '18px', transition: showCodeTip ? 'all 160ms ease-in' : 'none' }">
-                            <label for="rememberCheck">
-                                <input id="rememberCheck" type="checkbox">
-                                <span>30天内免登录</span>
-                            </label>
-                        </div>
-                        <div class="loginButton">
-                            <button @click="login">登录</button>
-                            <button @click="close">取消</button>
-                        </div>
-                    </form>
+            <div class="emailLogin" v-show="loginType == 'email'">
+                <div class="loginBox" v-if="isSignin">
+                    <div class="loginInput">
+                        <form @submit.prevent>
+                            <div class="email input">
+                                <input type="email" placeholder="邮箱地址" v-model="email" @blur="emailBlur"
+                                    @focus="testResult.email.state = false">
+                                <span v-show="showEmailTip" class="tips">
+                                    <i :class="emailTip.icon"></i>
+                                    {{ emailTip.content }}
+                                </span>
+                            </div>
+                            <div class="password input"
+                                :style="{ marginTop: showEmailTip ? '38px' : '28px', transition: showEmailTip ? 'all 160ms ease-in' : 'none' }">
+                                <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur"
+                                    @input="passwordInput" @focus="passwordFocus" placeholder="密码" v-model="password"
+                                    autocomplete>
+                                <span class="eyes" v-show="eyesShow" @mousedown="eyesHandler">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use :xlink:href="passwordEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
+                                    </svg>
+                                </span>
+                                <span v-show="showPasswordTip" class="tips">
+                                    <i :class="passwordTip.icon"></i>
+                                    {{ passwordTip.content }}
+                                </span>
+                            </div>
+                            <div class="captcha input"
+                                :style="{ marginTop: showPasswordTip ? '38px' : '28px', transition: showPasswordTip ? 'all 160ms ease-in' : 'none' }">
+                                <input type="text" v-model="code" placeholder="图形验证码" @input="codeFinish" maxlength="4">
+                                <span v-show="showCodeTip" class="tips">
+                                    <i :class="codeTip.icon"></i>
+                                    {{ codeTip.content }}
+                                </span>
+                                <el-tooltip class="item" effect="dark" content="点击刷新" placement="top">
+                                    <div class="codeBox" @click="refreshCode">
+                                        <Identify :identifyCode="identifyCode" />
+                                    </div>
+                                </el-tooltip>
+                            </div>
+                            <div class="remember"
+                                :style="{ marginTop: showCodeTip ? '32px' : '18px', transition: showCodeTip ? 'all 160ms ease-in' : 'none' }">
+                                <label for="rememberCheck">
+                                    <input id="rememberCheck" type="checkbox">
+                                    <span>30天内免登录</span>
+                                </label>
+                            </div>
+                            <div class="loginButton">
+                                <button @click="login">登录</button>
+                                <button @click="close">取消</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="choices">
+                        <span>
+                            没有账号？<a @click="toSignup">注册</a>&nbsp;/&nbsp;<a>忘记密码</a>
+                        </span>
+                    </div>
                 </div>
-                <div class="choices">
-                    <span>
-                        没有账号？<a @click="toSignup">注册</a>&nbsp;/&nbsp;<a>忘记密码</a>
-                    </span>
+                <div class="signupBox" v-if="!isSignin">
+                    <div class="signupInput">
+                        <form @submit.prevent>
+                            <div class="email input">
+                                <input type="email" placeholder="邮箱地址" v-model="email" @blur="emailBlur"
+                                    @focus="testResult.email.state = false">
+                                <span v-show="showEmailTip" class="tips">
+                                    <i :class="emailTip.icon"></i>
+                                    {{ emailTip.content }}
+                                </span>
+                            </div>
+                            <div class="password input"
+                                :style="{ marginTop: showEmailTip ? '32px' : '22px', transition: showEmailTip ? 'all 160ms ease-in' : 'none' }">
+                                <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur"
+                                    @input="passwordInput" @focus="passwordFocus" placeholder="密码" v-model="password"
+                                    autocomplete>
+                                <span class="eyes" v-show="eyesShow" @mousedown="eyesHandler">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use :xlink:href="passwordEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
+                                    </svg>
+                                </span>
+                                <span v-show="showPasswordTip" class="tips">
+                                    <i :class="passwordTip.icon"></i>
+                                    {{ passwordTip.content }}
+                                </span>
+                            </div>
+                            <!-- 确认密码 -->
+                            <div class="password input"
+                                :style="{ marginTop: showPasswordTip ? '32px' : '22px', transition: showPasswordTip ? 'all 160ms ease-in' : 'none' }">
+                                <input :type="passwordSureEyes ? 'password' : 'text'" @input="passwordSureInput"
+                                    @blur="passwordSureBlur" placeholder="确认密码" v-model="passwordSure" autocomplete>
+                                <!-- 确认密码的小眼睛 -->
+                                <span class="eyes" v-show="sureEyesShow" @mousedown="sureEyesHandler">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use :xlink:href="passwordSureEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
+                                    </svg>
+                                </span>
+                                <!-- 确认密码提示信息 -->
+                                <span v-show="showPasswordSureTip" class="tips">
+                                    <i :class="passwordSureTip.icon"></i>
+                                    {{ passwordSureTip.content }}
+                                </span>
+                            </div>
+                            <!-- 图形验证码 -->
+                            <div class="captcha input"
+                                :style="{ marginTop: showPasswordSureTip ? '32px' : '22px', transition: showPasswordSureTip ? 'all 160ms ease-in' : 'none' }">
+                                <input type="text" v-model="code" placeholder="图形验证码" @input="codeFinish" maxlength="4">
+                                <span v-show="showCodeTip" class="tips">
+                                    <i :class="codeTip.icon"></i>
+                                    {{ codeTip.content }}
+                                </span>
+                                <el-tooltip class="item" effect="dark" content="点击刷新" placement="top">
+                                    <div class="codeBox" @click="refreshCode">
+                                        <Identify :identifyCode="identifyCode" />
+                                    </div>
+                                </el-tooltip>
+                            </div>
+                            <div class="signupButton"
+                                :style="{ marginTop: showCodeTip ? '36px' : '19px', transition: showCodeTip ? 'all 160ms ease-in' : 'none' }">
+                                <button @click="signup">注册</button>
+                                <button @click="close">取消</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="choices">
+                        <span>
+                            已有账号？<a @click="isSignin = true">登录</a>
+                        </span>
+                    </div>
                 </div>
             </div>
-            <div class="signupBox" v-if="!isSignin">
-                <div class="signupInput">
-                    <form @submit.prevent>
-                        <div class="email input">
-                            <input type="email" placeholder="邮箱地址" v-model="email" @blur="emailBlur"
-                                @focus="testResult.email.state = false">
-                            <span v-show="showEmailTip" class="tips">
-                                <i :class="emailTip.icon"></i>
-                                {{ emailTip.content }}
-                            </span>
-                        </div>
-                        <div class="password input"
-                            :style="{ marginTop: showEmailTip ? '32px' : '22px', transition: showEmailTip ? 'all 160ms ease-in' : 'none' }">
-                            <input :type="passwordEyes ? 'password' : 'text'" @blur="passwordBlur" @input="passwordInput"
-                                @focus="passwordFocus" placeholder="密码" v-model="password" autocomplete>
-                            <span class="eyes" v-show="eyesShow" @mousedown="eyesHandler">
-                                <svg class="icon" aria-hidden="true">
-                                    <use :xlink:href="passwordEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
-                                </svg>
-                            </span>
-                            <span v-show="showPasswordTip" class="tips">
-                                <i :class="passwordTip.icon"></i>
-                                {{ passwordTip.content }}
-                            </span>
-                        </div>
-                        <!-- 确认密码 -->
-                        <div class="password input"
-                            :style="{ marginTop: showPasswordTip ? '32px' : '22px', transition: showPasswordTip ? 'all 160ms ease-in' : 'none' }">
-                            <input :type="passwordSureEyes ? 'password' : 'text'" @input="passwordSureInput"
-                                @blur="passwordSureBlur" placeholder="确认密码" v-model="passwordSure" autocomplete>
-                            <!-- 确认密码的小眼睛 -->
-                            <span class="eyes" v-show="sureEyesShow" @mousedown="sureEyesHandler">
-                                <svg class="icon" aria-hidden="true">
-                                    <use :xlink:href="passwordSureEyes ? '#icon-bukejian' : '#icon-kejian'"></use>
-                                </svg>
-                            </span>
-                            <!-- 确认密码提示信息 -->
-                            <span v-show="showPasswordSureTip" class="tips">
-                                <i :class="passwordSureTip.icon"></i>
-                                {{ passwordSureTip.content }}
-                            </span>
-                        </div>
-                        <!-- 图形验证码 -->
-                        <div class="captcha input"
-                            :style="{ marginTop: showPasswordSureTip ? '32px' : '22px', transition: showPasswordSureTip ? 'all 160ms ease-in' : 'none' }">
-                            <input type="text" v-model="code" placeholder="图形验证码" @input="codeFinish" maxlength="4">
-                            <span v-show="showCodeTip" class="tips">
-                                <i :class="codeTip.icon"></i>
-                                {{ codeTip.content }}
-                            </span>
-                            <el-tooltip class="item" effect="dark" content="点击刷新" placement="top">
-                                <div class="codeBox" @click="refreshCode">
-                                    <Identify :identifyCode="identifyCode" />
-                                </div>
-                            </el-tooltip>
-                        </div>
-                        <div class="signupButton"
-                            :style="{ marginTop: showCodeTip ? '36px' : '19px', transition: showCodeTip ? 'all 160ms ease-in' : 'none' }">
-                            <button @click="signup">注册</button>
-                            <button @click="close">取消</button>
-                        </div>
-                    </form>
+            <div class="mpLogin" v-show="loginType == 'MP'">
+                <div class="mpQRBox">
+                    <img class="mpQR" src="./images/mpQR.png" />
                 </div>
-                <div class="choices">
-                    <span>
-                        已有账号？<a @click="isSignin = true">登录</a>
-                    </span>
-                </div>
+                <span class="captchaTip">
+                    扫码进入『 码上创新 』小程序获取动态码
+                </span>
+                <CaptchaInput />
             </div>
-
             <div class="othersLogin">
                 <span class="title">第三方账号登录</span>
                 <div class="othersApp">
@@ -160,10 +172,12 @@
 import Identify from '@/components/Identify'
 import cloudbase from "@cloudbase/js-sdk"
 import env from '@/config/login'
+import CaptchaInput from './components/CaptchaInput'
 
 export default {
     name: 'LoginModal',
-    components: { Identify },
+    components: { Identify, CaptchaInput },
+
     data() {
         return {
             show: true,
@@ -206,6 +220,8 @@ export default {
             sureEyesShow: false,
             // 标记眼睛是否被点击
             eyeClick: false,
+            // 登录方式
+            loginType: 'MP'
         }
     },
     computed: {
@@ -556,6 +572,11 @@ export default {
     mounted() {
         this.identifyCode = ""
         this.makeCode(this.identifyCodes, 4)
+        this.$bus.$on('close', (close) => {
+            if (close) {
+                this.close()
+            }
+        })
     }
 }
 </script>
