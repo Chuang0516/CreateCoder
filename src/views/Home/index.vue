@@ -382,7 +382,7 @@ export default {
             width: 92%;
             height: 50px;
             // border-bottom: 1px solid #666;
-            z-index: 3;
+            z-index: 1;
             cursor: pointer;
 
             .app {
@@ -420,7 +420,7 @@ export default {
             align-items: center;
             width: 22%;
             height: 100%;
-            z-index: 3;
+            z-index: 1;
 
             div {
                 position: relative;
@@ -466,6 +466,7 @@ export default {
             width: 55%;
             height: 100%;
             margin: 0 10px;
+            z-index: 1;
 
             .banner-box {
                 position: relative;
@@ -530,8 +531,8 @@ export default {
                         height: 30px;
 
                         .icon {
-                            width: 22px;
-                            height: 22px;
+                            width: 20px;
+                            height: 20px;
                         }
                     }
 

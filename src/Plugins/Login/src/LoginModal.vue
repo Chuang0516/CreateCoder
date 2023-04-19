@@ -8,7 +8,7 @@
                 <img src="~@/assets/images/logo.png" alt="">
                 <img src="~@/assets/images/logo_text.png" alt="">
             </div>
-            <p>已有超过{{ userNum }}名用户加入码上创新</p>
+            <p>已有超过{{ totalUser }}名用户加入码上创新</p>
             <div class="emailLogin" v-show="loginType == 'email'">
                 <div class="loginBox" v-if="isSignin">
                     <div class="loginInput">
@@ -173,6 +173,7 @@ import Identify from '@/components/Identify'
 import cloudbase from "@cloudbase/js-sdk"
 import env from '@/config/login'
 import CaptchaInput from './components/CaptchaInput'
+import { reqTotalUser } from '@/api'
 
 export default {
     name: 'LoginModal',
@@ -181,7 +182,7 @@ export default {
     data() {
         return {
             show: true,
-            userNum: 6,
+            totalUser: 0,
             identifyCodes: '1234567890abcdefjhijklinopqrsduvwxyz',
             identifyCode: '',
             // 记住密码
@@ -567,7 +568,18 @@ export default {
                     center: true
                 })
             }
+        },
+        // 获取用户总数
+        async getTotalUser() {
+            const result = await reqTotalUser()
+            if (result.code == 200) {
+                const { totalUser } = result.data
+                this.totalUser = totalUser
+            }
         }
+    },
+    created() {
+        this.getTotalUser()
     },
     mounted() {
         this.identifyCode = ""

@@ -60,17 +60,22 @@ export default {
   watch: {
     isLogin(newVal) {
       if (newVal) {
+        // WS链接实时监听异地登录消息
         onlineWS.socket.onmessage = (msg) => {
-          const data = msg.data
-          if (JSON.parse(data).code == 'OFFSITE_LOGIN') {
+          const { code } = JSON.parse(msg.data)
+          if (code == 'OFFSITE_LOGIN') {
+            // 提示用户异地登录
             this.$notify({
               title: '异地登录',
               message: '你的登录验证码可能泄露',
               type: 'warning',
               duration: 0
             })
+            // 退出登录
             this.$store.dispatch('logout')
+            // 登录态：未登录
             this.$bus.$emit('loginState', false)
+            // 弹出登录模态框
             this.$LoginModal()
           }
         }

@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import axios from 'axios'
 
 export const reqHomeInfo = () => request({ url: '/home/nav', method: 'post' })
 
@@ -15,3 +14,6 @@ export const reqCurrentUser = () =>
 export const reqLogout = () => request({ url: '/logout', method: 'post' })
 
 export const reqUserId = () => request({ url: '/user/id', method: 'post' })
+
+// 获取用户总数
+export const reqTotalUser = () => request({ url: '/total', method: 'post' })
