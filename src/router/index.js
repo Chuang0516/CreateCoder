@@ -16,28 +16,39 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/Home'),
-    meta: { menuIndex: 0, leftNav: true },
+    meta: { menuIndex: 0, leftNav: true, header: true }
+  },
+  {
+    path: '/tools',
+    name: 'tools',
+    component: () => import('@/views/OnlineTool'),
+    meta: { menuIndex: 0, leftNav: true, header: true }
   },
   {
     path: '/books',
     component: () => import('@/views/Books'),
-    meta: { menuIndex: 1, leftNav: true },
+    meta: { menuIndex: 1, leftNav: true, header: true },
   },
   {
     path: '/discuss',
     component: () => import('@/views/Discuss'),
-    meta: { menuIndex: 2, leftNav: true },
+    meta: { menuIndex: 2, leftNav: true, header: true },
   },
   {
     path: '/team',
     component: () => import('@/views/Team'),
-    meta: { menuIndex: 3, leftNav: true },
+    meta: { menuIndex: 3, leftNav: true, header: true },
   },
   {
     path: '/course',
     component: () => import('@/views/Course'),
-    meta: { menuIndex: 4, leftNav: false },
+    meta: { menuIndex: 4, leftNav: false, header: true },
   },
+  {
+    path: '/mine',
+    component: () => import('@/views/PersonalCenter'),
+    meta: { leftNav: false, header: true },
+  }
 ]
 
 export default new VueRouter({

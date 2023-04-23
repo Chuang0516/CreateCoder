@@ -6,6 +6,7 @@ export class WebSocketProxy {
     this.messages = [] // 收到的消息列表
   }
   create(data) {
+    console.log('链接')
     if (!WebSocket) {
       console.warn('你的浏览器不支持WS链接')
       return
@@ -28,7 +29,7 @@ export class WebSocketProxy {
       this.socket = new WebSocket(`${this.url}${params}`)
       const self = this
       // 连接开启
-      this.socket.onopen = function (e) {}
+      this.socket.onopen = function (e) { }
       // 连接错误
       this.socket.onerror = function (e) {
         self.close()

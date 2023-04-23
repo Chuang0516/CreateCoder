@@ -17,3 +17,6 @@ export const reqUserId = () => request({ url: '/user/id', method: 'post' })
 
 // 获取用户总数
 export const reqTotalUser = () => request({ url: '/total', method: 'post' })
+
+// 上传头像
+export const reqUpdateAvatar = (rAvatar, iAvatar) => request({ url: '/user/avatar', data: { rAvatar, iAvatar }, method: 'post' })

@@ -1,13 +1,21 @@
 <template>
     <div class="userAvatar-container" @mouseenter="showInfoHandler" @mouseleave="showInfo = false">
-        <div class="userAvatar" :style="{ backgroundImage: `url(${user.avatar})` }">
+        <div class="userAvatar">
+            <div class="avatarBox">
+                <div class="rAvatarBox" v-show="avatar.rAvatar" v-html="multiavatar(avatar.rAvatar)"></div>
+                <div class="iAvatarBox" v-show="avatar.iAvatar"><img class="iAvatar"
+                        :src="`${avatar?.iAvatar}?time=${new Date().getTime()}`" alt=""></div>
+            </div>
             <div class="userInfoBox" v-show="showInfo">
                 <div class="userInfo">
                     <i class="el-icon-caret-top arrow"></i>
                     <div class="top">
-                        <div class="avatarAndNickName">
-                            <div class="avatar">
-                                <img :src="user.avatar" alt="" />
+                        <div class="avatarAndNickName" @click="toPersonalCenter">
+                            <div class="avatarBox">
+                                <div class="rAvatarBox" v-show="avatar.rAvatar" v-html="multiavatar(avatar.rAvatar)"></div>
+                                <div class="iAvatarBox" v-show="avatar.iAvatar"><img class="iAvatar"
+                                        :src="`${avatar?.iAvatar}?time=${new Date().getTime()}`">
+                                </div>
                             </div>
                             <span class="nickName">{{ user.nickName }}</span>
                         </div>
@@ -20,7 +28,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import multiavatar from '@multiavatar/multiavatar'
 
 export default {
     name: 'UserAvatar',
@@ -32,8 +41,10 @@ export default {
     computed: {
         // 用户信息
         ...mapState({ user: state => state.user.currentUser }),
+        ...mapGetters(['avatar'])
     },
     methods: {
+        multiavatar,
         showInfoHandler() {
             this.showInfo = true
         },
@@ -47,6 +58,9 @@ export default {
                     type: 'success',
                 })
             }
+        },
+        toPersonalCenter() {
+            this.$router.push('/mine')
         }
     },
     mounted() {
@@ -68,8 +82,29 @@ export default {
         position: relative;
         width: 38px;
         height: 38px;
-        background-size: 38px 38px;
         cursor: pointer;
+
+        >.avatarBox {
+            width: 100%;
+            height: 100%;
+
+            .rAvatarBox {
+                width: 100%;
+                height: 100%;
+            }
+
+            .iAvatarBox {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                overflow: hidden;
+
+                .iAvatar {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
 
         .userInfoBox {
             display: flex;
@@ -111,13 +146,25 @@ export default {
                         display: flex;
                         align-items: center;
 
-                        .avatar {
+                        >.avatarBox {
                             width: 36px;
                             height: 36px;
 
-                            img {
-                                width: 36px;
-                                height: 36px;
+                            .rAvatarBox {
+                                width: 100%;
+                                height: 100%;
+                            }
+
+                            .iAvatarBox {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                overflow: hidden;
+
+                                .iAvatar {
+                                    width: 100%;
+                                    height: 100%;
+                                }
                             }
                         }
 

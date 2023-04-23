@@ -1,4 +1,4 @@
-import { reqLogin, reqCurrentUser, reqLogout, reqUserId } from '@/api'
+import { reqLogin, reqCurrentUser, reqLogout, reqUserId, reqUpdateAvatar } from '@/api'
 import { setTicket, getTicket } from '@/utils/ticket'
 import { auth } from '@/tcb'
 import { onlineWS } from '@/service/wsInstance'
@@ -13,8 +13,9 @@ const mutations = {
     state.userInfo = userInfo
   },
   GETCURRENTUSER(state, currentUser) {
+    state.currentUser = null
     state.currentUser = currentUser
-  },
+  }
 }
 const actions = {
   async onLogin({ commit }, { captcha }) {
@@ -30,6 +31,7 @@ const actions = {
         await auth.customAuthProvider().signIn(getTicket())
         onlineWS.create({
           _id: _id,
+          ticket: getTicket()
         })
         return true
       }
@@ -44,6 +46,7 @@ const actions = {
       commit('GETCURRENTUSER', result.data)
       onlineWS.create({
         _id: result.data._id,
+        ticket: getTicket()
       })
       return true
     }
@@ -57,8 +60,20 @@ const actions = {
       return true
     }
   },
+  // 更新头像
+  async updateAvatar({ commit }, { rAvatar, iAvatar }) {
+    const result = await reqUpdateAvatar(rAvatar, iAvatar)
+    if (result.code == 200) {
+      commit('GETCURRENTUSER', result.data)
+      return true
+    }
+  }
 }
-const getters = {}
+const getters = {
+  avatar(state) {
+    return state.currentUser.avatar || {}
+  }
+}
 
 export default {
   state,

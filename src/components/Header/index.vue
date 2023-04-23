@@ -1,7 +1,7 @@
 <template>
   <div class="header-container" :style="{ '--leftNavWidth': isOpen ? '220px' : '60px' }">
     <div class="header"
-      :style="{ '--background': currentIndex != 0 ? '#fff' : background, '--angle': angle, '--time': `${time}ms`, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': currentIndex != 0 ? '#2681c2' : '#eee' }">
+      :style="{ '--background': background, '--angle': angle, '--time': `${time}ms`, '--color': currentIndex != 0 ? '#666' : fontColor, '--navigationLeft': `${(currentIndex * 2 + 1) * 50 / headerMenuList.length}%`, '--navigationBackground': navigationBackground, '--headerShadow': headerShadow }">
       <div class="logo-container">
         <RouterLink class="logo" to="/">
           <div class="logo-box">
@@ -72,6 +72,8 @@ export default {
       lastIndex: this.currentIndex,
       // 齿轮默认离开
       isLeave: true,
+      // 导航条颜色
+      navigationBackground: '',
       // 侧边导航栏开关
       isOpen: true,
       // 背景颜色
@@ -85,18 +87,29 @@ export default {
         password: ''
       },
       // 登录状态
-      isLogin: false
+      isLogin: false,
+      // 窗口位置
+      scrollTop: 0,
+      // 底部阴影
+      headerShadow: 'none'
+    }
+  },
+  computed: {
+    routePath() {
+      return this.$route.path
     }
   },
   methods: {
     // 菜单切换
     menuHandler(index, route) {
       let { currentIndex } = this
+
       this.lastIndex = index
       // 路由切换
       this.$router.push(`${route}`)
       // 点击的不是当前的菜单项
-      if (currentIndex != index) {
+      // 如果是从其它非导航路由页面跳转来的
+      if ((currentIndex != index) && currentIndex != undefined) {
         // 步长值等于当前的 index - 上一个 index
         this.step = currentIndex - index
         // 齿轮旋转动效相关数据变化
@@ -109,6 +122,8 @@ export default {
         }, this.time + 260)
         // Logo 动效
         this.$bus.$emit('updateLogo')
+      } else {
+        return
       }
     },
     // 登录弹框
@@ -146,14 +161,7 @@ export default {
     },
     // 页面滚动
     scrollHandler() {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      if (scrollTop > 36) {
-        this.background = '#fff'
-        this.fontColor = '#666'
-      } else {
-        this.background = 'rgba(255, 255, 255, 0.1)'
-        this.fontColor = '#eee'
-      }
+      this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
     },
     // 更新 Logo 动效
     updateLogo: throttle(function () {
@@ -174,10 +182,39 @@ export default {
     },
   },
   watch: {
-    currentIndex() {
-      let barStyle = this.$refs.navigationBar.style
-      // barStyle.left = `${(this.currentIndex * 2 + 1) * 50 / this.headerMenuList.length}%`
-      barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
+    currentIndex(newVal) {
+      if (!newVal) {
+        let barStyle = this.$refs.navigationBar.style
+        barStyle.transition = `left ${(Math.abs(this.step) + 1) * 200}ms linear`
+      }
+    },
+    background: {
+      handler(newVal) {
+        if (newVal == '#fff') {
+          this.navigationBackground = '#2681c2'
+          this.fontColor = '#666'
+          this.headerShadow = '0px 8px 8px -8px #666'
+        } else {
+          this.navigationBackground = '#eee'
+          this.fontColor = '#eee'
+          this.headerShadow = 'none'
+        }
+      },
+      immediate: true
+    },
+    routePath: {
+      handler(newVal) {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        this.background = newVal == '/' ? (scrollTop < 36 ? 'rgba(255, 255, 255, 0.1)' : '#fff') : '#fff'
+      },
+      immediate: true
+    },
+    scrollTop: {
+      handler(newVal) {
+        const { routePath } = this
+        this.background = routePath == '/' ? (newVal < 36 ? 'rgba(255, 255, 255, 0.1)' : '#fff') : '#fff'
+      },
+      immediate: true
     }
   },
   mounted() {

@@ -10,8 +10,5 @@ module.exports = defineConfig({
         ws: true,
       },
     },
-    client: {
-      webSocketURL: 'ws://localhost:7592/ws',
-    },
   },
 })

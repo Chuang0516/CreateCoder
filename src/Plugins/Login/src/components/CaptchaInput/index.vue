@@ -33,7 +33,6 @@ export default {
             if (index > 0 && index < 6 && currentCaptcha) {
                 this.toFocus(index + 1)
             } else if (index == 6 && currentCaptcha) {
-                // @ts-ignore
                 this.$refs[`captcha${index}`][0].blur()
                 let str = ''
                 captcha.forEach((item, index) => {
@@ -67,6 +66,7 @@ export default {
                             message: '恭喜你，欢迎使用码上创新！',
                             type: 'success',
                         })
+
                     } else {
                         vueThis.$notify({
                             title: '登录失败',

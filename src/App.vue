@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <Header @switchHandler="switchHandler" :currentIndex="$route.meta.menuIndex" />
-    <router-view :isOpen="isOpen" />
+    <Header @switchHandler="switchHandler" :currentIndex="$route.meta.menuIndex" v-show="$route.meta.header" />
+    <router-view :isOpen="isOpen" :style="{ marginTop: $route.meta.header && $route.path != '/' ? '56px' : '0px' }" />
     <Footer />
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
           message: '链接状态：链接中...'
         }))
       }, 30 * 1000)
-    }
+    },
   },
   watch: {
     isLogin(newVal) {
@@ -96,5 +96,6 @@ export default {
 <style lang="less" scoped>
 .app-container {
   min-width: 1200px;
+
 }
 </style>
