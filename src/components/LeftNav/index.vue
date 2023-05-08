@@ -81,9 +81,6 @@ export default {
             immediate: true
         }
     },
-    created() {
-        this.$store.dispatch('getHomeNav')
-    },
     mounted() {
         window.onscroll = () => {
             let sl = -Math.max(document.body.scrollLeft, document.documentElement.scrollLeft);

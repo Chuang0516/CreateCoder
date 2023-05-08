@@ -1,8 +1,4 @@
 import axios from 'axios'
-// 引入进度条
-import nprogress from 'nprogress'
-// 引入进度条样式
-import 'nprogress/nprogress.css'
 
 const gitToken = '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'
 
@@ -17,18 +13,12 @@ const GitHubClient = axios.create({
 
 // 请求拦截器
 GitHubClient.interceptors.request.use((config) => {
-  // 进度条开始动
-  if (config.nprogress) {
-    nprogress.start()
-  }
   return config
 })
 
 // 响应拦截器
 GitHubClient.interceptors.response.use(
   (res) => {
-    // 进度条结束
-    nprogress.done()
     return res.data
   },
   (error) => {

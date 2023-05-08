@@ -3,8 +3,8 @@
         <div class="userAvatar">
             <div class="avatarBox">
                 <div class="rAvatarBox" v-show="avatar.rAvatar" v-html="multiavatar(avatar.rAvatar)"></div>
-                <div class="iAvatarBox" v-show="avatar.iAvatar"><img class="iAvatar"
-                        :src="`${avatar?.iAvatar}?time=${new Date().getTime()}`" alt=""></div>
+                <div class="iAvatarBox" v-show="avatar.iAvatar"><img class="iAvatar" :src="`${avatar.iAvatar}`" alt="">
+                </div>
             </div>
             <div class="userInfoBox" v-show="showInfo">
                 <div class="userInfo">
@@ -13,8 +13,8 @@
                         <div class="avatarAndNickName" @click="toPersonalCenter">
                             <div class="avatarBox">
                                 <div class="rAvatarBox" v-show="avatar.rAvatar" v-html="multiavatar(avatar.rAvatar)"></div>
-                                <div class="iAvatarBox" v-show="avatar.iAvatar"><img class="iAvatar"
-                                        :src="`${avatar?.iAvatar}?time=${new Date().getTime()}`">
+                                <div class="iAvatarBox" v-show="avatar.iAvatar">
+                                    <img class="iAvatar" :src="`${avatar?.iAvatar}`">
                                 </div>
                             </div>
                             <span class="nickName">{{ user.nickName }}</span>

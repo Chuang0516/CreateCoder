@@ -20,3 +20,6 @@ export const reqTotalUser = () => request({ url: '/total', method: 'post' })
 
 // 上传头像
 export const reqUpdateAvatar = (rAvatar, iAvatar) => request({ url: '/user/avatar', data: { rAvatar, iAvatar }, method: 'post' })
+
+// 获取用户IP属地
+export const reqUserIp = () => request({ url: '/user/ip', method: 'post' })

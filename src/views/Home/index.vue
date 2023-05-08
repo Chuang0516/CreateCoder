@@ -146,6 +146,21 @@ export default {
             }
         }
     },
+    async created() {
+        const state = JSON.parse(JSON.stringify(this.$store.state.home))
+        for (let key in state) {
+            const stateItem = JSON.stringify(state[key])
+            if (stateItem == '{}' || stateItem == '[]' || stateItem == '') {
+                this.$bus.$emit('toLoading', true)
+                await Promise.all([
+                    this.$store.dispatch('getHomeBanner'),
+                    this.$store.dispatch('getHomeNav')
+                ])
+                this.$bus.$emit('toLoading', false)
+                break
+            }
+        }
+    },
     mounted() {
         this.createWether()
         this.init()

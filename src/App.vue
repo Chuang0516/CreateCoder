@@ -3,6 +3,7 @@
     <Header @switchHandler="switchHandler" :currentIndex="$route.meta.menuIndex" v-show="$route.meta.header" />
     <router-view :isOpen="isOpen" :style="{ marginTop: $route.meta.header && $route.path != '/' ? '56px' : '0px' }" />
     <Footer />
+    <Loading :showLoading="showLoading" />
   </div>
 </template>
 
@@ -10,18 +11,21 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { onlineWS } from '@/service/wsInstance'
+import Loading from '@/components/Loading'
 
 export default {
   name: "App",
   components: {
     Header,
     Footer,
+    Loading
   },
   data() {
     return {
       isOpen: true,
       wsTimer: null,
-      isLogin: false
+      isLogin: false,
+      showLoading: false
     }
   },
   methods: {
@@ -82,10 +86,15 @@ export default {
       }
     }
   },
-  async mounted() {
-    this.adaptation()
+  async created() {
+    this.$bus.$on('toLoading', (showLoading) => {
+      this.showLoading = showLoading
+    })
     await this.getCurrentUser()
     this.heartbeat()
+  },
+  mounted() {
+    this.adaptation()
   },
   beforeDestroy() {
     clearInterval(this.wsTimer)

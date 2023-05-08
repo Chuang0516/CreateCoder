@@ -22,8 +22,21 @@ export default {
     methods: {
 
     },
-    mounted() {
-
+    async created() {
+        const state = JSON.parse(JSON.stringify(this.$store.state.user))
+        for (let key in state) {
+            const stateItem = JSON.stringify(state[key])
+            if (stateItem == '{}' || stateItem == '[]' || stateItem == '') {
+                this.$bus.$emit('toLoading', true)
+                try {
+                    await this.$store.dispatch('getUserIp')
+                    this.$bus.$emit('toLoading', false)
+                } catch (error) {
+                    this.$bus.$emit('toLoading', false)
+                }
+                break
+            }
+        }
     }
 }
 </script>

@@ -5,6 +5,7 @@ import nprogress from 'nprogress'
 // 引入进度条样式
 import 'nprogress/nprogress.css'
 // start：进度条开始 done：进度条结束
+import { publicIpv4 } from 'public-ip'
 
 // 1、利用 axios 对象的方法 create ，创建一个 axios 实例
 const request = axios.create({
@@ -16,9 +17,15 @@ const request = axios.create({
   // 代表请求超时的时间为5s
   timeout: 5000,
 })
+
 // 请求拦截器：在发请求之前，请求拦截器会监测到，在请求发出之前调用
-request.interceptors.request.use((config) => {
+request.interceptors.request.use(async (config) => {
   // config：配置对象，对象里面有一个属性很重要，headers请求头
+  const ip = await publicIpv4()
+  config.data = {
+    ...config.data,
+    ip
+  }
   // 进度条开始动
   nprogress.start()
   return config

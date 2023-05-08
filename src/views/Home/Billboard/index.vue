@@ -90,7 +90,6 @@ export default {
         utctobeijing,
     },
     created() {
-        this.$store.dispatch('getHomeBanner')
         this.getGithubCommit()
     }
 }
