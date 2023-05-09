@@ -1,6 +1,6 @@
 <template>
     <div class="userAvatar-container" @mouseenter="showInfoHandler" @mouseleave="showInfo = false">
-        <div class="userAvatar">
+        <div class="userAvatar" @click="toPersonalCenter">
             <div class="avatarBox">
                 <div class="rAvatarBox" v-show="avatar.rAvatar" v-html="multiavatar(avatar.rAvatar)"></div>
                 <div class="iAvatarBox" v-show="avatar.iAvatar"><img class="iAvatar" :src="`${avatar.iAvatar}`" alt="">

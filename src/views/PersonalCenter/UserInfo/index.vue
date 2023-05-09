@@ -1,9 +1,9 @@
 <template>
-    <div class="userInfo">
+    <div class="userInfoBox" :style="{ '--boxHeight': boxHeight }">
         <div class="user">
-            <Avatar />
-            <div class="userRight">
-                <div class="userTop">
+            <Avatar @setBoxHeight="setBoxHeight" />
+            <div class="user-r">
+                <div class="user-r-t">
                     <div class="nickName">{{ currentUser.nickName }}</div>
                     <div class="userId">
                         ID: {{ currentUser.userId }}
@@ -26,27 +26,50 @@
                         </div>
                     </div>
                 </div>
+                <div class="userData">
+                    <div class="followers">
+                        <strong>{{ currentUser.followers?.length }}</strong>
+                        <span>粉丝</span>
+                    </div>
+                    <div class="follow">
+                        <strong>{{ currentUser.follow?.length }}</strong>
+                        <span>关注</span>
+                    </div>
+                    <div class="collection">
+                        <strong>{{ currentUser.collection?.length }}</strong>
+                        <span>收藏</span>
+                    </div>
+                    <div class="dev">
+                        <strong>{{ currentUser.devList?.length }}</strong>
+                        <span>工具</span>
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
                 <div class="introduction">
                     个人简介：{{ currentUser.introduce ? currentUser.introduce : '暂无个人简介' }}
-                </div>
-                <div class="createTime">
-                    注册时间：{{ createTime }}
                 </div>
                 <div class="ip">
                     IP属地：{{ ipLocal || '未知' }}
                 </div>
-                <div class="more">
-                    <span>查看详细资料</span>
-                    <i class="el-icon-d-arrow-right"></i>
+                <div class="createTime" v-show="showMoreInfo">
+                    注册时间：{{ createTime }}
+                </div>
+                <div class="more" @click="toShowMoreInfo">
+                    <span>{{ showMoreInfo ? '收起详细资料' : '查看详细资料' }}</span>
+                    <i class="el-icon-d-arrow-right" :style="{ '--rotate': showMoreInfo ? '-90deg' : '90deg' }"></i>
                 </div>
             </div>
         </div>
         <div class="setBtn">
             <div class="setUserInfoBtn">
-                编辑资料
+                <i class="el-icon-edit"></i>
+                <span>编辑资料</span>
             </div>
             <div class="setSystem">
-                设置
+                <i class="el-icon-setting"></i>
+                <span>设置</span>
             </div>
         </div>
     </div>
@@ -65,38 +88,53 @@ export default {
     },
     data() {
         return {
-
+            boxHeight: '239px',
+            showMoreInfo: false
+        }
+    },
+    watch: {
+        showMoreInfo(newVal) {
+            this.boxHeight = newVal ? '278px' : '239px'
+        }
+    },
+    methods: {
+        toShowMoreInfo() {
+            const { showMoreInfo } = this
+            this.showMoreInfo = !showMoreInfo
+        },
+        setBoxHeight(boxHeight) {
+            this.boxHeight = boxHeight
         }
     }
 }
 </script>
 
 <style scoped lang="less">
-.userInfo {
+.userInfoBox {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: 3fr 1fr;
     position: relative;
     width: 90%;
-    height: 320px;
+    height: var(--boxHeight);
     background-color: #fff;
     border-radius: 16px;
     box-shadow: 0 0 12px 1px #aaaaaa;
     padding: 16px;
     box-sizing: border-box;
+    // transition: height 100ms ease-in;
 
     .user {
         display: flex;
         justify-content: space-between;
 
-        .userRight {
+        .user-r {
             flex: 1;
             display: flex;
             flex-direction: column;
             margin-left: 16px;
             font-size: 16px;
 
-            .userTop {
+            .user-r-t {
                 display: flex;
                 align-items: center;
                 height: 36px;
@@ -178,29 +216,64 @@ export default {
 
             }
 
+            .userData {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 12px;
+
+                >div {
+                    flex: 1;
+
+                    strong {
+                        display: inline-block;
+                        font-size: 21px;
+                        vertical-align: bottom;
+                    }
+
+                    span {
+                        display: inline-block;
+                        font-size: 14px;
+                        color: #555;
+                        vertical-align: text-bottom;
+                        margin-left: 6px;
+                    }
+                }
+            }
+
             // 个人简介
             .introduction {
-                margin-top: 25px;
+                display: flex;
+                align-items: end;
+                height: 39px;
                 color: #333;
             }
 
             .ip {
-                margin-top: 21px;
+                display: flex;
+                align-items: end;
+                height: 39px;
+                color: #333;
             }
 
             .createTime {
-                margin-top: 21px;
+                display: flex;
+                align-items: end;
+                height: 39px;
+                color: #333;
             }
 
             .more {
-                margin-top: 21px;
+                display: flex;
+                align-items: end;
+                height: 39px;
                 color: #666;
                 cursor: pointer;
                 width: 120px;
 
                 i {
                     margin-left: 2px;
-                    transform: rotate(90deg);
+                    transform: rotate(var(--rotate));
                     font-size: 14px;
                 }
             }
@@ -214,16 +287,19 @@ export default {
 
         .setSystem,
         .setUserInfoBtn {
-            width: 76px;
-            height: 26px;
+            display: grid;
+            grid-template-columns: auto auto;
+            align-items: center;
+            justify-content: center;
+            grid-gap: 0 3px;
+            width: 99px;
+            height: 30px;
             border: 1px solid #2980b9;
-            line-height: 26px;
-            text-align: center;
             color: #fff;
             background-color: #fff;
             color: #333;
             cursor: pointer;
-            border-radius: 14px;
+            border-radius: 15px;
             font-size: 14px;
             transition: all 100ms ease-in;
             margin: 6px;

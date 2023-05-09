@@ -129,6 +129,9 @@ export default {
                 this.cropperOption.img = ''
                 this.preview = {}
                 this.$refs.fileInput.value = ''
+                this.$emit('setBoxHeight', '239px')
+            } else {
+                this.$emit('setBoxHeight', '320px')
             }
         }
     },
