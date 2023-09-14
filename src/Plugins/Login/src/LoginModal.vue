@@ -274,7 +274,6 @@ export default {
             }
             return { content, type, icon }
         },
-
         // 显示确认密码提示
         showPasswordSureTip() {
             return this.testResult.passwordSure.state

@@ -75,7 +75,6 @@ export default {
                         })
                     }
                 } catch (error) {
-                    // 登录成功
                     vueThis.$notify({
                         title: '登录失败',
                         message: '请检查您的验证码是否正确',

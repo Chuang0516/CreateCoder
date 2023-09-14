@@ -19,7 +19,7 @@
                             </div>
                             <span class="nickName">{{ user.nickName }}</span>
                         </div>
-                        <div class="logout" @click="logout">退出登录</div>
+                        <div class="logout" @click.stop="logout">退出登录</div>
                     </div>
                 </div>
             </div>

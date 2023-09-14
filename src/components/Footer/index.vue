@@ -2,7 +2,7 @@
     <div class="footer">
         <span>Copyright © 2022</span>
         <a href="https://createcoder.com">&nbsp;码上创新&nbsp;</a>
-        <a href="https://beian.miit.gov.cn/" target="_blank">&nbsp;陕ICP备2022014724号-1</a>
+        <a href="https://beian.miit.gov.cn/" target="_blank">&nbsp;陕ICP备2023009367号-1</a>
     </div>
 </template>
 

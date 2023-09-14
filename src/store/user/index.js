@@ -2,6 +2,7 @@ import { reqLogin, reqCurrentUser, reqLogout, reqUserId, reqUpdateAvatar, reqUse
 import { setTicket, getTicket } from '@/utils/ticket'
 import { auth } from '@/tcb'
 import { onlineWS } from '@/service/wsInstance'
+import getOnlineTime from '@/utils/getOnlineTime'
 
 const state = {
   ticket: getTicket(),
@@ -87,6 +88,9 @@ const getters = {
   },
   createTime(state) {
     return state.currentUser.createTime?.substring(0, state.currentUser.createTime.indexOf('T'))
+  },
+  onlineTime(state) {
+    return getOnlineTime(Number(state.currentUser?.onlineTime) || 0)
   }
 }
 

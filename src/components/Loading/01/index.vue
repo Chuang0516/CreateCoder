@@ -15,8 +15,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import url('https://fonts.googleapis.com/css?family=Roboto:100');
-
 .container {
     background-color: #333;
 

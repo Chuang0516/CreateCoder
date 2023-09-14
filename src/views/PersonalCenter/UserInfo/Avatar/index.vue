@@ -129,10 +129,8 @@ export default {
                 this.cropperOption.img = ''
                 this.preview = {}
                 this.$refs.fileInput.value = ''
-                this.$emit('setBoxHeight', '239px')
-            } else {
-                this.$emit('setBoxHeight', '320px')
             }
+            this.$emit('openAvatar', newVal)
         }
     },
 
@@ -333,11 +331,13 @@ export default {
 <style scoped lang="less">
 .userAvatar {
     position: relative;
-    width: 96px;
-    height: 96px;
+    width: 102px;
+    height: 102px;
     border-radius: 50%;
     cursor: pointer;
     border: 3px solid #e9e7ef;
+    transform: translateY(-12px);
+    box-sizing: border-box;
 
     .avatar {
         position: absolute;
@@ -359,7 +359,7 @@ export default {
         grid-template-columns: 1.5fr 1.1fr;
         grid-gap: 0 16px;
         left: calc(100% + 16px);
-        top: 0;
+        top: 9px;
         width: 939px;
         height: 288px;
         padding: 12px;
@@ -371,7 +371,7 @@ export default {
         >i {
             position: absolute;
             left: -24px;
-            top: 32px;
+            top: 19px;
             color: rgba(0, 0, 0, .6);
             font-size: 36px;
             font-weight: bold;

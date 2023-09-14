@@ -6,7 +6,7 @@
                     <use xlink:href="#icon-zhuti"></use>
                 </svg>
                 <span>随机壁纸</span>
-                <div class="wallpaperOptions">
+                <div class=" wallpaperOptions">
                     <ul>
                         <el-tooltip class="item" effect="dark" :content="lockTip" placement="left">
                             <li class="lock" @click.stop="lockWallpaper">
@@ -35,6 +35,12 @@
                         </el-tooltip>
                     </ul>
                 </div>
+            </li>
+            <li @click="toZhiMaKeYan" class="wallpaper-card">
+                <div class="imgBox">
+                    <img src="~@/assets/images/zhimakeyan_logo_mini.png" alt="" style="object-fit: contain;">
+                </div>
+                <span>芝麻可言</span>
             </li>
         </ul>
     </div>
@@ -172,6 +178,10 @@ export default {
                 }
             )
             return request
+        },
+
+        toZhiMaKeYan() {
+            window.open('https://zhimakeyan.com')
         }
     },
     mounted() {
@@ -213,6 +223,22 @@ export default {
                 width: 30px;
                 height: 30px;
             }
+
+            .imgBox {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 30px;
+                height: 30px;
+                border-radius: 15px;
+                overflow: hidden;
+
+                img {
+                    width: 25px;
+                    height: 25px;
+                }
+            }
+
 
             span {
                 color: #eee;

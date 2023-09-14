@@ -1,6 +1,7 @@
 export class WebSocketProxy {
   constructor(path) {
-    this.baseUrl = 'wss://createcoder-prod-0gpj2cowbfa22bef-1307039145.ap-shanghai.run.wxcloudrun.com/ws' // 服务器路径
+    this.baseUrl = 'ws://localhost:7593/ws'
+    // this.baseUrl = 'wss://createcoder-prod-0gpj2cowbfa22bef-1307039145.ap-shanghai.run.wxcloudrun.com/ws' // 服务器路径
     this.url = `${this.baseUrl}${path}` // 服务器路径
     this.socket = undefined // 连接实例
     this.messages = [] // 收到的消息列表
