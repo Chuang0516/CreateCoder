@@ -1,6 +1,14 @@
 <template>
     <div ref="fixed" class="codenav-container" :style="{ '--navWidth': isOpen ? '220px' : '60px' }">
         <div class="left-nav" v-show="$route.meta.leftNav">
+            <div class="upload" @click="$router.push('/upload')">
+                <i class="upload-icon">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-shangchuan"></use>
+                    </svg>
+                </i>
+                <span>上传组件</span>
+            </div>
             <!-- 展开时的导航菜单 -->
             <Transition enter-active-class="animate__animated animate__slideInRight animate__fast"
                 leave-active-class="animate__animated animate__slideOutRight animate__fast">
@@ -65,12 +73,14 @@ export default {
         }
     },
     computed: {
-        ...mapState({ pageNavList: (state) => state.home.homeNavList })
+        ...mapState({ pageNavList: (state) => state.home.homeNavList }),
     },
     methods: {
         // 展开菜单
         openMenuItem(menuIndex) {
             this.openIndex = menuIndex === this.openIndex ? null : menuIndex;
+            // 滚动到当前项的位置
+            this.$bus.$emit('leftNavClick', menuIndex)
         }
     },
     watch: {

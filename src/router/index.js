@@ -48,9 +48,16 @@ const routes = [
     path: '/mine',
     component: () => import('@/views/PersonalCenter'),
     meta: { leftNav: false, header: true },
+  },
+  {
+    path: '/upload',
+    component: () => import('@/views/Upload'),
+    meta: { leftNav: false, header: true },
   }
 ]
 
-export default new VueRouter({
+const router = new VueRouter({
   routes,
 })
+
+export default router

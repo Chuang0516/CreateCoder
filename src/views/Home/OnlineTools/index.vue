@@ -1,6 +1,6 @@
 <template>
     <div class="onlineTools">
-        <div class="toolsBox" v-for="tools in toolsList" :key="tools.id">
+        <div class="toolsBox" v-for="tools in toolsList" :key="tools.id" :ref="`tools_${tools.id}`">
             <div class="classify">
                 <i class="icon"></i>
                 <span class="name">{{ tools.classify }}</span>
@@ -10,7 +10,6 @@
                     :style="{ '--toolHeight': isOpen ? '92px' : '102px', '--toolIconSize': isOpen ? '62px' : '72px' }"
                     v-for="tool in tools.toolList" :key="tool.id" :title="tool.name" @click="toTool(tool.id)">
                     <div class="toolIcon">
-
                     </div>
                     <div class="toolName">
                         <span class="name">{{ tool.name }}</span>
@@ -30,10 +29,10 @@ export default {
         return {
             toolsList: [
                 {
-                    id: 1,
-                    classify: '精选工具',
+                    id: 0,
+                    classify: '通用',
                     toolList: [
-                        { id: 11, name: '码上翻译', introduce: '中英互译', icon: '' },
+                        { id: 11, name: '', introduce: '', icon: '' },
                         { id: 12, name: '', introduce: '', icon: '' },
                         { id: 13, name: '', introduce: '', icon: '' },
                         { id: 14, name: '', introduce: '', icon: '' },
@@ -43,8 +42,32 @@ export default {
                     ]
                 },
                 {
+                    id: 1,
+                    classify: '导航',
+                    toolList: [
+                        { id: 21, name: '', icon: '' }
+                    ]
+                }, {
                     id: 2,
-                    classify: '推荐工具',
+                    classify: '数据录入',
+                    toolList: [
+                        { id: 21, name: '', icon: '' }
+                    ]
+                }, {
+                    id: 3,
+                    classify: '数据展示',
+                    toolList: [
+                        { id: 21, name: '', icon: '' }
+                    ]
+                }, {
+                    id: 4,
+                    classify: '反馈',
+                    toolList: [
+                        { id: 21, name: '', icon: '' }
+                    ]
+                }, {
+                    id: 5,
+                    classify: '其他',
                     toolList: [
                         { id: 21, name: '', icon: '' }
                     ]
@@ -62,6 +85,12 @@ export default {
                 }
             })
         }
+    },
+    mounted() {
+        this.$bus.$on('leftNavClick', (id) => {
+            console.log(id)
+            this.$refs[`tools_${id}`][0].scrollIntoView({ behavior: "smooth", block: "start" })
+        })
     }
 }
 </script>

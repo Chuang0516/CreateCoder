@@ -59,6 +59,7 @@ import Loader from '@/components/Loader'
 import { throttle } from 'lodash'
 import Billboard from '@/views/Home/Billboard'
 import OnlineTools from '@/views/Home/OnlineTools'
+import { mapState } from 'vuex'
 
 export default {
     name: 'Home',
@@ -77,6 +78,9 @@ export default {
                 { id: 1, name: '翻译', icon: '#icon-yuyanfanyi' }
             ]
         }
+    },
+    computed: {
+        ...mapState({ currentUser: (state) => state.user.currentUser })
     },
     methods: {
         createWether() {
@@ -165,6 +169,17 @@ export default {
         this.createWether()
         this.init()
         this.getyiyan()
+    },
+    beforeRouteLeave(to, from, next) {
+        console.log(to);
+        if (to.path === '/upload') {
+            if (JSON.stringify(this.currentUser) === '{}') {
+                this.$LoginModal()
+
+                return
+            }
+        }
+        next()
     }
 }
 </script>
